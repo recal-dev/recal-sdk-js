@@ -1,4 +1,4 @@
-import { Provider, RecalOptions } from './types'
+import { FreeBusy, Provider, RecalOptions, TimeRange } from './types'
 import type { Organization, OrganizationMember } from './types/entity.types'
 import { OAuthCredentials, OAuthLink } from './types/oauth.types'
 
@@ -83,6 +83,34 @@ export class Recal {
             if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
             return response.json() as Promise<Organization>
         },
+
+        /**
+         * Organization wide calendar namespace
+         */
+        calendar: {
+            /**
+             * Get free busy time ranges for all organization members
+             * @param organizationSlug Organization slug
+             * @param timeRange Time range
+             * @param primaryOnly Only primary calendars of members (default: false)
+             * @param provider Providers (default: undefined => all)
+             * @returns Promise<TimeRange[]>
+             */
+            freeBusy: async (
+                organizationSlug: string,
+                timeRange: TimeRange,
+                primaryOnly?: boolean,
+                provider?: Provider[]
+            ): Promise<TimeRange[]> => {
+                const providerQuery = provider ? `&provider=${provider.join(',')}` : ''
+                const query = `?timeMin=${timeRange.start.toISOString()}&timeMax=${timeRange.end.toISOString()}${providerQuery}${
+                    primaryOnly ? '&primaryOnly=true' : ''
+                }`
+                const response = await this.fetch(`/organizations/${organizationSlug}/calendar/freeBusy${query}`)
+                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
+                return response.json() as Promise<TimeRange[]>
+            },
+        },
     }
 
     // Member
@@ -136,6 +164,9 @@ export class Recal {
             if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
         },
 
+        /**
+         * Member OAuth namespace
+         */
         oauth: {
             /**
              * Get OAuth URLs for a member
@@ -240,11 +271,27 @@ export class Recal {
                 )
                 if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
             },
+
+            /**
+             * Remove OAuth connection
+             * @param userId User ID
+             * @param provider Provider
+             */
+            removeConnection: async (userId: string, provider: Provider): Promise<void> => {
+                const response = await this.fetch(
+                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}`,
+                    {
+                        method: 'DELETE',
+                    }
+                )
+                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
+            },
+        },
+
+        calendar: {
+            // to be continued
         },
     })
-
-    // Calendar
-    calendar = {}
 }
 
 export * from './types'
