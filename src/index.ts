@@ -37,7 +37,7 @@ export class Recal {
      * @param init Request init
      * @returns Promise<Response>
      */
-    private _fetch = async (input: string, init?: RequestInit): Promise<Response> => {
+    _fetch = async (input: string, init?: RequestInit): Promise<Response> => {
         const url = new URL(`${this.baseURL}/v1${input.startsWith('/') ? '' : '/'}${input}`)
         return await fetch(url, {
             method: init?.method || 'GET',
