@@ -40,7 +40,10 @@ export class MemberService {
      */
     async get(userId: string): Promise<OrganizationMember> {
         const response = await this.fetch(`/organizations/${this.organizationSlug}/members/${userId}`)
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to get member: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<OrganizationMember>
     }
 
@@ -54,7 +57,10 @@ export class MemberService {
             method: 'POST',
             body: JSON.stringify({ userId }),
         })
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to create member: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<OrganizationMember>
     }
 

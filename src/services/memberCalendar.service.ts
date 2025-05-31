@@ -40,7 +40,7 @@ export class MemberCalendarService {
         const response = await this.fetch(`/organizations/${orgSlug}/members/${userId}/calendar/freeBusy${query}`)
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to get free-busy: ${errorText}`)
+            throw new Error(`[Recal] Failed to get free-busy: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<TimeRange[]>
@@ -60,7 +60,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to get events: ${errorText}`)
+            throw new Error(`[Recal] Failed to get events: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event[]>
@@ -90,7 +90,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to create event: ${errorText}`)
+            throw new Error(`[Recal] Failed to create event: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event[]>
@@ -115,7 +115,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to get event by metaId: ${errorText}`)
+            throw new Error(`[Recal] Failed to get event by metaId: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event>
@@ -149,7 +149,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to update event by metaId: ${errorText}`)
+            throw new Error(`[Recal] Failed to update event by metaId: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event[]>
@@ -178,7 +178,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to delete event by metaId: ${errorText}`)
+            throw new Error(`[Recal] Failed to delete event by metaId: Status ${response.status} - ${errorText}`)
         }
     }
 
@@ -205,7 +205,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to create event for specific calendar: ${errorText}`)
+            throw new Error(`[Recal] Failed to create event for specific calendar: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event>
@@ -225,7 +225,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to get event from specific calendar: ${errorText}`)
+            throw new Error(`[Recal] Failed to get event from specific calendar: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event>
@@ -254,7 +254,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to update event in specific calendar: ${errorText}`)
+            throw new Error(`[Recal] Failed to update event in specific calendar: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event>
@@ -279,7 +279,7 @@ export class MemberCalendarService {
 
         if (!response.ok) {
             const errorText = await response.text()
-            throw new Error(`Failed to delete event from specific calendar: ${errorText}`)
+            throw new Error(`[Recal] Failed to delete event from specific calendar: Status ${response.status} - ${errorText}`)
         }
 
         return response.json() as Promise<Event | { success: boolean }>

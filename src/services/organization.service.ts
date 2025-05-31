@@ -22,7 +22,10 @@ export class OrganizationService {
      */
     async list(): Promise<Organization[]> {
         const response = await this.fetch('/organizations')
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to list organizations: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<Organization[]>
     }
 
@@ -33,7 +36,10 @@ export class OrganizationService {
      */
     async get(slug: string): Promise<Organization> {
         const response = await this.fetch(`/organizations/${slug}`)
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to get organization: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<Organization>
     }
 
@@ -55,8 +61,11 @@ export class OrganizationService {
         const query = `?timeMin=${timeRange.start.toISOString()}&timeMax=${timeRange.end.toISOString()}${providerQuery}${
             primaryOnly ? '&primaryOnly=true' : ''
         }`
-        const response = await this.fetch(`/organizations/${organizationSlug}/calendar/freeBusy${query}`)
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        const response = await this.fetch(`/organizations/${organizationSlug}/calendar/free-busy${query}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to get organization free-busy: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<TimeRange[]>
     }
 }

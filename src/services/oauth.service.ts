@@ -43,7 +43,10 @@ export class OAuthService {
                 body: options ? JSON.stringify(options) : undefined,
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to get OAuth URLs: Status ${response.status} - ${errorText}`)
+        }
         return response.json() as Promise<OAuthLink[]>
     }
 
@@ -62,7 +65,10 @@ export class OAuthService {
                 body: redirectUrl ? JSON.stringify({ redirectUrl }) : undefined,
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to get OAuth URL: Status ${response.status} - ${errorText}`)
+        }
         const { url } = (await response.json()) as { url: string }
         return { provider, url } as OAuthLink
     }
@@ -82,7 +88,10 @@ export class OAuthService {
                 body: JSON.stringify({ code, redirectUrl }),
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to verify OAuth code: Status ${response.status} - ${errorText}`)
+        }
     }
 
     /**
@@ -101,7 +110,10 @@ export class OAuthService {
                 body: JSON.stringify({ code, redirectUrl }),
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to verify OAuth response: Status ${response.status} - ${errorText}`)
+        }
     }
 
     /**
@@ -118,7 +130,10 @@ export class OAuthService {
                 body: JSON.stringify(credentials),
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to set OAuth token: Status ${response.status} - ${errorText}`)
+        }
     }
 
     /**
@@ -133,6 +148,9 @@ export class OAuthService {
                 method: 'DELETE',
             }
         )
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`[Recal] Failed to remove OAuth connection: Status ${response.status} - ${errorText}`)
+        }
     }
 }
