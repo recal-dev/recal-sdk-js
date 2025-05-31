@@ -1,6 +1,15 @@
-import { FreeBusy, Provider, RecalOptions, TimeRange } from './types'
+import { Provider, RecalOptions, TimeRange } from './types'
 import type { Organization, OrganizationMember } from './types/entity.types'
 import { OAuthCredentials, OAuthLink } from './types/oauth.types'
+import {
+    Event,
+    CreateEventAcrossCalendars,
+    UpdateEventAcrossCalendars,
+    CreateEvent,
+    UpdateEvent,
+} from './types/calendar.types'
+import { OrganizationService } from './services/organization.service'
+import { MemberService } from './services/member.service'
 
 /**
  * Recal SDK
@@ -13,6 +22,7 @@ export class Recal {
     // MARK: States
     private token: string
     private baseURL: string
+    private organizationService: OrganizationService
 
     /**
      * Recal SDK constructor
@@ -28,6 +38,7 @@ export class Recal {
         }
         this.token = options?.token || envToken!
         this.baseURL = options?.baseURL || process.env.RECAL_BASE_URL || 'https://api.recal.dev'
+        this.organizationService = new OrganizationService(this.fetch)
     }
 
     // MARK: Functions
@@ -68,9 +79,7 @@ export class Recal {
          * @returns Promise<PublicOrganization[]>
          */
         list: async (): Promise<Organization[]> => {
-            const response = await this.fetch('/organizations')
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            return response.json() as Promise<Organization[]>
+            return this.organizationService.list()
         },
 
         /**
@@ -79,9 +88,7 @@ export class Recal {
          * @returns Promise<Organization>
          */
         get: async (slug: string): Promise<Organization> => {
-            const response = await this.fetch(`/organizations/${slug}`)
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            return response.json() as Promise<Organization>
+            return this.organizationService.get(slug)
         },
 
         /**
@@ -102,13 +109,7 @@ export class Recal {
                 primaryOnly?: boolean,
                 provider?: Provider[]
             ): Promise<TimeRange[]> => {
-                const providerQuery = provider ? `&provider=${provider.join(',')}` : ''
-                const query = `?timeMin=${timeRange.start.toISOString()}&timeMax=${timeRange.end.toISOString()}${providerQuery}${
-                    primaryOnly ? '&primaryOnly=true' : ''
-                }`
-                const response = await this.fetch(`/organizations/${organizationSlug}/calendar/freeBusy${query}`)
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-                return response.json() as Promise<TimeRange[]>
+                return this.organizationService.getFreeBusy(organizationSlug, timeRange, primaryOnly, provider)
             },
         },
     }
@@ -117,181 +118,293 @@ export class Recal {
     /**
      * Member namespace
      */
-    members = (organizationSlug: string) => ({
-        /**
-         * List members of an organization
-         * @returns Promise<OrganizationMember[]>
-         */
-        list: async (): Promise<OrganizationMember[]> => {
-            const response = await this.fetch(`/organizations/${organizationSlug}/members`)
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            return response.json() as Promise<OrganizationMember[]>
-        },
+    members = (organizationSlug: string) => {
+        const memberService = new MemberService(organizationSlug, this.fetch)
 
-        /**
-         * Get member of an organization
-         * @param userId User ID
-         * @returns Promise<OrganizationMember>
-         */
-        get: async (userId: string): Promise<OrganizationMember> => {
-            const response = await this.fetch(`/organizations/${organizationSlug}/members/${userId}`)
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            return response.json() as Promise<OrganizationMember>
-        },
-
-        /**
-         * Create member in an organization
-         * @param userId User ID
-         * @returns Promise<OrganizationMember>
-         */
-        create: async (userId: string): Promise<OrganizationMember> => {
-            const response = await this.fetch(`/organizations/${organizationSlug}/members`, {
-                method: 'POST',
-                body: JSON.stringify({ userId }),
-            })
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            return response.json() as Promise<OrganizationMember>
-        },
-
-        /**
-         * Delete member from an organization
-         * @param userId User ID
-         */
-        delete: async (userId: string): Promise<void> => {
-            const response = await this.fetch(`/organizations/${organizationSlug}/members/${userId}`, {
-                method: 'DELETE',
-            })
-            if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-        },
-
-        /**
-         * Member OAuth namespace
-         */
-        oauth: {
+        return {
             /**
-             * Get OAuth URLs for a member
+             * List members of an organization
+             * @returns Promise<OrganizationMember[]>
+             */
+            list: async (): Promise<OrganizationMember[]> => {
+                return memberService.list()
+            },
+
+            /**
+             * Get member of an organization
              * @param userId User ID
-             * @param filter Filter by provider
-             * @returns List of OAuth URLs
+             * @returns Promise<OrganizationMember>
              */
-            getUrls: async (
-                userId: string,
-                filter?: Provider[],
-                options?: {
-                    providerRedirectUrlOverwrites?: {
-                        provider: Provider
-                        redirectUrl: string
-                    }[]
-                }
-            ): Promise<OAuthLink[]> => {
-                const query = filter ? `?provider=${filter.join(',')}` : ''
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/links${query}`,
-                    {
-                        method: 'GET',
-                        body: options ? JSON.stringify(options) : undefined,
-                    }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-                return response.json() as Promise<OAuthLink[]>
+            get: async (userId: string): Promise<OrganizationMember> => {
+                return memberService.get(userId)
             },
 
             /**
-             * Get OAuth URL
-             * @param provider Provider
-             * @returns string
-             */
-            getURL: async (userId: string, provider: Provider, redirectUrl?: string): Promise<OAuthLink> => {
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}/link`,
-                    {
-                        method: 'POST',
-                        body: redirectUrl ? JSON.stringify({ redirectUrl }) : undefined,
-                    }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-                const { url } = (await response.json()) as { url: string }
-                return { provider, url } as OAuthLink
-            },
-
-            /**
-             * Verify OAuth code
+             * Create member in an organization
              * @param userId User ID
-             * @param provider Provider
-             * @param code OAuth code
+             * @returns Promise<OrganizationMember>
              */
-            verifyCode: async (
-                userId: string,
-                provider: Provider,
-                code: string,
-                redirectUrl?: string
-            ): Promise<void> => {
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}/verify`,
-                    {
-                        method: 'POST',
-                        body: JSON.stringify({ code, redirectUrl }),
-                    }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
+            create: async (userId: string): Promise<OrganizationMember> => {
+                return memberService.create(userId)
             },
 
             /**
-             * Verify OAuth response
+             * Delete member from an organization
              * @param userId User ID
-             * @param provider Provider
-             * @param url Redirect response (the redirect response from the provider to your redirect URL)
              */
-            verifyResponse: async (userId: string, provider: Provider, url: URL): Promise<void> => {
-                const { code } = Object.fromEntries(url.searchParams.entries())
-                const redirectUrl = url.origin
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}/verify`,
-                    {
-                        method: 'POST',
-                        body: JSON.stringify({ code, redirectUrl }),
-                    }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
+            delete: async (userId: string): Promise<void> => {
+                return memberService.delete(userId)
             },
 
             /**
-             * Set OAuth token
-             * @param userId User ID
-             * @param provider Provider
-             * @param credentials OAuth credentials
+             * Member OAuth namespace
              */
-            setToken: async (userId: string, provider: Provider, credentials: OAuthCredentials): Promise<void> => {
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}`,
-                    {
-                        method: 'POST',
-                        body: JSON.stringify(credentials),
+            oauth: {
+                /**
+                 * Get OAuth URLs for a member
+                 * @param userId User ID
+                 * @param filter Filter by provider
+                 * @returns List of OAuth URLs
+                 */
+                getUrls: async (
+                    userId: string,
+                    filter?: Provider[],
+                    options?: {
+                        providerRedirectUrlOverwrites?: {
+                            provider: Provider
+                            redirectUrl: string
+                        }[]
                     }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
+                ): Promise<OAuthLink[]> => {
+                    return memberService.oauth.getUrls(userId, filter, options)
+                },
+
+                /**
+                 * Get OAuth URL
+                 * @param provider Provider
+                 * @returns string
+                 */
+                getURL: async (userId: string, provider: Provider, redirectUrl?: string): Promise<OAuthLink> => {
+                    return memberService.oauth.getURL(userId, provider, redirectUrl)
+                },
+
+                /**
+                 * Verify OAuth code
+                 * @param userId User ID
+                 * @param provider Provider
+                 * @param code OAuth code
+                 */
+                verifyCode: async (
+                    userId: string,
+                    provider: Provider,
+                    code: string,
+                    redirectUrl?: string
+                ): Promise<void> => {
+                    return memberService.oauth.verifyCode(userId, provider, code, redirectUrl)
+                },
+
+                /**
+                 * Verify OAuth response
+                 * @param userId User ID
+                 * @param provider Provider
+                 * @param url Redirect response (the redirect response from the provider to your redirect URL)
+                 */
+                verifyResponse: async (userId: string, provider: Provider, url: URL): Promise<void> => {
+                    return memberService.oauth.verifyResponse(userId, provider, url)
+                },
+
+                /**
+                 * Set OAuth token
+                 * @param userId User ID
+                 * @param provider Provider
+                 * @param credentials OAuth credentials
+                 */
+                setToken: async (userId: string, provider: Provider, credentials: OAuthCredentials): Promise<void> => {
+                    return memberService.oauth.setToken(userId, provider, credentials)
+                },
+
+                /**
+                 * Remove OAuth connection
+                 * @param userId User ID
+                 * @param provider Provider
+                 */
+                removeConnection: async (userId: string, provider: Provider): Promise<void> => {
+                    return memberService.oauth.removeConnection(userId, provider)
+                },
             },
 
             /**
-             * Remove OAuth connection
-             * @param userId User ID
-             * @param provider Provider
+             * Member Calendar namespace
              */
-            removeConnection: async (userId: string, provider: Provider): Promise<void> => {
-                const response = await this.fetch(
-                    `/organizations/${organizationSlug}/members/${userId}/oauth/${provider}`,
-                    {
-                        method: 'DELETE',
-                    }
-                )
-                if (!response.ok) throw new Error(`[Recal] HTTP error! status: ${response.status}`)
-            },
-        },
+            calendar: {
+                /**
+                 * Gets the free-busy times for a member across all their calendars
+                 */
+                getFreeBusy: async (
+                    userId: string,
+                    timeRange: TimeRange,
+                    provider?: Provider[]
+                ): Promise<TimeRange[]> => {
+                    return memberService.calendar.getFreeBusy({
+                        orgSlug: organizationSlug,
+                        userId,
+                        timeMin: timeRange.start,
+                        timeMax: timeRange.end,
+                        provider,
+                    })
+                },
 
-        calendar: {
-            // to be continued
-        },
-    })
+                /**
+                 * Gets events for a member across all their calendars
+                 */
+                getEvents: async (userId: string, timeRange: TimeRange, provider?: Provider[]): Promise<Event[]> => {
+                    return memberService.calendar.getEvents({
+                        orgSlug: organizationSlug,
+                        userId,
+                        timeMin: timeRange.start,
+                        timeMax: timeRange.end,
+                        provider,
+                    })
+                },
+
+                /**
+                 * Creates an event for a member across all their calendars
+                 */
+                createEvent: async (
+                    userId: string,
+                    event: CreateEventAcrossCalendars,
+                    provider?: Provider[]
+                ): Promise<Event[]> => {
+                    return memberService.calendar.createEvent({
+                        orgSlug: organizationSlug,
+                        userId,
+                        event,
+                        provider,
+                    })
+                },
+
+                /**
+                 * Gets an event by metaId for a member across all their calendars
+                 */
+                getEventByMetaId: async (
+                    userId: string,
+                    metaId: string,
+                    provider?: Provider[]
+                ): Promise<Event | null> => {
+                    return memberService.calendar.getEventByMetaId({
+                        orgSlug: organizationSlug,
+                        userId,
+                        metaId,
+                        provider,
+                    })
+                },
+
+                /**
+                 * Updates an event by metaId for a member across all their calendars
+                 */
+                updateEventByMetaId: async (
+                    userId: string,
+                    metaId: string,
+                    event: UpdateEventAcrossCalendars,
+                    provider?: Provider[]
+                ): Promise<Event[]> => {
+                    return memberService.calendar.updateEventByMetaId({
+                        orgSlug: organizationSlug,
+                        userId,
+                        metaId,
+                        event,
+                        provider,
+                    })
+                },
+
+                /**
+                 * Deletes an event by metaId for a member across all their calendars
+                 */
+                deleteEventByMetaId: async (userId: string, metaId: string, provider?: Provider[]): Promise<void> => {
+                    await memberService.calendar.deleteEventByMetaId({
+                        orgSlug: organizationSlug,
+                        userId,
+                        metaId,
+                        provider,
+                    })
+                },
+
+                /**
+                 * Creates an event for a member for a specific calendar and provider
+                 */
+                createEventForSpecificCalendar: async (
+                    userId: string,
+                    provider: Provider,
+                    calendarId: string,
+                    event: CreateEvent
+                ): Promise<Event> => {
+                    return memberService.calendar.createEventForSpecificCalendar({
+                        orgSlug: organizationSlug,
+                        userId,
+                        provider,
+                        calendarId,
+                        event,
+                    })
+                },
+
+                /**
+                 * Gets an event for a member for a specific calendar and provider
+                 */
+                getEventFromSpecificCalendar: async (
+                    userId: string,
+                    provider: Provider,
+                    calendarId: string,
+                    eventId: string
+                ): Promise<Event> => {
+                    return memberService.calendar.getEventFromSpecificCalendar({
+                        orgSlug: organizationSlug,
+                        userId,
+                        provider,
+                        calendarId,
+                        eventId,
+                    })
+                },
+
+                /**
+                 * Updates an event for a member for a specific calendar and provider
+                 */
+                updateEventInSpecificCalendar: async (
+                    userId: string,
+                    provider: Provider,
+                    calendarId: string,
+                    eventId: string,
+                    event: UpdateEvent
+                ): Promise<Event> => {
+                    return memberService.calendar.updateEventInSpecificCalendar({
+                        orgSlug: organizationSlug,
+                        userId,
+                        provider,
+                        calendarId,
+                        eventId,
+                        event,
+                    })
+                },
+
+                /**
+                 * Deletes an event for a member for a specific calendar and provider
+                 */
+                deleteEventFromSpecificCalendar: async (
+                    userId: string,
+                    provider: Provider,
+                    calendarId: string,
+                    eventId: string
+                ): Promise<Event | { success: boolean }> => {
+                    return memberService.calendar.deleteEventFromSpecificCalendar({
+                        orgSlug: organizationSlug,
+                        userId,
+                        provider,
+                        calendarId,
+                        eventId,
+                    })
+                },
+            },
+        }
+    }
 }
 
 export * from './types'
