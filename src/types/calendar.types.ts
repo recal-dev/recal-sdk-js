@@ -1,7 +1,5 @@
-// MARK: Base Types
-
+// MARK: Types
 // Enums
-
 /**
  * Provider enum
  */
@@ -31,11 +29,10 @@ export enum AttendeeResponseStatus {
 }
 
 // Types
-
 /**
  * Calendar type
  */
-export type Calendar = {
+export interface Calendar {
     id: string
     timeZone?: string
     subject?: string
@@ -46,12 +43,15 @@ export type Calendar = {
     original?: unknown
 }
 
-export type Meeting = {
+/**
+ * Meeting interface
+ */
+export interface Meeting {
     url: string
 }
 
 /**
- * Attendee type
+ * Attendee interface
  */
 export type Attendee = {
     email: string
@@ -66,9 +66,9 @@ export type Attendee = {
 )
 
 /**
- * Event type
+ * Event interface
  */
-export type Event = {
+export interface Event {
     id: string
     metaId?: string
     subject?: string
@@ -82,123 +82,17 @@ export type Event = {
 }
 
 /**
- * Time range type
+ * Time range interface
  */
-export type TimeRange = {
+export interface TimeRange {
     start: Date
     end: Date
 }
 
 /**
- * FreeBusy response type
+ * FreeBusy response interface
  */
-export type FreeBusy = {
+export interface FreeBusy {
     calendarId: string
     busy: TimeRange[]
-}
-
-// MARK: Function Types
-
-/**
- * Base calendar request information
- */
-export type CalendarRequest = {
-    orgSlug: string
-    userId: string
-}
-
-/**
- * Time range filter for calendar queries
- */
-export type TimeRangeFilter = {
-    timeMin: Date
-    timeMax: Date
-    provider?: Provider[]
-}
-
-/**
- * Event creation data for operations across multiple calendars
- */
-export type CreateEventAcrossCalendars = {
-    subject?: string
-    description?: string
-    start?: Date
-    end?: Date
-    location?: string
-    attendees?: {
-        email: string
-    }[]
-    meeting?: {
-        url: string
-    }
-    metaId?: string
-    sendNotificationsFor?: Provider[]
-}
-
-/**
- * Event update data for operations across multiple calendars
- */
-export type UpdateEventAcrossCalendars = {
-    subject?: string
-    description?: string
-    start?: Date
-    end?: Date
-    location?: string
-    attendees?: {
-        email: string
-        responseStatus?: AttendeeResponseStatus
-    }[]
-    meeting?: {
-        url: string
-    }
-    metaId?: string
-    sendNotificationsFor?: Provider[]
-}
-
-/**
- * Event creation data for a specific calendar
- */
-export type CreateEvent = {
-    subject?: string
-    description?: string
-    start?: Date
-    end?: Date
-    location?: string
-    attendees?: {
-        email: string
-    }[]
-    meeting?: {
-        url: string
-    }
-    metaId?: string
-    sendNotifications?: boolean
-}
-
-/**
- * Event update data for a specific calendar
- */
-export type UpdateEvent = {
-    subject?: string
-    description?: string
-    start?: Date
-    end?: Date
-    location?: string
-    attendees?: {
-        email: string
-        responseStatus?: AttendeeResponseStatus
-    }[]
-    meeting?: {
-        url: string
-    }
-    metaId?: string
-    sendNotifications?: boolean
-}
-
-/**
- * Specific calendar and event identifiers
- */
-export type SpecificCalendarEvent = CalendarRequest & {
-    provider: Provider
-    calendarId: string
-    eventId: string
 }

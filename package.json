@@ -4,16 +4,21 @@
     "description": "Recal SDK",
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsup ./src",
-        "test": "ts-node tests/index.test.ts"
+        "build": "bun run ./src/index.ts",
+        "test": "bun test tests/index.test.ts",
+        "format": "biome format",
+        "format:fix": "biome format --fix",
+        "lint": "biome lint",
+        "lint:fix": "biome lint --fix",
+        "lint:fix:all": "biome lint --fix --unsafe",
+        "check": "biome check",
+        "check:fix": "biome check --fix"
     },
-    "keywords": [
-        "recal",
-        "calendar"
-    ],
+    "keywords": ["recal", "calendar"],
     "author": "Recal<team@recal.dev>",
     "license": "MIT",
     "devDependencies": {
+        "@biomejs/biome": "2.1.2",
         "@types/node": "^22.15.21",
         "tsup": "^8.5.0",
         "typescript": "^5.8.3"

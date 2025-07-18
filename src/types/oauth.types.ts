@@ -1,13 +1,15 @@
-import { Provider } from './calendar.types'
+import type { Provider } from './calendar.types'
 
-export type OAuthLink = {
-    provider: Provider
-    url: string
+export interface OAuthConnection {
+    expiresAt: Date | null
+    provider: Provider.GOOGLE | Provider.MICROSOFT
+    accessToken?: string
+    refreshToken?: string | null
+    scope?: string[]
+    alive: boolean
 }
 
-export type OAuthCredentials = {
-    accessToken: string
-    refreshToken?: string
-    expiresAt?: Date | number
-    scope?: string[]
+export interface OAuthLink {
+    provider: Provider
+    url: string
 }
