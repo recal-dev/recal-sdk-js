@@ -1,17 +1,17 @@
-import { Type } from '@sinclair/typebox'
+import { Type as T } from '@sinclair/typebox'
 import { providerSchema } from './calendar.tb'
 
-export const oauthConnectionSchema = Type.Object({
-    expiresAt: Type.Union([Type.Date(), Type.Null()]),
+export const oauthConnectionSchema = T.Object({
+    expiresAt: T.Union([T.Date(), T.Null()]),
     provider: providerSchema,
-    accessToken: Type.Optional(Type.String()),
-    refreshToken: Type.Optional(Type.Union([Type.String(), Type.Null()])),
-    email: Type.Union([Type.String(), Type.Null()]),
-    scope: Type.Array(Type.String()),
-    alive: Type.Boolean(),
+    accessToken: T.Optional(T.String()),
+    refreshToken: T.Optional(T.Union([T.String(), T.Null()])),
+    email: T.Union([T.String(), T.Null()]),
+    scope: T.Array(T.String()),
+    alive: T.Boolean(),
 })
 
-export const oauthLinkSchema = Type.Object({
+export const oauthLinkSchema = T.Object({
     provider: providerSchema,
-    url: Type.String(),
+    url: T.String(),
 })
