@@ -3,6 +3,9 @@
   "workspaces": {
     "": {
       "name": "recal",
+      "dependencies": {
+        "@sinclair/typebox": "^0.34.38",
+      },
       "devDependencies": {
         "@biomejs/biome": "2.1.2",
         "@types/node": "^22.15.21",
@@ -133,6 +136,8 @@
     "@rollup/rollup-win32-ia32-msvc": ["@rollup/rollup-win32-ia32-msvc@4.41.1", "", { "os": "win32", "cpu": "ia32" }, "sha512-+psFT9+pIh2iuGsxFYYa/LhS5MFKmuivRsx9iPJWNSGbh2XVEjk90fmpUEjCnILPEPJnikAU6SFDiEUyOv90Pg=="],
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.41.1", "", { "os": "win32", "cpu": "x64" }, "sha512-Wq2zpapRYLfi4aKxf2Xff0tN+7slj2d4R87WEzqw7ZLsVvO5zwYCIuEGSZYiK41+GlwUo1HiR+GdkLEJnCKTCw=="],
+
+    "@sinclair/typebox": ["@sinclair/typebox@0.34.38", "", {}, "sha512-HpkxMmc2XmZKhvaKIZZThlHmx1L0I/V1hWK1NubtlFnr6ZqdiOpV72TKudZUNQjZNsyDBay72qFEhEvb+bcwcA=="],
 
     "@types/estree": ["@types/estree@1.0.7", "", {}, "sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ=="],
 

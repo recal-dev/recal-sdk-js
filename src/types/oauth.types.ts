@@ -5,7 +5,8 @@ export interface OAuthConnection {
     provider: Provider.GOOGLE | Provider.MICROSOFT
     accessToken?: string
     refreshToken?: string | null
-    scope?: string[]
+    email: string | null
+    scope: string[]
     alive: boolean
 }
 
