@@ -1,4 +1,4 @@
-import { Type } from '@sinclair/typebox'
+import { Type as T } from '@sinclair/typebox'
 import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from './errors'
 import { oauthConnectionSchema, oauthLinkSchema } from './typebox/oauth.tb'
 import type { OAuthConnection, OAuthLink, Provider } from './types'
@@ -18,7 +18,7 @@ export class OAuthService {
         try {
             const oauthConnections = await this.fetchHelper.fetch(
                 `v1/users/${userId}/oauth?redacted=${redacted}`,
-                Type.Array(oauthConnectionSchema)
+                T.Array(oauthConnectionSchema)
             )
             return oauthConnections
         } catch (error) {
@@ -74,7 +74,7 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
 
-            const oauthLinks = await this.fetchHelper.fetch(url, Type.Array(oauthLinkSchema))
+            const oauthLinks = await this.fetchHelper.fetch(url, T.Array(oauthLinkSchema))
             return oauthLinks
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -105,7 +105,7 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.fetch(url, Type.Object({ url: Type.String() }))
+            const response = await this.fetchHelper.fetch(url, T.Object({ url: T.String() }))
             return { provider, url: response.url }
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -163,7 +163,7 @@ export class OAuthService {
      */
     public async disconnect(userId: string, provider: Provider): Promise<void> {
         try {
-            await this.fetchHelper.fetch(`v1/users/${userId}/oauth/${provider}`, Type.Unknown(), {
+            await this.fetchHelper.fetch(`v1/users/${userId}/oauth/${provider}`, T.Unknown(), {
                 method: 'DELETE',
             })
         } catch (error) {
@@ -193,7 +193,7 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.fetch(url, Type.Object({ success: Type.Boolean() }), {
+            const response = await this.fetchHelper.fetch(url, T.Object({ success: T.Boolean() }), {
                 method: 'POST',
                 body: JSON.stringify({ code, state }),
                 headers: {
