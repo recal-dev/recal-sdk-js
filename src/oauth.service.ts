@@ -13,6 +13,9 @@ export class OAuthService {
 
     /**
      * Get all OAuth connections for a user
+     * @param userId The ID of the user
+     * @param redacted Whether to redact the OAuth connections
+     * @returns An array of OAuth connections
      */
     public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
         try {
@@ -31,6 +34,10 @@ export class OAuthService {
 
     /**
      * Get OAuth connection for a specific provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @param redacted Whether to redact the OAuth connection
+     * @returns The OAuth connection
      */
     public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
         try {
@@ -53,6 +60,9 @@ export class OAuthService {
 
     /**
      * Get OAuth authorization URLs for all providers
+     * @param userId The ID of the user
+     * @param options Options for the OAuth authorization URLs
+     * @returns An array of OAuth authorization URLs
      */
     public async getBulkLinks(
         userId: string,
