@@ -28,7 +28,8 @@ export class FetchHelper {
     }
 
     public async baseFetch(url: string, options?: RequestInit) {
-        const response = await fetch(`${this.baseUrl}${url}`, {
+        const completeUrl = url.startsWith('/') ? `${this.baseUrl}${url}` : `${this.baseUrl}/${url}`
+        const response = await fetch(completeUrl, {
             ...options,
             headers: {
                 ...options?.headers,

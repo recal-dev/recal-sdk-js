@@ -20,7 +20,7 @@ export class OAuthService {
     public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
         try {
             const oauthConnections = await this.fetchHelper.fetch(
-                `v1/users/${userId}/oauth?redacted=${redacted}`,
+                `/v1/users/${userId}/oauth?redacted=${redacted}`,
                 T.Array(oauthConnectionSchema)
             )
             return oauthConnections
@@ -42,7 +42,7 @@ export class OAuthService {
     public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
         try {
             const oauthConnection = await this.fetchHelper.fetch(
-                `v1/users/${userId}/oauth/${provider}?redacted=${redacted}`,
+                `/v1/users/${userId}/oauth/${provider}?redacted=${redacted}`,
                 oauthConnectionSchema
             )
             return oauthConnection
@@ -82,7 +82,7 @@ export class OAuthService {
             if (options?.accessType) params.append('accessType', options.accessType)
 
             const queryString = params.toString()
-            const url = `v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
+            const url = `/v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
 
             const oauthLinks = await this.fetchHelper.fetch(url, T.Array(oauthLinkSchema))
             return oauthLinks
@@ -113,7 +113,7 @@ export class OAuthService {
             if (options?.redirectUrl) params.append('redirectUrl', options.redirectUrl)
 
             const queryString = params.toString()
-            const url = `v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
+            const url = `/v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
 
             const response = await this.fetchHelper.fetch(url, T.Object({ url: T.String() }))
             return { provider, url: response.url }
@@ -145,7 +145,7 @@ export class OAuthService {
     ): Promise<OAuthConnection> {
         try {
             const oauthConnection = await this.fetchHelper.fetch(
-                `v1/users/${userId}/oauth/${provider}`,
+                `/v1/users/${userId}/oauth/${provider}`,
                 oauthConnectionSchema,
                 {
                     method: 'POST',
@@ -201,7 +201,7 @@ export class OAuthService {
             if (redirectUrl) params.append('redirectUrl', redirectUrl)
 
             const queryString = params.toString()
-            const url = `v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
+            const url = `/v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
 
             const response = await this.fetchHelper.fetch(url, T.Object({ success: T.Boolean() }), {
                 method: 'POST',
