@@ -96,6 +96,10 @@ export class OAuthService {
 
     /**
      * Get OAuth authorization URL for a specific provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @param options Options for the OAuth authorization URL
+     * @returns The OAuth authorization URL
      */
     public async getLink(
         userId: string,
@@ -131,6 +135,10 @@ export class OAuthService {
 
     /**
      * Set OAuth tokens for a provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @param connection The OAuth connection to set
+     * @returns The OAuth connection
      */
     public async setConnection(
         userId: string,
@@ -170,6 +178,9 @@ export class OAuthService {
 
     /**
      * Delete OAuth connection for a provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @returns Promise that resolves when the connection is deleted
      */
     public async disconnect(userId: string, provider: Provider): Promise<void> {
         try {
@@ -189,6 +200,11 @@ export class OAuthService {
 
     /**
      * Verify OAuth code (used in OAuth callback flow)
+     * @param provider The provider of the OAuth connection
+     * @param code The OAuth code
+     * @param state The OAuth state
+     * @param redirectUrl The redirect URL
+     * @returns The OAuth verification result
      */
     public async verify(
         provider: Provider,
