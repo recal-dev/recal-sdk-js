@@ -9,5 +9,5 @@ export const strippedOrganizationSchema = T.Object({
 
 export const organizationSchema = T.Object({
     ...strippedOrganizationSchema.properties,
-    members: T.Array(strippedUserSchema),
+    members: T.Optional(T.Array(strippedUserSchema)),
 })

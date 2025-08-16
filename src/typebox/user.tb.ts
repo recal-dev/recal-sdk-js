@@ -9,6 +9,6 @@ export const strippedUserSchema = T.Object({
 
 export const userSchema = T.Object({
     ...strippedUserSchema.properties,
-    organization: T.Array(strippedOrganizationSchema),
-    oauthConnections: T.Array(oauthConnectionSchema),
+    organizations: T.Optional(T.Array(strippedOrganizationSchema)),
+    oauthConnections: T.Optional(T.Array(oauthConnectionSchema)),
 })

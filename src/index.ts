@@ -1,11 +1,7 @@
-import { OAuthService } from './oauth.service'
+import { OAuthService } from './services/oauth.service'
+import type { RecalOptions } from './types/internal.types'
 import { FetchHelper } from './utils/fetch.helper'
-import { type Functionize, functionize } from './utils/functionize'
-
-export interface RecalOptions {
-    token?: Functionize<string>
-    url?: Functionize<string>
-}
+import { functionize } from './utils/functionize'
 
 /**
  * Recal SDK
