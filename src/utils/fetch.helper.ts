@@ -42,6 +42,7 @@ export class FetchHelper {
             headers: {
                 ...options?.headers,
                 Authorization: `Bearer ${this.token}`,
+                ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
             },
         })
         return response
