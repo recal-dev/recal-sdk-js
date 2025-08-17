@@ -1,7 +1,8 @@
 import { Type as T } from '@sinclair/typebox'
 import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from './errors'
 import { oauthConnectionSchema, oauthLinkSchema } from './typebox/oauth.tb'
-import type { OAuthConnection, OAuthLink, Provider } from './types'
+import type { Provider } from './types/calendar.types'
+import type { OAuthConnection, OAuthLink } from './types/oauth.types'
 import { FetchError, type FetchHelper } from './utils/fetch.helper'
 
 export class OAuthService {
