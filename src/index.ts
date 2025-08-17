@@ -1,4 +1,5 @@
 import { OAuthService } from './services/oauth.service'
+import { UsersService } from './services/users.service'
 import type { RecalOptions } from './types/internal.types'
 import { FetchHelper } from './utils/fetch.helper'
 import { functionize } from './utils/functionize'
@@ -14,7 +15,10 @@ export class RecalClient {
     private token: string
     private baseUrl: string
     private fetchHelper: FetchHelper
+
+    // MARK: Services
     oauth: OAuthService
+    users: UsersService
 
     public constructor(options: RecalOptions) {
         const _token = functionize(options.token) || process.env.RECAL_TOKEN
@@ -26,8 +30,10 @@ export class RecalClient {
         this.fetchHelper = new FetchHelper({ token: this.token, url: this.baseUrl })
         // Initialize services
         this.oauth = new OAuthService(this.fetchHelper)
+        this.users = new UsersService(this.fetchHelper)
     }
 }
 
+export * from './entities/organization'
+export * from './entities/user'
 export * from './errors'
-export * from './types'
