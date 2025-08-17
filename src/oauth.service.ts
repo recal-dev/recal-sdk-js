@@ -19,10 +19,9 @@ export class OAuthService {
      */
     public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
         try {
-            const oauthConnections = await this.fetchHelper.fetch(
-                `/v1/users/${userId}/oauth?redacted=${redacted}`,
-                T.Array(oauthConnectionSchema)
-            )
+            const oauthConnections = await this.fetchHelper.get(`/v1/users/${userId}/oauth?redacted=${redacted}`, {
+                schema: T.Array(oauthConnectionSchema),
+            })
             return oauthConnections
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -41,9 +40,11 @@ export class OAuthService {
      */
     public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
         try {
-            const oauthConnection = await this.fetchHelper.fetch(
+            const oauthConnection = await this.fetchHelper.get(
                 `/v1/users/${userId}/oauth/${provider}?redacted=${redacted}`,
-                oauthConnectionSchema
+                {
+                    schema: oauthConnectionSchema,
+                }
             )
             return oauthConnection
         } catch (error) {
@@ -84,7 +85,9 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `/v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
 
-            const oauthLinks = await this.fetchHelper.fetch(url, T.Array(oauthLinkSchema))
+            const oauthLinks = await this.fetchHelper.get(url, {
+                schema: T.Array(oauthLinkSchema),
+            })
             return oauthLinks
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -119,7 +122,9 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `/v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.fetch(url, T.Object({ url: T.String() }))
+            const response = await this.fetchHelper.get(url, {
+                schema: T.Object({ url: T.String() }),
+            })
             return { provider, url: response.url }
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -152,17 +157,10 @@ export class OAuthService {
         }
     ): Promise<OAuthConnection> {
         try {
-            const oauthConnection = await this.fetchHelper.fetch(
-                `/v1/users/${userId}/oauth/${provider}`,
-                oauthConnectionSchema,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(connection),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
+            const oauthConnection = await this.fetchHelper.post(`/v1/users/${userId}/oauth/${provider}`, {
+                schema: oauthConnectionSchema,
+                body: connection,
+            })
             return oauthConnection
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -184,8 +182,8 @@ export class OAuthService {
      */
     public async disconnect(userId: string, provider: Provider): Promise<void> {
         try {
-            await this.fetchHelper.fetch(`v1/users/${userId}/oauth/${provider}`, T.Unknown(), {
-                method: 'DELETE',
+            await this.fetchHelper.delete(`v1/users/${userId}/oauth/${provider}`, {
+                schema: T.Object({ success: T.Boolean() }),
             })
         } catch (error) {
             if (error instanceof FetchError && error.status === 404) {
@@ -219,12 +217,9 @@ export class OAuthService {
             const queryString = params.toString()
             const url = `/v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.fetch(url, T.Object({ success: T.Boolean() }), {
-                method: 'POST',
-                body: JSON.stringify({ code, state }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            const response = await this.fetchHelper.post(url, {
+                body: { code, state },
+                schema: T.Object({ success: T.Boolean() }),
             })
             return response
         } catch (error) {
