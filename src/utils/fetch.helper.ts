@@ -10,7 +10,7 @@ interface FetchHelperOptions {
 
 type JSONBody = string | number | boolean | Date | undefined | null | JSONBody[] | { [key: string]: JSONBody }
 
-type SearchParams = { [key: string]: Arrayable<string | number | boolean> }
+type SearchParams = { [key: string]: Arrayable<string | number | boolean | Date | undefined> | undefined }
 
 // Error
 export class FetchError extends Error {
@@ -70,8 +70,8 @@ export class FetchHelper {
         if (_searchParams) {
             Object.entries(_searchParams).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach((v) => params.append(key, v.toString()))
-                } else {
+                    value.forEach((v) => v && params.append(key, v.toString()))
+                } else if (value !== undefined) {
                     params.append(key, value.toString())
                 }
             })
