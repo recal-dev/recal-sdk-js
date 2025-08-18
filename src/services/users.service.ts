@@ -57,14 +57,8 @@ export class UsersService {
             })
             .catch(
                 errorHandler([
-                    {
-                        code: 404,
-                        error: new OrganizationNotFoundError(id),
-                    },
-                    {
-                        code: 409,
-                        error: new UserAlreadyExistsError(id),
-                    },
+                    { code: 404, error: new OrganizationNotFoundError(id) },
+                    { code: 409, error: new UserAlreadyExistsError(id) },
                 ])
             )
         return User.fromJson(newUser)
