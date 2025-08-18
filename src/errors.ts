@@ -4,6 +4,12 @@ export class OrganizationNotFoundError extends Error {
     }
 }
 
+export class OrganizationAlreadyExistsError extends Error {
+    public constructor(slug: string) {
+        super(`[Recal] Organization ${slug} already exists`)
+    }
+}
+
 export class UserAlreadyExistsError extends Error {
     public constructor(userId: string) {
         super(`[Recal] User ${userId} already exists`)
