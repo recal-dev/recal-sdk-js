@@ -65,6 +65,12 @@ export class UsersService {
             .then(User.fromJson)
     }
 
+    /**
+     * Update a user
+     * @param id The ID of the user
+     * @param updatedUserData The updated user data
+     * @returns The updated user
+     */
     public async update(id: string, updatedUserData: { id: string }): Promise<User | null> {
         return this.fetchHelper
             .put(`/v1/users/${id}`, {
@@ -82,6 +88,11 @@ export class UsersService {
             .then((updatedUser) => (updatedUser ? User.fromJson(updatedUser) : null))
     }
 
+    /**
+     * Delete a user
+     * @param id The ID of the user
+     * @returns The deleted user
+     */
     public async delete(id: string): Promise<User> {
         return this.fetchHelper
             .delete(`/v1/users/${id}`, {
