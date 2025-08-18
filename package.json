@@ -6,8 +6,7 @@
     "scripts": {
         "build": "bun run ./src/index.ts",
         "test": "bun test tests/index.test.ts",
-        "format": "biome format",
-        "format:fix": "biome format --fix",
+        "format": "biome format --fix",
         "lint": "biome lint",
         "lint:fix": "biome lint --fix",
         "lint:fix:all": "biome lint --fix --unsafe",
