@@ -13,10 +13,10 @@ type ErrorHandlerObj<T> = {
     code: number
     filter?: (error: FetchError) => boolean
     statusTextInclFilter?: string | string[]
-} & (T extends Error ? { error: T } : { result: Handler<T> })
+} & ({ error: Error } | { result: Handler<T> })
 
 export const errorHandler =
-    <T>(errHandlers: ErrorHandlerObj<T>[], _catch?: CatchHandler<T>) =>
+    <T = never>(errHandlers: ErrorHandlerObj<T>[], _catch?: CatchHandler<T>) =>
     (error: Error): HandlerResult<T> => {
         if (error instanceof FetchError) {
             for (const errHandler of errHandlers) {

@@ -70,13 +70,21 @@ export class UsersService {
         return User.fromJson(newUser)
     }
 
-    public async update(id: string, updatedUserData: { id: string }) {
-        const updatedUser = await this.fetchHelper.put(`/v1/users/${id}`, {
-            body: {
-                userId: updatedUserData.id,
-            },
-            schema: userSchema,
-        })
+    public async update(id: string, updatedUserData: { id: string }): Promise<User | null> {
+        const updatedUser = await this.fetchHelper
+            .put(`/v1/users/${id}`, {
+                body: {
+                    userId: updatedUserData.id,
+                },
+                schema: userSchema,
+            })
+            .catch(
+                errorHandler([
+                    { code: 404, result: null },
+                    { code: 409, error: new UserAlreadyExistsError(id) },
+                ])
+            )
+        if (!updatedUser) return null
         return User.fromJson(updatedUser)
     }
 }
