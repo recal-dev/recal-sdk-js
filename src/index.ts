@@ -1,4 +1,5 @@
 import { OAuthService } from './services/oauth.service'
+import { OrganizationService } from './services/organization.service'
 import { UsersService } from './services/users.service'
 import type { RecalOptions } from './types/internal.types'
 import { FetchHelper } from './utils/fetch.helper'
@@ -18,6 +19,7 @@ export class RecalClient {
 
     // MARK: Services
     oauth: OAuthService
+    organization: OrganizationService
     users: UsersService
 
     public constructor(options: RecalOptions) {
@@ -30,6 +32,7 @@ export class RecalClient {
         this.fetchHelper = new FetchHelper({ token: this.token, url: this.baseUrl })
         // Initialize services
         this.oauth = new OAuthService(this.fetchHelper)
+        this.organization = new OrganizationService(this.fetchHelper)
         this.users = new UsersService(this.fetchHelper)
     }
 }
