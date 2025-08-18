@@ -39,6 +39,6 @@ export const errorHandler =
                 }
             }
         }
-        if (_catch) return _catch(error) as HandlerResult<T>
+        if (_catch) return _catch(error)
         throw error
     }
