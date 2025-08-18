@@ -24,6 +24,8 @@ export class FetchError extends Error {
     }
 }
 
+export { errorHandler } from './fetchErrorHandler'
+
 // MARK: - FetchHelper
 export class FetchHelper {
     private token: string
@@ -177,41 +179,3 @@ export class FetchHelper {
         })
     }
 }
-
-// MARK: - Error Handler
-type FunctionHandler<T> = (e: FetchError) => T
-type Handler<T> = T extends Error ? never : FunctionHandler<T> | T
-type CatchHandler<T> = T extends Error ? never : (e: unknown) => T
-type HandlerResult<T> = Exclude<T, Error>
-/**
- * ErrorHandler Object
- * @param code The HTTP status code to handle
- * @param error The error to throw on match of the HTTP status code
- * @param result The result to return on match of the HTTP status code
- */
-type ErrorHandlerObj<T> = {
-    code: number
-} & (T extends Error ? { error: T } : { result: Handler<T> })
-
-export const errorHandler =
-    <T>(errHandlers: ErrorHandlerObj<T>[], _catch?: CatchHandler<T>) =>
-    (error: Error): HandlerResult<T> => {
-        if (error instanceof FetchError) {
-            const mappedFunctionHandlers = new Map<number, FunctionHandler<T>>(
-                errHandlers.map((errHandler) => [
-                    errHandler.code,
-                    () => {
-                        if ('result' in errHandler) {
-                            if (errHandler.result instanceof Function) return errHandler.result(error)
-                            return errHandler.result
-                        }
-                        throw errHandler.error
-                    },
-                ])
-            )
-            const handler = mappedFunctionHandlers.get(error.status)
-            if (handler) return handler(error) as HandlerResult<T>
-        }
-        if (_catch) return _catch(error) as HandlerResult<T>
-        throw error
-    }

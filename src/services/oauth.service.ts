@@ -3,7 +3,7 @@ import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFo
 import { oauthConnectionSchema, oauthLinkSchema } from '../typebox/oauth.tb'
 import type { Provider } from '../types/calendar.types'
 import type { OAuthConnection, OAuthLink } from '../types/oauth.types'
-import { FetchError, type FetchHelper } from '../utils/fetch.helper'
+import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
 
 export class OAuthService {
     constructor(private fetchHelper: FetchHelper) {}
@@ -15,17 +15,12 @@ export class OAuthService {
      * @returns An array of OAuth connections
      */
     public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
-        try {
-            const oauthConnections = await this.fetchHelper.get(`/v1/users/${userId}/oauth?redacted=${redacted}`, {
+        const oauthConnections = await this.fetchHelper
+            .get(`/v1/users/${userId}/oauth?redacted=${redacted}`, {
                 schema: T.Array(oauthConnectionSchema),
             })
-            return oauthConnections
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+        return oauthConnections
     }
 
     /**
@@ -36,24 +31,21 @@ export class OAuthService {
      * @returns The OAuth connection
      */
     public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
-        try {
-            const oauthConnection = await this.fetchHelper.get(
-                `/v1/users/${userId}/oauth/${provider}?redacted=${redacted}`,
-                {
-                    schema: oauthConnectionSchema,
-                }
+        const oauthConnection = await this.fetchHelper
+            .get(`/v1/users/${userId}/oauth/${provider}?redacted=${redacted}`, {
+                schema: oauthConnectionSchema,
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        statusTextInclFilter: 'OAuth connection not found',
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                ])
             )
-            return oauthConnection
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                // Check the specific error message to determine the type of 404
-                if (error.statusText?.includes('OAuth connection not found')) {
-                    throw new OAuthConnectionNotFoundError(userId, provider)
-                }
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+        return oauthConnection
     }
 
     /**
@@ -70,28 +62,23 @@ export class OAuthService {
             accessType?: 'offline' | 'online'
         }
     ): Promise<OAuthLink[]> {
-        try {
-            const params = new URLSearchParams()
-            if (options?.provider) {
-                const providers = Array.isArray(options.provider) ? options.provider : [options.provider]
-                providers.forEach((p) => params.append('provider', p))
-            }
-            if (options?.scope) params.append('scope', options.scope)
-            if (options?.accessType) params.append('accessType', options.accessType)
+        const params = new URLSearchParams()
+        if (options?.provider) {
+            const providers = Array.isArray(options.provider) ? options.provider : [options.provider]
+            providers.forEach((p) => params.append('provider', p))
+        }
+        if (options?.scope) params.append('scope', options.scope)
+        if (options?.accessType) params.append('accessType', options.accessType)
 
-            const queryString = params.toString()
-            const url = `/v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
+        const queryString = params.toString()
+        const url = `/v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
 
-            const oauthLinks = await this.fetchHelper.get(url, {
+        const oauthLinks = await this.fetchHelper
+            .get(url, {
                 schema: T.Array(oauthLinkSchema),
             })
-            return oauthLinks
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+        return oauthLinks
     }
 
     /**
@@ -106,29 +93,29 @@ export class OAuthService {
             redirectUrl?: string
         }
     ): Promise<OAuthLink> {
-        try {
-            const params = new URLSearchParams()
-            if (options?.scope) params.append('scope', options.scope)
-            if (options?.accessType) params.append('accessType', options.accessType)
-            if (options?.redirectUrl) params.append('redirectUrl', options.redirectUrl)
+        const params = new URLSearchParams()
+        if (options?.scope) params.append('scope', options.scope)
+        if (options?.accessType) params.append('accessType', options.accessType)
+        if (options?.redirectUrl) params.append('redirectUrl', options.redirectUrl)
 
-            const queryString = params.toString()
-            const url = `/v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
+        const queryString = params.toString()
+        const url = `/v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.get(url, {
+        const response = await this.fetchHelper
+            .get(url, {
                 schema: T.Object({ url: T.String() }),
             })
-            return { provider, url: response.url }
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                // "OAuth credentials not found" means the server doesn't have credentials for this provider
-                if (error.statusText?.includes('OAuth credentials not found')) {
-                    throw new ProviderCredentialsNotSetError(provider)
-                }
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        statusTextInclFilter: 'OAuth credentials not found',
+                        error: new ProviderCredentialsNotSetError(provider),
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
+        return { provider, url: response.url }
     }
 
     /**
@@ -145,42 +132,42 @@ export class OAuthService {
             email?: string
         }
     ): Promise<OAuthConnection> {
-        try {
-            const oauthConnection = await this.fetchHelper.post(`/v1/users/${userId}/oauth/${provider}`, {
+        const oauthConnection = await this.fetchHelper
+            .post(`/v1/users/${userId}/oauth/${provider}`, {
                 schema: oauthConnectionSchema,
-                body: JSON.stringify(connection),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                body: connection,
             })
-            return oauthConnection
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                // POST endpoints typically return "OAuth connection not found" when trying to set a connection
-                if (error.statusText?.includes('OAuth connection not found')) {
-                    throw new OAuthConnectionNotFoundError(userId, provider)
-                }
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        statusTextInclFilter: 'OAuth connection not found',
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
+        return oauthConnection
     }
 
     /**
      * Delete OAuth connection for a provider
      */
     public async disconnect(userId: string, provider: Provider): Promise<void> {
-        try {
-            await this.fetchHelper.delete(`v1/users/${userId}/oauth/${provider}`, {})
-        } catch (error) {
-            if (error instanceof FetchError && error.status === 404) {
-                if (error.statusText?.includes('OAuth connection not found')) {
-                    throw new OAuthConnectionNotFoundError(userId, provider)
-                }
-                throw new UserNotFoundError(userId)
-            }
-            throw error
-        }
+        await this.fetchHelper
+            .delete(`v1/users/${userId}/oauth/${provider}`, {
+                schema: T.Object({ success: T.Boolean() }),
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        statusTextInclFilter: 'OAuth connection not found',
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
     }
 
     /**
@@ -192,39 +179,36 @@ export class OAuthService {
         state: string,
         redirectUrl?: string
     ): Promise<{ success: boolean }> {
-        try {
-            const params = new URLSearchParams()
-            if (redirectUrl) params.append('redirectUrl', redirectUrl)
+        const params = new URLSearchParams()
+        if (redirectUrl) params.append('redirectUrl', redirectUrl)
 
-            const queryString = params.toString()
-            const url = `/v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
+        const queryString = params.toString()
+        const url = `/v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
 
-            const response = await this.fetchHelper.post(url, {
+        const response = await this.fetchHelper
+            .post(url, {
                 schema: T.Object({ success: T.Boolean() }),
-                body: JSON.stringify({ code, state }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                body: { code, state },
             })
-            return response
-        } catch (error) {
-            if (error instanceof FetchError) {
-                if (error.status === 404) {
-                    // "OAuth authorization provider not found" is a specific message for verify endpoint
-                    if (error.statusText?.includes('OAuth authorization provider not found')) {
-                        throw new ProviderCredentialsNotSetError(provider)
-                    }
-                    throw new UserNotFoundError('User not found in state parameter')
-                }
-                if (error.status === 400) {
-                    // "OAuth credentials not configured" is another way the server says credentials aren't set
-                    if (error.statusText?.includes('OAuth credentials not configured')) {
-                        throw new ProviderCredentialsNotSetError(provider)
-                    }
-                    throw new Error(error.statusText || 'Invalid OAuth verification request')
-                }
-            }
-            throw error
-        }
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        statusTextInclFilter: 'OAuth authorization provider not found',
+                        error: new ProviderCredentialsNotSetError(provider),
+                    },
+                    { code: 404, error: new UserNotFoundError('User not found in state parameter') },
+                    {
+                        code: 400,
+                        statusTextInclFilter: 'OAuth credentials not configured',
+                        error: new ProviderCredentialsNotSetError(provider),
+                    },
+                    {
+                        code: 400,
+                        error: new Error('Invalid OAuth verification request'),
+                    },
+                ])
+            )
+        return response
     }
 }
