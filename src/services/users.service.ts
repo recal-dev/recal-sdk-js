@@ -1,4 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
+import { OrganizationNotFoundError, UserAlreadyExistsError } from 'src/errors'
 import { includesHelper } from 'src/utils/includes.helper'
 import { User } from '../entities/user'
 import { userSchema } from '../typebox/user.tb'
@@ -38,7 +39,7 @@ export class UsersService {
                     ]),
                 },
             })
-            .catch(errorHandler([[404, () => null]]))
+            .catch(errorHandler([{ code: 404, result: null }]))
         return newUser ? User.fromJson(newUser) : null
     }
 
@@ -49,10 +50,33 @@ export class UsersService {
      * @returns The new user
      */
     public async create(id: string, organizationSlugs?: string[]): Promise<User> {
-        const newUser = await this.fetchHelper.post(`/v1/users`, {
-            body: { id, organizationSlugs },
+        const newUser = await this.fetchHelper
+            .post(`/v1/users`, {
+                body: { id, organizationSlugs },
+                schema: userSchema,
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 404,
+                        error: new OrganizationNotFoundError(id),
+                    },
+                    {
+                        code: 409,
+                        error: new UserAlreadyExistsError(id),
+                    },
+                ])
+            )
+        return User.fromJson(newUser)
+    }
+
+    public async update(id: string, updatedUserData: { id: string }) {
+        const updatedUser = await this.fetchHelper.put(`/v1/users/${id}`, {
+            body: {
+                userId: updatedUserData.id,
+            },
             schema: userSchema,
         })
-        return User.fromJson(newUser)
+        return User.fromJson(updatedUser)
     }
 }
