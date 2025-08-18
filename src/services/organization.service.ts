@@ -1,4 +1,6 @@
 import { Type as T } from '@sinclair/typebox'
+import { User } from 'src/entities/user'
+import { userSchema } from 'src/typebox/user.tb'
 import { Organization } from '../entities/organization'
 import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '../errors'
 import { organizationSchema } from '../typebox/organization.tb'
@@ -85,5 +87,50 @@ export class OrganizationService {
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
             .then(Organization.fromJson)
+    }
+
+    /**
+     * Get the members of an organization
+     * @param slug The slug of the organization
+     * @returns The members of the organization
+     */
+    public async getMembers(slug: string): Promise<User[]> {
+        return this.fetchHelper
+            .get(`/v1/organizations/${slug}/members`, {
+                schema: T.Array(userSchema),
+            })
+            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
+            .then((users) => users.map(User.fromJson))
+    }
+
+    /**
+     * Add members to an organization
+     * @param slug The slug of the organization
+     * @param userIds The IDs of the users to add
+     * @returns The added users
+     */
+    public async addMembers(slug: string, userIds: string[]): Promise<User[]> {
+        return this.fetchHelper
+            .post(`/v1/organizations/${slug}/members`, {
+                body: { userIds },
+                schema: T.Array(userSchema),
+            })
+            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
+            .then((users) => users.map(User.fromJson))
+    }
+
+    /**
+     * Remove members from an organization
+     * @param slug The slug of the organization
+     * @param userIds The IDs of the users to remove
+     * @returns Success message
+     */
+    public async removeMembers(slug: string, userIds: string[]): Promise<string> {
+        return this.fetchHelper
+            .delete(`/v1/organizations/${slug}/members`, {
+                body: { userIds },
+                schema: T.String(),
+            })
+            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
     }
 }
