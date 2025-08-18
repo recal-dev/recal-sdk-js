@@ -160,11 +160,13 @@ export class FetchHelper {
     public async delete<T extends Static<S>, S extends TSchema>(
         _url: string,
         {
+            body,
             searchParams,
             headers,
             schema,
             options,
         }: {
+            body?: JSONBody
             searchParams?: { [key: string]: string | number | boolean }
             headers?: Record<string, string>
             schema?: S
@@ -172,6 +174,7 @@ export class FetchHelper {
         }
     ): Promise<T> {
         return this._fetch(_url, {
+            body,
             searchParams,
             headers,
             schema,
