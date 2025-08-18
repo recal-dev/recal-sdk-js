@@ -15,12 +15,12 @@ export class OAuthService {
      * @returns An array of OAuth connections
      */
     public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
-        const oauthConnections = await this.fetchHelper
-            .get(`/v1/users/${userId}/oauth?redacted=${redacted}`, {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/oauth`, {
                 schema: T.Array(oauthConnectionSchema),
+                searchParams: { redacted },
             })
             .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
-        return oauthConnections
     }
 
     /**
@@ -31,9 +31,10 @@ export class OAuthService {
      * @returns The OAuth connection
      */
     public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
-        const oauthConnection = await this.fetchHelper
-            .get(`/v1/users/${userId}/oauth/${provider}?redacted=${redacted}`, {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/oauth/${provider}`, {
                 schema: oauthConnectionSchema,
+                searchParams: { redacted },
             })
             .catch(
                 errorHandler([
@@ -45,7 +46,6 @@ export class OAuthService {
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
             )
-        return oauthConnection
     }
 
     /**
@@ -62,27 +62,24 @@ export class OAuthService {
             accessType?: 'offline' | 'online'
         }
     ): Promise<OAuthLink[]> {
-        const params = new URLSearchParams()
-        if (options?.provider) {
-            const providers = Array.isArray(options.provider) ? options.provider : [options.provider]
-            providers.forEach((p) => params.append('provider', p))
-        }
-        if (options?.scope) params.append('scope', options.scope)
-        if (options?.accessType) params.append('accessType', options.accessType)
-
-        const queryString = params.toString()
-        const url = `/v1/users/${userId}/oauth/links${queryString ? `?${queryString}` : ''}`
-
-        const oauthLinks = await this.fetchHelper
-            .get(url, {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/oauth/links`, {
                 schema: T.Array(oauthLinkSchema),
+                searchParams: {
+                    provider: options?.provider,
+                    scope: options?.scope,
+                    accessType: options?.accessType,
+                },
             })
             .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
-        return oauthLinks
     }
 
     /**
      * Get OAuth authorization URL for a specific provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @param options Options for the OAuth authorization URL
+     * @returns The OAuth authorization URL
      */
     public async getLink(
         userId: string,
@@ -93,17 +90,14 @@ export class OAuthService {
             redirectUrl?: string
         }
     ): Promise<OAuthLink> {
-        const params = new URLSearchParams()
-        if (options?.scope) params.append('scope', options.scope)
-        if (options?.accessType) params.append('accessType', options.accessType)
-        if (options?.redirectUrl) params.append('redirectUrl', options.redirectUrl)
-
-        const queryString = params.toString()
-        const url = `/v1/users/${userId}/oauth/${provider}/link${queryString ? `?${queryString}` : ''}`
-
         const response = await this.fetchHelper
-            .get(url, {
+            .get(`/v1/users/${userId}/oauth/${provider}/link`, {
                 schema: T.Object({ url: T.String() }),
+                searchParams: {
+                    scope: options?.scope,
+                    accessType: options?.accessType,
+                    redirectUrl: options?.redirectUrl,
+                },
             })
             .catch(
                 errorHandler([
@@ -120,6 +114,10 @@ export class OAuthService {
 
     /**
      * Set OAuth tokens for a provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @param connection The OAuth connection to set
+     * @returns The OAuth connection
      */
     public async setConnection(
         userId: string,
@@ -132,7 +130,7 @@ export class OAuthService {
             email?: string
         }
     ): Promise<OAuthConnection> {
-        const oauthConnection = await this.fetchHelper
+        return this.fetchHelper
             .post(`/v1/users/${userId}/oauth/${provider}`, {
                 schema: oauthConnectionSchema,
                 body: connection,
@@ -147,15 +145,17 @@ export class OAuthService {
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
             )
-        return oauthConnection
     }
 
     /**
      * Delete OAuth connection for a provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @returns Promise that resolves when the connection is deleted
      */
     public async disconnect(userId: string, provider: Provider): Promise<void> {
         await this.fetchHelper
-            .delete(`v1/users/${userId}/oauth/${provider}`, {
+            .delete(`/v1/users/${userId}/oauth/${provider}`, {
                 schema: T.Object({ success: T.Boolean() }),
             })
             .catch(
@@ -172,6 +172,11 @@ export class OAuthService {
 
     /**
      * Verify OAuth code (used in OAuth callback flow)
+     * @param provider The provider of the OAuth connection
+     * @param code The OAuth code
+     * @param state The OAuth state
+     * @param redirectUrl The redirect URL
+     * @returns The OAuth verification result
      */
     public async verify(
         provider: Provider,
@@ -179,16 +184,11 @@ export class OAuthService {
         state: string,
         redirectUrl?: string
     ): Promise<{ success: boolean }> {
-        const params = new URLSearchParams()
-        if (redirectUrl) params.append('redirectUrl', redirectUrl)
-
-        const queryString = params.toString()
-        const url = `/v1/users/oauth/${provider}/verify${queryString ? `?${queryString}` : ''}`
-
-        const response = await this.fetchHelper
-            .post(url, {
-                schema: T.Object({ success: T.Boolean() }),
+        return this.fetchHelper
+            .post(`/v1/users/oauth/${provider}/verify`, {
                 body: { code, state },
+                schema: T.Object({ success: T.Boolean() }),
+                searchParams: { redirectUrl },
             })
             .catch(
                 errorHandler([
@@ -209,6 +209,5 @@ export class OAuthService {
                     },
                 ])
             )
-        return response
     }
 }
