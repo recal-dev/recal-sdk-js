@@ -1,8 +1,17 @@
-import { advancedSchedulingResponseSchema, schedulingResponseSchema } from 'src/typebox/scheduling.tb'
+import {
+    advancedSchedulingResponseSchema,
+    schedulingResponseSchema,
+    subOrgSchedulingResponseSchema,
+} from 'src/typebox/scheduling.tb'
 import type { Provider } from 'src/types/calendar.types'
-import type { AdvancedSchedulingResponse, Schedule, SchedulingResponse } from 'src/types/scheduling.types'
+import type {
+    AdvancedSchedulingResponse,
+    Schedule,
+    SchedulingResponse,
+    SubOrgSchedulingResponse,
+} from 'src/types/scheduling.types'
 import { errorHandler, type FetchHelper } from 'src/utils/fetch.helper'
-import { OAuthConnectionNotFoundError, UserNotFoundError } from '../errors'
+import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '../errors'
 
 export class SchedulingService {
     constructor(private fetchHelper: FetchHelper) {}
@@ -106,6 +115,55 @@ export class SchedulingService {
                         statusTextInclFilter: 'User has no connected calendars',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
+    }
+
+    public async getOrgWideAvailability(
+        orgSlug: string,
+        provider?: Provider | Provider[],
+        padding?: number,
+        slotDuration?: number,
+        startDate?: Date,
+        endDate?: Date,
+        earliestTimeEachDay?: string,
+        latestTimeEachDay?: string,
+        timeZone?: string
+    ): Promise<SubOrgSchedulingResponse> {
+        return this.fetchHelper
+            .get(`/v1/${orgSlug}/scheduling`, {
+                schema: subOrgSchedulingResponseSchema,
+                searchParams: {
+                    provider,
+                    padding,
+                    slotDuration,
+                    startDate,
+                    endDate,
+                    earliestTimeEachDay,
+                    latestTimeEachDay,
+                },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(
+                            'organization',
+                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
+                        ),
+                        statusTextInclFilter: 'User has no connected calendars',
+                    },
+                    {
+                        code: 404,
+                        error: new OrganizationNotFoundError(orgSlug),
+                        statusTextInclFilter: 'Organization not found',
+                    },
+                    {
+                        code: 404,
+                        error: new UserNotFoundError('organization'),
+                        statusTextInclFilter: 'No users found in this organization',
+                    },
                 ])
             )
     }

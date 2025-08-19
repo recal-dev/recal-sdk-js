@@ -6,36 +6,6 @@ import { timeRangeSchema } from './calendar.tb'
 /**
  * Schema for scheduling options
  */
-// export const schedulingOptionsSchema = T.Object({
-//     padding: T.Number({
-//         default: 0,
-//         description: 'Padding in minutes to add before and after busy times',
-//     }),
-//     slotDuration: T.Number({
-//         default: 30,
-//         description: 'Duration of each slot in minutes',
-//     }),
-//     startDate: T.Date({
-//         description: 'Start of the time range to scan for availability (inclusive)',
-//     }),
-//     endDate: T.Date({
-//         description: 'End of the time range to scan for availability (inclusive)',
-//     }),
-//     earliestTimeEachDay: T.Optional(
-//         time({
-//             description: 'Requested earliest time of each day (in the time zone of the request) (e.g., 10:00)',
-//         })
-//     ),
-//     latestTimeEachDay: T.Optional(
-//         time({
-//             description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
-//         })
-//     ),
-// })
-
-/**
- * Schema for scheduling options
- */
 export const outputSchedulingOptionsSchema = T.Object({
     padding: T.Number({
         default: 0,

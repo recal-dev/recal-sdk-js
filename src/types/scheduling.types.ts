@@ -1,3 +1,5 @@
+import type { Static } from '@sinclair/typebox'
+import type { subOrgSchedulingResponseSchema } from '../typebox/scheduling.tb'
 import type { TimeRange } from './calendar.types'
 
 export interface SchedulingOptions {
@@ -39,3 +41,5 @@ export interface AdvancedSchedulingResponse {
         schedules: Schedule[]
     }
 }
+
+export type SubOrgSchedulingResponse = Static<typeof subOrgSchedulingResponseSchema>
