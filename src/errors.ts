@@ -33,3 +33,9 @@ export class OAuthConnectionNotFoundError extends Error {
         super(`[Recal] OAuth connection not found for user ${userId} and provider ${provider}`)
     }
 }
+
+export class EventNotFoundError extends Error {
+    public constructor(eventId: string) {
+        super(`[Recal] Event ${eventId} not found`)
+    }
+}
