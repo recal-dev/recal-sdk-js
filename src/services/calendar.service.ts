@@ -1,11 +1,18 @@
 import { Type as T } from '@sinclair/typebox'
-import { EventNotFoundError, OAuthConnectionNotFoundError, UserNotFoundError } from 'src/errors'
+import {
+    EventNotFoundError,
+    OAuthConnectionNotFoundError,
+    ProviderCredentialsNotSetError,
+    UserNotFoundError,
+} from 'src/errors'
 import { eventSchema, freeBusySchema } from 'src/typebox/calendar.tb'
 import type {
+    CreateEvent,
     CreateEventAcrossCalendars,
     Event,
     FreeBusy,
     Provider,
+    UpdateEvent,
     UpdateEventAcrossCalendars,
 } from 'src/types/calendar.types'
 import type { FetchHelper } from 'src/utils/fetch.helper'
@@ -213,6 +220,143 @@ export class CalendarService {
                         ),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
+    }
+
+    /**
+     * @param userId The ID of the user
+     * @param provider The provider of the calendar
+     * @param calendarId The ID of the calendar
+     * @param eventId The ID of the event
+     * @param timeZone The time zone of the calendar (optional)
+     * @returns The event
+     */
+    public async getEvent(
+        userId: string,
+        provider: Provider,
+        calendarId: string,
+        eventId: string,
+        timeZone?: string
+    ): Promise<Event> {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
+                schema: eventSchema,
+                searchParams: { timeZone },
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                        statusTextInclFilter: 'User has not connected this calendar provider',
+                    },
+                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new EventNotFoundError(eventId), statusTextInclFilter: 'Event not found' },
+                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
+                ])
+            )
+    }
+
+    /**
+     * @param userId The ID of the user
+     * @param provider The provider of the calendar
+     * @param calendarId The ID of the calendar
+     * @param event The event to create
+     * @param timeZone The time zone of the calendar (optional)
+     * @returns The created event
+     */
+    public async createEvent(
+        userId: string,
+        provider: Provider,
+        calendarId: string,
+        event: CreateEvent,
+        timeZone?: string
+    ): Promise<Event> {
+        return this.fetchHelper
+            .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
+                schema: eventSchema,
+                searchParams: { timeZone },
+                body: { event },
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                        statusTextInclFilter: 'User has not connected this calendar provider',
+                    },
+                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
+                ])
+            )
+    }
+
+    /**
+     * @param userId The ID of the user
+     * @param provider The provider of the calendar
+     * @param calendarId The ID of the calendar
+     * @param eventId The ID of the event
+     * @param event The event to update
+     * @param timeZone The time zone of the calendar (optional)
+     * @returns The updated event
+     */
+    public async updateEvent(
+        userId: string,
+        provider: Provider,
+        calendarId: string,
+        eventId: string,
+        event: UpdateEvent,
+        timeZone?: string
+    ): Promise<Event> {
+        return this.fetchHelper
+            .put(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
+                schema: eventSchema,
+                searchParams: { timeZone },
+                body: { event },
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                        statusTextInclFilter: 'User has not connected this calendar provider',
+                    },
+                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
+                ])
+            )
+    }
+
+    /**
+     * @param userId The ID of the user
+     * @param provider The provider of the calendar
+     * @param calendarId The ID of the calendar
+     * @param eventId The ID of the event
+     * @param timeZone The time zone of the calendar (optional)
+     * @returns The deleted event
+     */
+    public async deleteEvent(
+        userId: string,
+        provider: Provider,
+        calendarId: string,
+        eventId: string,
+        timeZone?: string
+    ): Promise<void> {
+        return this.fetchHelper
+            .delete(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
+                searchParams: { timeZone },
+                schema: T.Void(),
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(userId, provider),
+                        statusTextInclFilter: 'User has not connected this calendar provider',
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                    { code: 404, error: new EventNotFoundError(eventId) },
                 ])
             )
     }
