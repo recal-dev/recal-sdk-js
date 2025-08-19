@@ -37,6 +37,10 @@ export const attendeeSchema = T.Intersect([
     ]),
 ])
 
+export const createAttendeeSchema = T.Object({
+    email: T.String(),
+})
+
 export const eventSchema = T.Object({
     id: T.String(),
     metaId: T.Optional(T.String()),
@@ -48,6 +52,18 @@ export const eventSchema = T.Object({
     attendees: T.Array(attendeeSchema),
     meeting: T.Optional(meetingSchema),
     original: T.Unknown(),
+})
+
+export const createEventSchema = T.Object({
+    metaId: T.Optional(T.String()),
+    subject: T.Optional(T.String()),
+    description: T.Optional(T.String()),
+    start: T.Optional(T.Date()),
+    end: T.Optional(T.Date()),
+    location: T.Optional(T.String()),
+    attendees: T.Optional(T.Array(createAttendeeSchema)),
+    sendNotifications: T.Boolean(),
+    meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 
 export const timeRangeSchema = T.Object({

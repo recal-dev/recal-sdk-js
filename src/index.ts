@@ -1,3 +1,4 @@
+import { CalendarService } from './services/calendar.service'
 import { OAuthService } from './services/oauth.service'
 import { OrganizationService } from './services/organization.service'
 import { UsersService } from './services/users.service'
@@ -21,6 +22,7 @@ export class RecalClient {
     oauth: OAuthService
     organization: OrganizationService
     users: UsersService
+    calendar: CalendarService
 
     public constructor(options: RecalOptions) {
         const _token = functionize(options.token) || process.env.RECAL_TOKEN
@@ -34,6 +36,7 @@ export class RecalClient {
         this.oauth = new OAuthService(this.fetchHelper)
         this.organization = new OrganizationService(this.fetchHelper)
         this.users = new UsersService(this.fetchHelper)
+        this.calendar = new CalendarService(this.fetchHelper)
     }
 }
 

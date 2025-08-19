@@ -66,6 +66,13 @@ export type Attendee = {
 )
 
 /**
+ * Create attendee interface
+ */
+export interface CreateAttendee {
+    email: string
+}
+
+/**
  * Event interface
  */
 export interface Event {
@@ -81,6 +88,20 @@ export interface Event {
     original: unknown
 }
 
+/**
+ * Create event interface
+ */
+export interface CreateEvent {
+    metaId?: string
+    subject?: string
+    description?: string
+    start?: Date
+    end?: Date
+    location?: string
+    attendees?: CreateAttendee[]
+    sendNotifications: boolean
+    meeting?: Meeting
+}
 /**
  * Time range interface
  */
