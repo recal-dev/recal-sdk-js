@@ -66,6 +66,42 @@ export const createEventSchema = T.Object({
     meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 
+export const createEventAcrossCalendarsSchema = T.Object({
+    id: T.Optional(T.String()),
+    subject: T.Optional(T.String()),
+    description: T.Optional(T.String()),
+    start: T.Optional(T.Date()),
+    end: T.Optional(T.Date()),
+    location: T.Optional(T.String()),
+    attendees: T.Optional(T.Array(createAttendeeSchema)),
+    sendNotifications: T.Optional(T.Boolean()),
+    meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
+})
+
+export const updateEventSchema = T.Object({
+    id: T.Optional(T.String()),
+    subject: T.Optional(T.String()),
+    description: T.Optional(T.String()),
+    start: T.Optional(T.Date()),
+    end: T.Optional(T.Date()),
+    location: T.Optional(T.String()),
+    attendees: T.Optional(T.Array(createAttendeeSchema)),
+    sendNotifications: T.Optional(T.Boolean()),
+    meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
+})
+
+export const updateEventAcrossCalendarsSchema = T.Object({
+    metaId: T.String(),
+    subject: T.Optional(T.String()),
+    description: T.Optional(T.String()),
+    start: T.Optional(T.Date()),
+    end: T.Optional(T.Date()),
+    location: T.Optional(T.String()),
+    attendees: T.Optional(T.Array(createAttendeeSchema)),
+    sendNotificationsFor: T.Optional(T.Array(T.Enum(Provider))),
+    meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
+})
+
 export const timeRangeSchema = T.Object({
     start: T.Date(),
     end: T.Date(),

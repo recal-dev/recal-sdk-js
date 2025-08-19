@@ -102,6 +102,52 @@ export interface CreateEvent {
     sendNotifications: boolean
     meeting?: Meeting
 }
+
+/**
+ * Create event across calendars interface
+ */
+export interface CreateEventAcrossCalendars {
+    id?: string
+    subject?: string
+    description?: string
+    start?: Date
+    end?: Date
+    location?: string
+    attendees?: CreateAttendee[]
+    sendNotifications?: boolean
+    meeting?: Meeting
+}
+
+/**
+ * Update event interface
+ */
+export interface UpdateEvent {
+    id?: string
+    subject?: string
+    description?: string
+    start?: Date
+    end?: Date
+    location?: string
+    attendees?: CreateAttendee[]
+    sendNotifications?: boolean
+    meeting?: Meeting
+}
+
+/**
+ * Update event across calendars interface
+ */
+export interface UpdateEventAcrossCalendars {
+    metaId: string
+    subject?: string
+    description?: string
+    start?: Date
+    end?: Date
+    location?: string
+    attendees?: CreateAttendee[]
+    sendNotificationsFor?: Provider[]
+    meeting?: Meeting
+}
+
 /**
  * Time range interface
  */

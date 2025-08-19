@@ -151,7 +151,7 @@ export class FetchHelper {
             options,
         }: {
             body?: JSONBody
-            searchParams?: { [key: string]: string | number | boolean }
+            searchParams?: SearchParams
             headers?: Record<string, string>
             schema?: S
             options?: RequestInit
@@ -176,7 +176,7 @@ export class FetchHelper {
             options,
         }: {
             body?: JSONBody
-            searchParams?: { [key: string]: string | number | boolean }
+            searchParams?: SearchParams
             headers?: Record<string, string>
             schema?: S
             options?: RequestInit
