@@ -1,5 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
-import { strippedUserSchema } from './user.tb'
+import { strippedUserSchema } from './common.tb'
 
 export const strippedOrganizationSchema = T.Object({
     slug: T.String(),
