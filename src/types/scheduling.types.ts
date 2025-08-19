@@ -12,8 +12,8 @@ export interface SchedulingOptions {
 export interface OutputsSchedulingOptions {
     padding: number
     slotDuration: number
-    startDate: Date
-    endDate: Date
+    startDate: string
+    endDate: string
     earliestTimeEachDay?: string
     latestTimeEachDay?: string
 }
@@ -22,12 +22,20 @@ export interface TimeRangeWithUser extends TimeRange {
     userId: string
 }
 
+export interface Schedule {
+    start: number
+    end: number
+    daysOfWeek: number[]
+}
+
 export interface SchedulingResponse {
     availableSlots: TimeRange[]
     options: OutputsSchedulingOptions
 }
 
-export interface SubOrgSchedulingResponse {
-    availableSlots: TimeRangeWithUser[]
-    options: OutputsSchedulingOptions
+export interface AdvancedSchedulingResponse {
+    availableSlots: TimeRange[]
+    options: OutputsSchedulingOptions & {
+        schedules: Schedule[]
+    }
 }
