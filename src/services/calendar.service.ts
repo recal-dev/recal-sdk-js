@@ -2,16 +2,18 @@ import { Type as T } from '@sinclair/typebox'
 import {
     EventNotFoundError,
     OAuthConnectionNotFoundError,
+    OrganizationNotFoundError,
     ProviderCredentialsNotSetError,
     UserNotFoundError,
 } from 'src/errors'
-import { eventSchema, freeBusySchema } from 'src/typebox/calendar.tb'
+import { eventSchema, freeBusySchema, timeRangeSchema } from 'src/typebox/calendar.tb'
 import type {
     CreateEvent,
     CreateEventAcrossCalendars,
     Event,
     FreeBusy,
     Provider,
+    TimeRange,
     UpdateEvent,
     UpdateEventAcrossCalendars,
 } from 'src/types/calendar.types'
@@ -357,6 +359,40 @@ export class CalendarService {
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                     { code: 404, error: new EventNotFoundError(eventId) },
+                ])
+            )
+    }
+
+    /**
+     * Get the org-wide free/busy period
+     * @param slug The slug of the organization
+     * @param minDate The minimum date
+     * @param maxDate The maximum date
+     * @param primaryOnly Whether to only include the primary calendar
+     * @param provider The provider
+     * @param timeZone The time zone
+     * @returns The org-wide free/busy period
+     */
+    public async getOrgWideFreeBusy(
+        slug: string,
+        minDate: Date,
+        maxDate: Date,
+        primaryOnly?: boolean,
+        provider?: Provider | Provider[],
+        timeZone?: string
+    ): Promise<TimeRange[]> {
+        return this.fetchHelper
+            .get(`/v1/organizations/${slug}/calendar/free-busy`, {
+                schema: T.Array(timeRangeSchema),
+                searchParams: { minDate, maxDate, primaryOnly, provider, timeZone },
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new Error(`OAuth credentials for provider ${provider} not found for the user`),
+                    },
+                    { code: 404, error: new OrganizationNotFoundError(slug) },
                 ])
             )
     }
