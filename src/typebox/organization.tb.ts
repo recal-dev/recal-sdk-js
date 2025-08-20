@@ -1,11 +1,6 @@
 import { Type as T } from '@sinclair/typebox'
-import { strippedUserSchema } from './common.tb'
-
-export const strippedOrganizationSchema = T.Object({
-    slug: T.String(),
-    name: T.Union([T.String(), T.Null()]),
-    createdAt: T.Date(),
-})
+import { strippedOrganizationSchema } from './organization.stripped.tb'
+import { strippedUserSchema } from './user.stripped.tb'
 
 export const organizationSchema = T.Object({
     ...strippedOrganizationSchema.properties,

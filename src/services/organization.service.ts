@@ -9,11 +9,11 @@ import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
 export class OrganizationService {
     constructor(private fetchHelper: FetchHelper) {}
 
+    /**
+     * List all organizations
+     * @returns An array of organizations
+     */
     public async listAll(): Promise<Organization[]> {
-        /**
-         * List all organizations
-         * @returns An array of organizations
-         */
         return this.fetchHelper
             .get('/v1/organizations', {
                 schema: T.Array(organizationSchema),

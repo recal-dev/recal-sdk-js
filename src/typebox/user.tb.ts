@@ -1,11 +1,7 @@
 import { Type as T } from '@sinclair/typebox'
-import { strippedOrganizationSchema } from './common.tb'
 import { oauthConnectionSchema } from './oauth.tb'
-
-export const strippedUserSchema = T.Object({
-    id: T.String(),
-    createdAt: T.Date(),
-})
+import { strippedOrganizationSchema } from './organization.stripped.tb'
+import { strippedUserSchema } from './user.stripped.tb'
 
 export const userSchema = T.Object({
     ...strippedUserSchema.properties,
