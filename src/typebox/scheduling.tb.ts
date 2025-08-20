@@ -1,6 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
 import { time } from 'src/utils/time'
-import { tzDate } from 'src/utils/tzDate'
 import { timeRangeSchema } from './calendar.tb'
 
 /**
@@ -15,10 +14,10 @@ export const outputSchedulingOptionsSchema = T.Object({
         default: 30,
         description: 'Duration of each slot in minutes',
     }),
-    startDate: tzDate({
+    startDate: T.Date({
         description: 'Start of the time range to scan for availability (inclusive)',
     }),
-    endDate: tzDate({
+    endDate: T.Date({
         description: 'End of the time range to scan for availability (inclusive)',
     }),
     earliestTimeEachDay: T.Optional(
@@ -56,11 +55,11 @@ export const scheduleSchema = T.Object({
  * Schema for time range with user information
  */
 export const timeRangeWithUserSchema = T.Object({
-    start: tzDate({
-        description: 'Start time of the time range in ISO format',
+    start: T.Date({
+        description: 'Start time of the time range',
     }),
-    end: tzDate({
-        description: 'End time of the time range in ISO format',
+    end: T.Date({
+        description: 'End time of the time range',
     }),
     userId: T.String(),
 })
