@@ -1,8 +1,8 @@
 import type { Static } from '@sinclair/typebox'
 import { UserNotFoundError } from 'src/errors'
+import { OAuthService } from 'src/services/oauth.service'
 import { OrganizationsService } from 'src/services/organizations.service'
 import type { userSchema } from 'src/typebox/user.tb'
-import type { Event } from '../types/calendar.types'
 import type { OAuthConnection } from '../types/oauth.types'
 import type { FetchHelper } from '../utils/fetch.helper'
 import { Organization } from './organization'
@@ -44,7 +44,7 @@ export class User {
     }
 
     public async getOrganizations(refetch = false): Promise<Organization[]> {
-        if (refetch) {
+        if (this.organizations === undefined || refetch) {
             const organizationsService = new OrganizationsService(this.fetchHelper)
             const orgs = await organizationsService.listAllFromUser(this.id)
             if (!orgs) throw new UserNotFoundError(this.id)
@@ -53,11 +53,12 @@ export class User {
         return this.organizations ?? []
     }
 
-    public getOAuthConnections(): OAuthConnection[] {
+    public async getOAuthConnections(refetch = false): Promise<OAuthConnection[]> {
+        if (this.oauthConnections === undefined || refetch) {
+            const oauthService = new OAuthService(this.fetchHelper)
+            const connections = await oauthService.getAllConnections(this.id)
+            this.oauthConnections = connections
+        }
         return this.oauthConnections ?? []
-    }
-
-    public getEvents(): Event[] {
-        return []
     }
 }
