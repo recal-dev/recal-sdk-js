@@ -6,8 +6,8 @@ import { userSchema } from '../typebox/user.tb'
 import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
 
 interface UserOptions {
-    includeOrgs: boolean
-    includeOAuth: boolean
+    includeOrgs?: boolean
+    includeOAuth?: boolean
 }
 
 export class UsersService {
@@ -20,7 +20,7 @@ export class UsersService {
     public async listAll(): Promise<User[]> {
         return this.fetchHelper
             .get('/v1/users', { schema: T.Array(userSchema) })
-            .then((users) => users.map(User.fromJson))
+            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
     }
 
     /**
@@ -41,7 +41,7 @@ export class UsersService {
                 },
             })
             .catch(errorHandler([{ code: 404, result: null }]))
-            .then((user) => (user ? User.fromJson(user) : null))
+            .then((user) => (user ? User.fromJson(user, this.fetchHelper) : null))
     }
 
     /**
@@ -62,7 +62,7 @@ export class UsersService {
                     { code: 409, error: new UserAlreadyExistsError(id) },
                 ])
             )
-            .then(User.fromJson)
+            .then((user) => User.fromJson(user, this.fetchHelper))
     }
 
     /**
@@ -85,7 +85,7 @@ export class UsersService {
                     { code: 409, error: new UserAlreadyExistsError(id) },
                 ])
             )
-            .then((updatedUser) => (updatedUser ? User.fromJson(updatedUser) : null))
+            .then((updatedUser) => (updatedUser ? User.fromJson(updatedUser, this.fetchHelper) : null))
     }
 
     /**
@@ -99,6 +99,6 @@ export class UsersService {
                 schema: userSchema,
             })
             .catch(errorHandler([{ code: 404, error: new UserNotFoundError(id) }]))
-            .then(User.fromJson)
+            .then((user) => User.fromJson(user, this.fetchHelper))
     }
 }
