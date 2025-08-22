@@ -59,7 +59,7 @@ export class OrganizationService {
      */
     public async update(
         slug: string,
-        updatedOrganizationData: { slug?: string; name?: string }
+        updatedOrganizationData: { slug: string; name: string }
     ): Promise<Organization> {
         return this.fetchHelper
             .put(`/v1/organizations/${slug}`, {
