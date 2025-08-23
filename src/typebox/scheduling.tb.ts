@@ -1,6 +1,7 @@
 import { Type as T } from '@sinclair/typebox'
 import { time } from 'src/utils/time'
 import { timeRangeSchema } from './calendar.tb'
+import { timeString } from './timeString.tb'
 
 /**
  * Schema for scheduling options
@@ -36,18 +37,22 @@ export const outputSchedulingOptionsSchema = T.Object({
  * Schema for schedule
  */
 export const scheduleSchema = T.Object({
-    start: T.Number({
+    start: timeString({
         description: 'Start time in minutes from midnight',
     }),
-    end: T.Number({
+    end: timeString({
         description: 'End time in minutes from midnight',
     }),
-    daysOfWeek: T.Array(
-        T.Number({
-            minimum: 0,
-            maximum: 6,
-            description: 'Days of the week (0 = Sunday, 6 = Saturday)',
-        })
+    days: T.Array(
+        T.Union([
+            T.Literal('monday'),
+            T.Literal('tuesday'),
+            T.Literal('wednesday'),
+            T.Literal('thursday'),
+            T.Literal('friday'),
+            T.Literal('saturday'),
+            T.Literal('sunday'),
+        ])
     ),
 })
 
