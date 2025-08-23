@@ -23,6 +23,10 @@ import { errorHandler } from 'src/utils/fetch.helper'
 export class CalendarService {
     constructor(private fetchHelper: FetchHelper) {}
 
+    // ==========================================
+    // MARK: User Calendar - Free/Busy & Events
+    // ==========================================
+
     /**
      * @param userId The ID of the user
      * @param minDate The start date of the free/busy period
@@ -91,6 +95,10 @@ export class CalendarService {
                 ])
             )
     }
+
+    // ==========================================
+    // MARK: Meta Event Operations (Cross-Calendar)
+    // ==========================================
 
     /**
      * @param userId The ID of the user
@@ -225,6 +233,10 @@ export class CalendarService {
                 ])
             )
     }
+
+    // ==========================================
+    // MARK: Provider-Specific Event Operations
+    // ==========================================
 
     /**
      * @param userId The ID of the user
@@ -362,6 +374,10 @@ export class CalendarService {
                 ])
             )
     }
+
+    // ==========================================
+    // MARK: Organization-Wide Operations
+    // ==========================================
 
     /**
      * Get the org-wide free/busy period
