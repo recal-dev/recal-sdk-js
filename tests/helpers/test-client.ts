@@ -22,10 +22,10 @@ export class TestClient {
   }
 
   async teardown(prefix: string): Promise<void> {
-    const orgs = await this.sdk.organization.listAll()
+    const orgs = await this.sdk.organizations.listAll()
     for (const org of orgs){
       if (org.name?.startsWith(prefix)) {
-        await this.sdk.organization.delete(org.slug)
+        await this.sdk.organizations.delete(org.slug)
       }
     }
 
