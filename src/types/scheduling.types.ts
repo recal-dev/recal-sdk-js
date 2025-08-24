@@ -5,7 +5,7 @@ import type {
     schedulingSchema,
     subOrgSchedulingResponseSchema,
 } from '../typebox/scheduling.tb'
-import type { TimeRange } from './calendar.types'
+import type { Provider, TimeRange } from './calendar.types'
 
 // ==========================================
 // MARK: Scheduling Options
@@ -47,3 +47,32 @@ export type SchedulingResponse = Static<typeof schedulingResponseSchema>
 export type AdvancedSchedulingResponse = Static<typeof advancedSchedulingResponseSchema>
 
 export type SubOrgSchedulingResponse = Static<typeof subOrgSchedulingResponseSchema>
+
+// ==========================================
+// MARK: Scheduling Params
+// ==========================================
+
+export interface UserSchedulingBasicParams {
+    provider?: Provider | Provider[]
+    padding?: number
+    slotDuration?: number
+    earliestTimeEachDay?: string
+    latestTimeEachDay?: string
+    timeZone?: string
+}
+
+export interface UserSchedulingAdvancedParams {
+    provider?: Provider | Provider[]
+    padding?: number
+    slotDuration?: number
+    timeZone?: string
+}
+
+export interface OrgSchedulingParams {
+    provider?: Provider | Provider[]
+    padding?: number
+    slotDuration?: number
+    earliestTimeEachDay?: string
+    latestTimeEachDay?: string
+    timeZone?: string
+}
