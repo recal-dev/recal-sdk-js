@@ -19,7 +19,7 @@ describe("Organization Integration Tests", () => {
   })
 
   test("should create an organization and return it", async () => {
-    const org = await testClient.client.organization.create(primaryOrgSlug, primaryOrgName)
+    const org = await testClient.client.organizations.create(primaryOrgSlug, primaryOrgName)
 
     expect(org).toBeDefined()
     expect(org.slug).toBe(primaryOrgSlug)
@@ -28,7 +28,7 @@ describe("Organization Integration Tests", () => {
   })
 
   test("should retrieve an organization by slug", async () => {
-    const org = await testClient.client.organization.get(primaryOrgSlug)
+    const org = await testClient.client.organizations.get(primaryOrgSlug)
 
     expect(org).toBeDefined()
     expect(org.slug).toBe(primaryOrgSlug)
@@ -37,12 +37,12 @@ describe("Organization Integration Tests", () => {
   })
 
   test("should update an organization", async () => {
-    const org = await testClient.client.organization.create(secondaryOrgSlug, secondaryOrgName)
+    const org = await testClient.client.organizations.create(secondaryOrgSlug, secondaryOrgName)
 
     const updatedSlug = testClient.generateTestId("org", "updated-org")
     const updatedName = testClient.generateTestId("org", "Updated Org")
 
-    const updatedOrg = await testClient.client.organization.update(org.slug, {
+    const updatedOrg = await testClient.client.organizations.update(org.slug, {
       slug: updatedSlug,
       name: updatedName
     })
@@ -54,7 +54,7 @@ describe("Organization Integration Tests", () => {
   })
 
   test("should list all organizations", async () => {
-    const orgs = await testClient.client.organization.listAll()
+    const orgs = await testClient.client.organizations.listAll()
 
     expect(orgs).toBeDefined()
     expect(Array.isArray(orgs)).toBe(true)
@@ -74,10 +74,10 @@ describe("Organization Integration Tests", () => {
     const tempSlug = testClient.generateTestId("org", "temp-org")
     const tempName = testClient.generateTestId("org", "Temp Org")
     
-    const tempOrg = await testClient.client.organization.create(tempSlug, tempName)
+    const tempOrg = await testClient.client.organizations.create(tempSlug, tempName)
     expect(tempOrg.slug).toBe(tempSlug)
     
-    const deletedOrg = await testClient.client.organization.delete(tempSlug)
+    const deletedOrg = await testClient.client.organizations.delete(tempSlug)
     
     expect(deletedOrg).toBeDefined()
     expect(deletedOrg.slug).toBe(tempSlug)

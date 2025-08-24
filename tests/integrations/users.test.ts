@@ -14,7 +14,7 @@ describe("User Integration Tests", () => {
     
     testOrgSlug = testClient.generateTestId("user", "user-test-org")
     const testOrgName = testClient.generateTestId("user", "User Test Org")
-    await testClient.client.organization.create(testOrgSlug, testOrgName)
+    await testClient.client.organizations.create(testOrgSlug, testOrgName)
   })
 
   afterAll(async () => {
