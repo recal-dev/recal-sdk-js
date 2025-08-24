@@ -161,21 +161,21 @@ export class SchedulingService {
                 errorHandler([
                     {
                         code: 400,
+                        statusTextInclFilter: 'User has no connected calendars',
                         error: new OAuthConnectionNotFoundError(
                             'organization',
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
-                        statusTextInclFilter: 'User has no connected calendars',
                     },
                     {
                         code: 404,
-                        error: new OrganizationNotFoundError(orgSlug),
                         statusTextInclFilter: 'Organization not found',
+                        error: new OrganizationNotFoundError(orgSlug),
                     },
                     {
                         code: 404,
-                        error: new UserNotFoundError('organization'),
                         statusTextInclFilter: 'No users found in this organization',
+                        error: new UserNotFoundError('organization'),
                     },
                 ])
             )
