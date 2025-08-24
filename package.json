@@ -24,6 +24,9 @@
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@sinclair/typebox": "^0.34.38"
+    "@sinclair/typebox": "^0.34.38",
+    "@types/luxon": "^3.7.1",
+    "luxon": "^3.7.1",
+    "typedi": "^0.10.0"
   }
 }
