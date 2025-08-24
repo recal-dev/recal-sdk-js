@@ -2,6 +2,10 @@ import type { Static } from '@sinclair/typebox'
 import type { subOrgSchedulingResponseSchema } from '../typebox/scheduling.tb'
 import type { TimeRange } from './calendar.types'
 
+// ==========================================
+// MARK: Scheduling Options
+// ==========================================
+
 export interface SchedulingOptions {
     padding: number
     slotDuration: number
@@ -20,6 +24,10 @@ export interface OutputsSchedulingOptions {
     latestTimeEachDay?: string
 }
 
+// ==========================================
+// MARK: Time & Schedule Models
+// ==========================================
+
 export interface TimeRangeWithUser extends TimeRange {
     userId: string
 }
@@ -29,6 +37,10 @@ export interface Schedule {
     end: number
     daysOfWeek: number[]
 }
+
+// ==========================================
+// MARK: Response Types
+// ==========================================
 
 export interface SchedulingResponse {
     availableSlots: TimeRange[]

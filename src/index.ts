@@ -1,6 +1,6 @@
 import { CalendarService } from './services/calendar.service'
 import { OAuthService } from './services/oauth.service'
-import { OrganizationService } from './services/organization.service'
+import { OrganizationsService } from './services/organizations.service'
 import { SchedulingService } from './services/scheduling.service'
 import { UsersService } from './services/users.service'
 import type { RecalOptions } from './types/internal.types'
@@ -21,7 +21,7 @@ export class RecalClient {
 
     // MARK: Services
     oauth: OAuthService
-    organization: OrganizationService
+    organizations: OrganizationsService
     users: UsersService
     calendar: CalendarService
     scheduling: SchedulingService
@@ -36,7 +36,7 @@ export class RecalClient {
         this.fetchHelper = new FetchHelper({ token: this.token, url: this.baseUrl })
         // Initialize services
         this.oauth = new OAuthService(this.fetchHelper)
-        this.organization = new OrganizationService(this.fetchHelper)
+        this.organizations = new OrganizationsService(this.fetchHelper)
         this.users = new UsersService(this.fetchHelper)
         this.calendar = new CalendarService(this.fetchHelper)
         this.scheduling = new SchedulingService(this.fetchHelper)

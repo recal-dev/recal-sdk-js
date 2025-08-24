@@ -6,7 +6,7 @@ import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '../er
 import { organizationSchema } from '../typebox/organization.tb'
 import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
 
-export class OrganizationService {
+export class OrganizationsService {
     constructor(private fetchHelper: FetchHelper) {}
 
     /**
@@ -18,7 +18,16 @@ export class OrganizationService {
             .get('/v1/organizations', {
                 schema: T.Array(organizationSchema),
             })
-            .then((organizations) => organizations.map(Organization.fromJson))
+            .then((organizations) => organizations.map((org) => Organization.fromJson(org, this.fetchHelper)))
+    }
+
+    public async listAllFromUser(userId: string): Promise<Organization[] | null> {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/organizations`, {
+                schema: T.Array(organizationSchema),
+            })
+            .catch(errorHandler([{ code: 404, result: null }]))
+            .then((orgs) => (orgs ? orgs.map((org) => Organization.fromJson(org, this.fetchHelper)) : null))
     }
 
     /**
@@ -32,7 +41,7 @@ export class OrganizationService {
                 schema: organizationSchema,
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then(Organization.fromJson)
+            .then((org) => Organization.fromJson(org, this.fetchHelper))
     }
 
     /**
@@ -48,7 +57,7 @@ export class OrganizationService {
                 schema: organizationSchema,
             })
             .catch(errorHandler([{ code: 409, error: new OrganizationAlreadyExistsError(slug) }]))
-            .then(Organization.fromJson)
+            .then((org) => Organization.fromJson(org, this.fetchHelper))
     }
 
     /**
@@ -72,7 +81,7 @@ export class OrganizationService {
                     { code: 409, error: new OrganizationAlreadyExistsError(slug) },
                 ])
             )
-            .then(Organization.fromJson)
+            .then((org) => Organization.fromJson(org, this.fetchHelper))
     }
 
     /**
@@ -86,7 +95,7 @@ export class OrganizationService {
                 schema: organizationSchema,
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then(Organization.fromJson)
+            .then((org) => Organization.fromJson(org, this.fetchHelper))
     }
 
     /**
@@ -100,7 +109,7 @@ export class OrganizationService {
                 schema: T.Array(userSchema),
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((users) => users.map(User.fromJson))
+            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
     }
 
     /**
@@ -116,7 +125,7 @@ export class OrganizationService {
                 schema: T.Array(userSchema),
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((users) => users.map(User.fromJson))
+            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
     }
 
     /**
