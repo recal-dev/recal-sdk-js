@@ -1,5 +1,5 @@
 import type { Static } from '@sinclair/typebox'
-import type { subOrgSchedulingResponseSchema } from '../typebox/scheduling.tb'
+import type { subOrgSchedulingResponseSchema, advancedSchedulingResponseSchema, schedulingSchema, schedulingResponseSchema } from '../typebox/scheduling.tb'
 import type { TimeRange } from './calendar.types'
 
 // ==========================================
@@ -20,8 +20,7 @@ export interface OutputsSchedulingOptions {
     slotDuration: number
     startDate: string
     endDate: string
-    earliestTimeEachDay?: string
-    latestTimeEachDay?: string
+    schedules: Schedule[]
 }
 
 // ==========================================
@@ -32,26 +31,14 @@ export interface TimeRangeWithUser extends TimeRange {
     userId: string
 }
 
-export interface Schedule {
-    start: number
-    end: number
-    daysOfWeek: number[]
-}
+export type Schedule = Static<typeof schedulingSchema>
 
 // ==========================================
 // MARK: Response Types
 // ==========================================
 
-export interface SchedulingResponse {
-    availableSlots: TimeRange[]
-    options: OutputsSchedulingOptions
-}
+export type SchedulingResponse = Static<typeof schedulingResponseSchema>
 
-export interface AdvancedSchedulingResponse {
-    availableSlots: TimeRange[]
-    options: OutputsSchedulingOptions & {
-        schedules: Schedule[]
-    }
-}
+export type AdvancedSchedulingResponse = Static<typeof advancedSchedulingResponseSchema>
 
 export type SubOrgSchedulingResponse = Static<typeof subOrgSchedulingResponseSchema>

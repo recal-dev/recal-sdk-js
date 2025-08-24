@@ -1,9 +1,8 @@
 import { Type as T } from '@sinclair/typebox'
-import { AttendeeResponseStatus, CalendarAccessRoles, Provider } from '../types/calendar.types'
+import { AttendeeResponseStatus, Provider } from '../types/calendar.types'
+import { tzDate } from 'src/utils/tzDate'
 
 export const providerSchema = T.Enum(Provider)
-
-export const calendarAccessRolesSchema = T.Enum(CalendarAccessRoles)
 
 export const attendeeResponseStatusSchema = T.Enum(AttendeeResponseStatus)
 
@@ -14,27 +13,23 @@ export const calendarSchema = T.Object({
     backgroundColor: T.Optional(T.String()),
     foregroundColor: T.Optional(T.String()),
     selected: T.Optional(T.Boolean()),
-    accessRole: T.Optional(calendarAccessRolesSchema),
-    original: T.Optional(T.Unknown()),
+    accessRole: T.Optional(T.String()),
+    original: T.Any(),
 })
 
 export const meetingSchema = T.Object({
     url: T.String(),
 })
 
-export const attendeeSchema = T.Intersect([
+export const attendeeSchema = T.Union([
     T.Object({
         email: T.String(),
-        original: T.Unknown(),
+        responseStatus: T.Optional(attendeeResponseStatusSchema),
     }),
-    T.Union([
-        T.Object({
-            responseStatus: T.Optional(attendeeResponseStatusSchema),
-        }),
-        T.Object({
-            self: T.Literal(true),
-        }),
-    ]),
+    T.Object({
+        email: T.String(),
+        self: T.Boolean(),
+    }),
 ])
 
 export const createAttendeeSchema = T.Object({
@@ -50,8 +45,7 @@ export const eventSchema = T.Object({
     end: T.Optional(T.Date()),
     location: T.Optional(T.String()),
     attendees: T.Array(attendeeSchema),
-    meeting: T.Optional(meetingSchema),
-    original: T.Unknown(),
+    original: T.Any(),
 })
 
 export const createEventSchema = T.Object({
@@ -74,7 +68,7 @@ export const createEventAcrossCalendarsSchema = T.Object({
     end: T.Optional(T.Date()),
     location: T.Optional(T.String()),
     attendees: T.Optional(T.Array(createAttendeeSchema)),
-    sendNotifications: T.Optional(T.Boolean()),
+    sendNotificationsFor: T.Optional(T.Array(T.Enum(Provider))),
     meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 
@@ -103,8 +97,8 @@ export const updateEventAcrossCalendarsSchema = T.Object({
 })
 
 export const timeRangeSchema = T.Object({
-    start: T.Date(),
-    end: T.Date(),
+    start: tzDate(),
+    end: tzDate(),
 })
 
 export const freeBusySchema = T.Object({

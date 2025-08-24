@@ -1,3 +1,11 @@
+import type { Static } from '@sinclair/typebox'
+import type { 
+    eventSchema, 
+    freeBusySchema, 
+    timeRangeSchema, 
+    attendeeSchema 
+} from '../typebox/calendar.tb'
+
 // MARK: Types
 // Enums
 /**
@@ -53,17 +61,7 @@ export interface Meeting {
 /**
  * Attendee interface
  */
-export type Attendee = {
-    email: string
-    original: unknown
-} & (
-    | {
-          responseStatus?: AttendeeResponseStatus
-      }
-    | {
-          self: true
-      }
-)
+export type Attendee = Static<typeof attendeeSchema>
 
 /**
  * Create attendee interface
@@ -75,18 +73,7 @@ export interface CreateAttendee {
 /**
  * Event interface
  */
-export interface Event {
-    id: string
-    metaId?: string
-    subject?: string
-    description?: string
-    start?: Date
-    end?: Date
-    location?: string
-    attendees: Attendee[]
-    meeting?: Meeting
-    original: unknown
-}
+export type Event = Static<typeof eventSchema>
 
 /**
  * Create event interface
@@ -151,15 +138,9 @@ export interface UpdateEventAcrossCalendars {
 /**
  * Time range interface
  */
-export interface TimeRange {
-    start: Date
-    end: Date
-}
+export type TimeRange = Static<typeof timeRangeSchema>
 
 /**
  * FreeBusy response interface
  */
-export interface FreeBusy {
-    calendarId: string
-    busy: TimeRange[]
-}
+export type FreeBusy = Static<typeof freeBusySchema>
