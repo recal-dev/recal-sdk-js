@@ -1,10 +1,9 @@
 import { Type as T } from '@sinclair/typebox'
 import { timeRangeSchema } from './calendar.tb'
 import { timeString } from './timeString.tb'
-import { tzDate, tzDateExample } from 'src/utils/tzDate'
 
-const exampleStartDate = new Date("2025-06-04")
-const exampleEndDate = new Date("2025-06-10")
+const exampleStartDate = new Date('2025-06-04')
+const exampleEndDate = new Date('2025-06-10')
 
 /**
  * Schema for scheduling
@@ -20,7 +19,7 @@ export const schedulingSchema = T.Object({
             T.Literal('saturday'),
             T.Literal('sunday'),
         ]),
-        {description: "The days to apply this scheduling element to"}
+        { description: 'The days to apply this scheduling element to' }
     ),
     start: timeString({
         description: 'Start time in minutes from midnight',
@@ -34,32 +33,32 @@ export const schedulingSchema = T.Object({
  * Schema for scheduling options
  */
 export const schedulingOptionsSchema = T.Object({
-	padding: T.Number({
-		default: 0,
-		description: 'Padding in minutes to add before and after busy times',
-	}),
-	slotDuration: T.Number({
-		default: 30,
-		description: 'Duration of each slot in minutes',
-	}),
-	startDate: T.Date({
-		description: 'Start of the time range to scan for availability (inclusive)',
-		examples: [exampleStartDate],
-	}),
-	endDate: T.Date({
-		description: 'End of the time range to scan for availability (inclusive)',
-		examples: [exampleEndDate],
-	}),
-	earliestTimeEachDay: T.Optional(
-		timeString({
-			description: 'Requested earliest time of each day (in the time zone of the request) (e.g., 10:00)',
-		}),
-	),
-	latestTimeEachDay: T.Optional(
-		timeString({
-			description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
-		}),
-	),
+    padding: T.Number({
+        default: 0,
+        description: 'Padding in minutes to add before and after busy times',
+    }),
+    slotDuration: T.Number({
+        default: 30,
+        description: 'Duration of each slot in minutes',
+    }),
+    startDate: T.Date({
+        description: 'Start of the time range to scan for availability (inclusive)',
+        examples: [exampleStartDate],
+    }),
+    endDate: T.Date({
+        description: 'End of the time range to scan for availability (inclusive)',
+        examples: [exampleEndDate],
+    }),
+    earliestTimeEachDay: T.Optional(
+        timeString({
+            description: 'Requested earliest time of each day (in the time zone of the request) (e.g., 10:00)',
+        })
+    ),
+    latestTimeEachDay: T.Optional(
+        timeString({
+            description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
+        })
+    ),
 })
 
 /**
@@ -74,13 +73,13 @@ export const outputSchedulingOptionsSchema = T.Object({
         default: 30,
         description: 'Duration of each slot in minutes',
     }),
-    startDate: tzDate({
+    startDate: T.Date({
         description: 'Start of the time range to scan for availability (inclusive)',
-        examples: [tzDateExample(exampleStartDate)]
+        examples: [exampleStartDate],
     }),
-    endDate: tzDate({
+    endDate: T.Date({
         description: 'End of the time range to scan for availability (inclusive)',
-        examples: [tzDateExample(exampleEndDate)]
+        examples: [exampleEndDate],
     }),
     earliestTimeEachDay: T.Optional(
         timeString({
@@ -98,15 +97,15 @@ export const outputSchedulingOptionsSchema = T.Object({
  * Schema for time range with user information
  */
 export const timeRangeWithUserSchema = T.Object({
-	start: tzDate({
-		description: 'Start time of the time range in ISO format',
-		examples: [tzDateExample(exampleStartDate)],
-	}),
-	end: tzDate({
-		description: 'End time of the time range in ISO format',
-		examples: [tzDateExample(exampleEndDate)],
-	}),
-	userId: T.String(),
+    start: T.Date({
+        description: 'Start time of the time range in ISO format',
+        examples: [exampleStartDate],
+    }),
+    end: T.Date({
+        description: 'End time of the time range in ISO format',
+        examples: [exampleEndDate],
+    }),
+    userId: T.String(),
 })
 
 /**
@@ -123,7 +122,7 @@ export const schedulingResponseSchema = T.Object({
 export const advancedSchedulingResponseSchema = T.Object({
     availableSlots: T.Array(timeRangeSchema),
     options: T.Object({
-        ...T.Omit(schedulingOptionsSchema, ["earliestTimeEachDay", "latestTimeEachDay"]).properties,
+        ...T.Omit(schedulingOptionsSchema, ['earliestTimeEachDay', 'latestTimeEachDay']).properties,
         schedules: T.Array(schedulingSchema),
     }),
 })

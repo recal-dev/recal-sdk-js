@@ -1,6 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
 import { AttendeeResponseStatus, Provider } from '../types/calendar.types'
-import { tzDate } from 'src/utils/tzDate'
 
 export const providerSchema = T.Enum(Provider)
 
@@ -97,8 +96,8 @@ export const updateEventAcrossCalendarsSchema = T.Object({
 })
 
 export const timeRangeSchema = T.Object({
-    start: tzDate(),
-    end: tzDate(),
+    start: T.Date(),
+    end: T.Date(),
 })
 
 export const freeBusySchema = T.Object({

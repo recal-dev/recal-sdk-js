@@ -66,10 +66,7 @@ export class OrganizationsService {
      * @param updatedOrganizationData The updated organization data
      * @returns The updated organization
      */
-    public async update(
-        slug: string,
-        updatedOrganizationData: { slug: string; name: string }
-    ): Promise<Organization> {
+    public async update(slug: string, updatedOrganizationData: { slug: string; name: string }): Promise<Organization> {
         return this.fetchHelper
             .put(`/v1/organizations/${slug}`, {
                 body: updatedOrganizationData,

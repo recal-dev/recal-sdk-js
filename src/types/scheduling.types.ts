@@ -1,5 +1,10 @@
 import type { Static } from '@sinclair/typebox'
-import type { subOrgSchedulingResponseSchema, advancedSchedulingResponseSchema, schedulingSchema, schedulingResponseSchema } from '../typebox/scheduling.tb'
+import type {
+    advancedSchedulingResponseSchema,
+    schedulingResponseSchema,
+    schedulingSchema,
+    subOrgSchedulingResponseSchema,
+} from '../typebox/scheduling.tb'
 import type { TimeRange } from './calendar.types'
 
 // ==========================================
