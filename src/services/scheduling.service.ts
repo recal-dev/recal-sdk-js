@@ -19,7 +19,7 @@ export class SchedulingService {
     /**
      * Get available time slots based on free-busy data with basic parameters
      * @param userId The ID of the user
-     * @param provider The provider of the user
+     * @param provider The provider(s) of the calendar (optional, can be array)
      * @param padding The padding for the time slots
      * @param slotDuration The duration of each slot
      * @param startDate The start date
@@ -73,7 +73,7 @@ export class SchedulingService {
      * Get available time slots based on free-busy data with advanced parameters
      * @param userId The ID of the user
      * @param schedules The schedules of the user
-     * @param provider The provider of the user
+     * @param provider The provider(s) of the calendar (optional, can be array)
      * @param padding The padding for the time slots
      * @param slotDuration The duration of each slot
      * @param startDate The start date
@@ -119,6 +119,19 @@ export class SchedulingService {
             )
     }
 
+    /**
+     * Get available time slots based on free-busy data for an organization
+     * @param orgSlug The slug of the organization
+     * @param provider The provider(s) of the calendar (optional, can be array)
+     * @param padding The padding for the time slots
+     * @param slotDuration The duration of each slot
+     * @param startDate The start date
+     * @param endDate The end date
+     * @param earliestTimeEachDay The earliest time each day
+     * @param latestTimeEachDay The latest time each day
+     * @param timeZone The time zone for the request
+     * @returns Available time slots with basic scheduling options
+     */
     public async getOrgWideAvailability(
         orgSlug: string,
         provider?: Provider | Provider[],

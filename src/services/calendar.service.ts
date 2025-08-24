@@ -169,7 +169,7 @@ export class CalendarService {
     /**
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
-     * @param event The event to update
+     * @param event The updated event
      * @param provider The provider(s) of the calendar (optional, can be array)
      * @param timeZone The time zone of the calendar (optional)
      * @returns The updated event
@@ -311,7 +311,7 @@ export class CalendarService {
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
-     * @param event The event to update
+     * @param event The updated event
      * @param timeZone The time zone of the calendar (optional)
      * @returns The updated event
      */
@@ -385,7 +385,7 @@ export class CalendarService {
      * @param minDate The minimum date
      * @param maxDate The maximum date
      * @param primaryOnly Whether to only include the primary calendar
-     * @param provider The provider
+     * @param provider The provider(s) of the calendar (optional, can be array)
      * @param timeZone The time zone
      * @returns The org-wide free/busy period
      */
