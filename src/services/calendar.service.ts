@@ -386,14 +386,14 @@ export class CalendarService {
     // ==========================================
 
     /**
-     * Get the org-wide free/busy period
+     * Get the org-wide busy period
      * @param slug The slug of the organization
      * @param minDate The minimum date
      * @param maxDate The maximum date
      * @param primaryOnly Whether to only include the primary calendar
      * @param provider The provider(s) of the calendar (optional, can be array)
      * @param timeZone The time zone
-     * @returns The org-wide free/busy period
+     * @returns The org-wide busy period
      */
     public async getOrgWideBusy(
         slug: string,
