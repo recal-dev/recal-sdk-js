@@ -43,7 +43,7 @@ export class CalendarService {
         timeZone?: string
     ): Promise<FreeBusy> {
         return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/free-busy`, {
+            .get(`/v1/users/${userId}/calendar/busy`, {
                 schema: freeBusySchema,
                 searchParams: { minDate, maxDate, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
@@ -404,7 +404,7 @@ export class CalendarService {
         timeZone?: string
     ): Promise<TimeRange[]> {
         return this.fetchHelper
-            .get(`/v1/organizations/${slug}/calendar/free-busy`, {
+            .get(`/v1/organizations/${slug}/calendar/busy`, {
                 schema: T.Array(timeRangeSchema),
                 searchParams: { minDate, maxDate, primaryOnly, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
