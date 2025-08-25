@@ -81,7 +81,7 @@ export interface CreateEvent {
     end?: Date
     location?: string
     attendees?: CreateAttendee[]
-    sendNotifications: boolean
+    sendNotifications?: boolean
     meeting?: Meeting
 }
 

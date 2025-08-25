@@ -181,12 +181,13 @@ export class OAuthService {
     public async verify(
         provider: Provider,
         code: string,
+        scope: string[],
         state: string,
         redirectUrl?: string
     ): Promise<{ success: boolean }> {
         return this.fetchHelper
             .post(`/v1/users/oauth/${provider}/verify`, {
-                body: { code, state },
+                body: { code, scope, state },
                 schema: T.Object({ success: T.Boolean() }),
                 searchParams: { redirectUrl },
             })

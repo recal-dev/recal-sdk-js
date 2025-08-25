@@ -3,14 +3,17 @@ import {
     schedulingResponseSchema,
     subOrgSchedulingResponseSchema,
 } from 'src/typebox/scheduling.tb'
-import type { Provider } from 'src/types/calendar.types'
 import type {
     AdvancedSchedulingResponse,
+    OrgSchedulingParams,
     Schedule,
     SchedulingResponse,
     SubOrgSchedulingResponse,
+    UserSchedulingAdvancedParams,
+    UserSchedulingBasicParams,
 } from 'src/types/scheduling.types'
 import { errorHandler, type FetchHelper } from 'src/utils/fetch.helper'
+import { omit } from 'src/utils/omit'
 import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '../errors'
 
 export class SchedulingService {
@@ -31,28 +34,19 @@ export class SchedulingService {
      */
     public async userSchedulingBasic(
         userId: string,
-        provider?: Provider | Provider[],
-        padding?: number,
-        slotDuration?: number,
-        startDate?: Date,
-        endDate?: Date,
-        earliestTimeEachDay?: string,
-        latestTimeEachDay?: string,
-        timeZone?: string
+        startDate: Date,
+        endDate: Date,
+        options: UserSchedulingBasicParams
     ): Promise<SchedulingResponse> {
         return this.fetchHelper
             .get(`/v1/users/${userId}/scheduling`, {
                 schema: schedulingResponseSchema,
                 searchParams: {
-                    provider,
-                    padding,
-                    slotDuration,
+                    ...omit(options, ['timeZone']),
                     startDate,
                     endDate,
-                    earliestTimeEachDay,
-                    latestTimeEachDay,
                 },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
+                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -60,7 +54,7 @@ export class SchedulingService {
                         code: 404,
                         error: new OAuthConnectionNotFoundError(
                             userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
+                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
                         ),
                         statusTextInclFilter: 'User has no connected calendars',
                     },
@@ -84,25 +78,20 @@ export class SchedulingService {
     public async userSchedulingAdvanced(
         userId: string,
         schedules: Schedule[],
-        provider?: Provider | Provider[],
-        padding?: number,
-        slotDuration?: number,
-        startDate?: Date,
-        endDate?: Date,
-        timeZone?: string
+        startDate: Date,
+        endDate: Date,
+        options: UserSchedulingAdvancedParams
     ): Promise<AdvancedSchedulingResponse> {
         return this.fetchHelper
             .post(`/v1/users/${userId}/scheduling`, {
                 schema: advancedSchedulingResponseSchema,
                 searchParams: {
-                    provider,
-                    padding,
-                    slotDuration,
+                    ...omit(options, ['timeZone']),
                     startDate,
                     endDate,
                 },
                 body: { schedules },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
+                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -110,7 +99,7 @@ export class SchedulingService {
                         code: 404,
                         error: new OAuthConnectionNotFoundError(
                             userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
+                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
                         ),
                         statusTextInclFilter: 'User has no connected calendars',
                     },
@@ -134,28 +123,19 @@ export class SchedulingService {
      */
     public async getOrgWideAvailability(
         orgSlug: string,
-        provider?: Provider | Provider[],
-        padding?: number,
-        slotDuration?: number,
-        startDate?: Date,
-        endDate?: Date,
-        earliestTimeEachDay?: string,
-        latestTimeEachDay?: string,
-        timeZone?: string
+        startDate: Date,
+        endDate: Date,
+        options: OrgSchedulingParams
     ): Promise<SubOrgSchedulingResponse> {
         return this.fetchHelper
-            .get(`/v1/${orgSlug}/scheduling`, {
+            .get(`/v1/organizations/${orgSlug}/scheduling`, {
                 schema: subOrgSchedulingResponseSchema,
                 searchParams: {
-                    provider,
-                    padding,
-                    slotDuration,
+                    ...omit(options, ['timeZone']),
                     startDate,
                     endDate,
-                    earliestTimeEachDay,
-                    latestTimeEachDay,
                 },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
+                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -164,7 +144,7 @@ export class SchedulingService {
                         statusTextInclFilter: 'User has no connected calendars',
                         error: new OAuthConnectionNotFoundError(
                             'organization',
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
+                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
                         ),
                     },
                     {

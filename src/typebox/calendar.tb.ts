@@ -100,7 +100,4 @@ export const timeRangeSchema = T.Object({
     end: T.Date(),
 })
 
-export const freeBusySchema = T.Object({
-    calendarId: T.String(),
-    busy: T.Array(timeRangeSchema),
-})
+export const freeBusySchema = T.Array(timeRangeSchema)

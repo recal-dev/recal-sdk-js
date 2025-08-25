@@ -88,8 +88,10 @@ export class FetchHelper {
         const url = params.toString() ? `${_url}?${params.toString()}` : _url
         const response = await this.__fetch(url, { ...options, body: JSON.stringify(body), headers })
         if (!response.ok) throw new FetchError(url, response.status, response.statusText)
-        const data = await response.json()
-        if (schema !== undefined) return Value.Parse(schema, data)
+        if (schema !== undefined) {
+            const data = await response.json()
+            return Value.Parse(schema, data)
+        }
         return void 0 as R
     }
 

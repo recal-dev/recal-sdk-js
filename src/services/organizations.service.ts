@@ -115,14 +115,12 @@ export class OrganizationsService {
      * @param userIds The IDs of the users to add
      * @returns The added users
      */
-    public async addMembers(slug: string, userIds: string[]): Promise<User[]> {
+    public async addMembers(slug: string, userIds: string[]) {
         return this.fetchHelper
             .post(`/v1/organizations/${slug}/members`, {
                 body: { userIds },
-                schema: T.Array(userSchema),
             })
             .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
     }
 
     /**

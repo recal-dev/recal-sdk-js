@@ -45,7 +45,8 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/free-busy`, {
                 schema: freeBusySchema,
-                searchParams: { minDate, maxDate, provider, timeZone },
+                searchParams: { minDate, maxDate, provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -79,7 +80,8 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events`, {
                 schema: T.Array(eventSchema),
-                searchParams: { minDate, maxDate, provider, timeZone },
+                searchParams: { minDate, maxDate, provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -116,7 +118,8 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
                 schema: eventSchema,
-                searchParams: { provider, timeZone },
+                searchParams: { provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -149,7 +152,8 @@ export class CalendarService {
         return this.fetchHelper
             .post(`/v1/users/${userId}/calendar/events/meta`, {
                 schema: eventSchema,
-                searchParams: { provider, timeZone },
+                searchParams: { provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 body: { event },
             })
             .catch(
@@ -184,7 +188,8 @@ export class CalendarService {
         return this.fetchHelper
             .put(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
                 schema: eventSchema,
-                searchParams: { provider, timeZone },
+                searchParams: { provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 body: { event },
             })
             .catch(
@@ -217,7 +222,8 @@ export class CalendarService {
     ): Promise<void> {
         return this.fetchHelper
             .delete(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
-                searchParams: { provider, timeZone },
+                searchParams: { provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 schema: T.Void(),
             })
             .catch(
@@ -256,7 +262,7 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
                 schema: eventSchema,
-                searchParams: { timeZone },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
                 errorHandler([
@@ -290,7 +296,7 @@ export class CalendarService {
         return this.fetchHelper
             .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
                 schema: eventSchema,
-                searchParams: { timeZone },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 body: { event },
             })
             .catch(
@@ -326,7 +332,7 @@ export class CalendarService {
         return this.fetchHelper
             .put(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
                 schema: eventSchema,
-                searchParams: { timeZone },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 body: { event },
             })
             .catch(
@@ -359,7 +365,7 @@ export class CalendarService {
     ): Promise<void> {
         return this.fetchHelper
             .delete(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
-                searchParams: { timeZone },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
                 schema: T.Void(),
             })
             .catch(
@@ -400,7 +406,8 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/organizations/${slug}/calendar/free-busy`, {
                 schema: T.Array(timeRangeSchema),
-                searchParams: { minDate, maxDate, primaryOnly, provider, timeZone },
+                searchParams: { minDate, maxDate, primaryOnly, provider },
+                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
                 errorHandler([
