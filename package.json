@@ -1,32 +1,37 @@
 {
-    "name": "recal",
+    "name": "recal-sdk",
     "version": "0.1.0",
     "description": "Recal SDK",
+    "author": "Recal <team@recal.dev>",
+    "license": "MIT",
     "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": ["dist"],
     "scripts": {
-        "build": "bun run ./src/index.ts",
+        "build": "tsc --declaration --emitDeclarationOnly --outDir dist && NODE_ENV=production bun build src/index.ts --outdir dist --target node",
         "test": "bun test tests",
         "format": "biome format --fix",
         "lint": "biome lint",
         "lint:fix": "biome lint --fix",
         "lint:fix:all": "biome lint --fix --unsafe",
         "check": "biome check",
-        "check:fix": "biome check --fix"
+        "check:fix": "biome check --fix",
+        "prepublishOnly": "NODE_ENV=production bun run build"
     },
     "keywords": ["recal", "calendar"],
-    "author": "Recal<team@recal.dev>",
-    "license": "MIT",
     "devDependencies": {
         "@biomejs/biome": "2.1.2",
         "@types/node": "^22.15.21",
-        "tsup": "^8.5.0",
         "typescript": "^5.8.3",
         "@types/bun": "latest"
     },
     "dependencies": {
-        "@sinclair/typebox": "^0.34.38",
-        "@types/luxon": "^3.7.1",
-        "luxon": "^3.7.1",
-        "typedi": "^0.10.0"
+        "@sinclair/typebox": "^0.34.38"
     }
 }
