@@ -6,12 +6,12 @@ import {
     ProviderCredentialsNotSetError,
     UserNotFoundError,
 } from 'src/errors'
-import { eventSchema, freeBusySchema, timeRangeSchema } from 'src/typebox/calendar.tb'
+import { busySchema, eventSchema, timeRangeSchema } from 'src/typebox/calendar.tb'
 import type {
+    Busy,
     CreateEvent,
     CreateEventAcrossCalendars,
     Event,
-    FreeBusy,
     Provider,
     TimeRange,
     UpdateEvent,
@@ -24,27 +24,27 @@ export class CalendarService {
     constructor(private fetchHelper: FetchHelper) {}
 
     // ==========================================
-    // MARK: User Calendar - Free/Busy & Events
+    // MARK: User Calendar - Busy & Events
     // ==========================================
 
     /**
      * @param userId The ID of the user
-     * @param minDate The start date of the free/busy period
-     * @param maxDate The end date of the free/busy period
+     * @param minDate The start date of the busy period
+     * @param maxDate The end date of the busy period
      * @param provider The provider(s) of the calendar (optional, can be array)
      * @param timeZone The time zone of the calendar (optional)
-     * @returns The free/busy period
+     * @returns The busy period
      */
-    public async getFreeBusy(
+    public async getBusy(
         userId: string,
         minDate: Date,
         maxDate: Date,
         provider?: Provider | Provider[],
         timeZone?: string
-    ): Promise<FreeBusy> {
+    ): Promise<Busy> {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/busy`, {
-                schema: freeBusySchema,
+                schema: busySchema,
                 searchParams: { minDate, maxDate, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
@@ -395,7 +395,7 @@ export class CalendarService {
      * @param timeZone The time zone
      * @returns The org-wide free/busy period
      */
-    public async getOrgWideFreeBusy(
+    public async getOrgWideBusy(
         slug: string,
         minDate: Date,
         maxDate: Date,

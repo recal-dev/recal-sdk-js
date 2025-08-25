@@ -1,5 +1,5 @@
 import type { Static } from '@sinclair/typebox'
-import type { attendeeSchema, eventSchema, freeBusySchema, timeRangeSchema } from '../typebox/calendar.tb'
+import type { attendeeSchema, busySchema, eventSchema, timeRangeSchema } from '../typebox/calendar.tb'
 
 // MARK: Types
 // Enums
@@ -136,6 +136,6 @@ export interface UpdateEventAcrossCalendars {
 export type TimeRange = Static<typeof timeRangeSchema>
 
 /**
- * FreeBusy response interface
+ * Busy response interface
  */
-export type FreeBusy = Static<typeof freeBusySchema>
+export type Busy = Static<typeof busySchema>

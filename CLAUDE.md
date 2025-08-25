@@ -144,5 +144,5 @@ The SDK defines the following key types:
 - `Calendar`: Calendar with timezone, colors, access role
 - `Event`: Full event details with attendees and meetings
 - `Attendee`: Email with response status
-- `FreeBusy`: Availability information
+- `Busy`: Availability information
 - `CalendarAccessRoles`: Permission levels (freeBusyReader, reader, writer, owner)
