@@ -31,17 +31,19 @@ export class CalendarService {
      * @param userId The ID of the user
      * @param minDate The start date of the free/busy period
      * @param maxDate The end date of the free/busy period
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the free/busy query (optional)
      * @returns The free/busy period
      */
     public async getFreeBusy(
         userId: string,
         minDate: Date,
         maxDate: Date,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<FreeBusy> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/free-busy`, {
                 schema: freeBusySchema,
@@ -54,7 +56,7 @@ export class CalendarService {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(
                             userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
+                            Array.isArray(provider) ? provider.join(',') : provider || 'all'
                         ),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
@@ -66,17 +68,19 @@ export class CalendarService {
      * @param userId The ID of the user
      * @param minDate The start date of the events
      * @param maxDate The end date of the events
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the events query (optional)
      * @returns The events
      */
     public async getEvents(
         userId: string,
         minDate: Date,
         maxDate: Date,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<Event[]> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events`, {
                 schema: T.Array(eventSchema),
@@ -105,16 +109,18 @@ export class CalendarService {
     /**
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event query (optional)
      * @returns The event
      */
     public async getEventByMetaId(
         userId: string,
         metaId: string,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
                 schema: eventSchema,
@@ -139,16 +145,18 @@ export class CalendarService {
     /**
      * @param userId The ID of the user
      * @param event The event to create
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event creation (optional)
      * @returns The created event
      */
     public async createEventByMetaId(
         userId: string,
         event: CreateEventAcrossCalendars,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .post(`/v1/users/${userId}/calendar/events/meta`, {
                 schema: eventSchema,
@@ -174,17 +182,19 @@ export class CalendarService {
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
      * @param event The updated event
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event update (optional)
      * @returns The updated event
      */
     public async updateEventByMetaId(
         userId: string,
         metaId: string,
         event: UpdateEventAcrossCalendars,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .put(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
                 schema: eventSchema,
@@ -210,16 +220,18 @@ export class CalendarService {
     /**
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event deletion (optional)
      * @returns The deleted event
      */
     public async deleteEventByMetaId(
         userId: string,
         metaId: string,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<void> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .delete(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
                 searchParams: { provider },
@@ -249,7 +261,7 @@ export class CalendarService {
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event query (optional)
      * @returns The event
      */
     public async getEvent(
@@ -257,8 +269,11 @@ export class CalendarService {
         provider: Provider,
         calendarId: string,
         eventId: string,
-        timeZone?: string
+        options?: {
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
                 schema: eventSchema,
@@ -283,7 +298,7 @@ export class CalendarService {
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
      * @param event The event to create
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event creation (optional)
      * @returns The created event
      */
     public async createEvent(
@@ -291,8 +306,11 @@ export class CalendarService {
         provider: Provider,
         calendarId: string,
         event: CreateEvent,
-        timeZone?: string
+        options?: {
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { timeZone } = options || {}
         return this.fetchHelper
             .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
                 schema: eventSchema,
@@ -318,7 +336,7 @@ export class CalendarService {
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
      * @param event The updated event
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event update (optional)
      * @returns The updated event
      */
     public async updateEvent(
@@ -327,8 +345,11 @@ export class CalendarService {
         calendarId: string,
         eventId: string,
         event: UpdateEvent,
-        timeZone?: string
+        options?: {
+            timeZone?: string
+        }
     ): Promise<Event> {
+        const { timeZone } = options || {}
         return this.fetchHelper
             .put(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
                 schema: eventSchema,
@@ -353,7 +374,7 @@ export class CalendarService {
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
-     * @param timeZone The time zone of the calendar (optional)
+     * @param options The options for the event deletion (optional)
      * @returns The deleted event
      */
     public async deleteEvent(
@@ -361,8 +382,11 @@ export class CalendarService {
         provider: Provider,
         calendarId: string,
         eventId: string,
-        timeZone?: string
+        options?: {
+            timeZone?: string
+        }
     ): Promise<void> {
+        const { timeZone } = options || {}
         return this.fetchHelper
             .delete(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
@@ -390,9 +414,8 @@ export class CalendarService {
      * @param slug The slug of the organization
      * @param minDate The minimum date
      * @param maxDate The maximum date
-     * @param primaryOnly Whether to only include the primary calendar
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param timeZone The time zone
+     * @param primaryOnly Whether to only include the primary calendar (default: true)
+     * @param options The options for the org-wide free/busy query (optional)
      * @returns The org-wide free/busy period
      */
     public async getOrgWideFreeBusy(
@@ -400,9 +423,12 @@ export class CalendarService {
         minDate: Date,
         maxDate: Date,
         primaryOnly?: boolean,
-        provider?: Provider | Provider[],
-        timeZone?: string
+        options?: {
+            provider?: Provider | Provider[]
+            timeZone?: string
+        }
     ): Promise<TimeRange[]> {
+        const { provider, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/organizations/${slug}/calendar/free-busy`, {
                 schema: T.Array(timeRangeSchema),
