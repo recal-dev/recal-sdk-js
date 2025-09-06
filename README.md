@@ -138,9 +138,24 @@ const eventWithTZ = await recal.calendar.createEvent(
     {
         summary: 'Team Meeting',
         description: 'Weekly sync',
-        start: { dateTime: '2024-01-15T10:00:00' },
-        end: { dateTime: '2024-01-15T11:00:00' }
+        start: { dateTime: '2024-01-15T10:00:00Z' },
+        end: { dateTime: '2024-01-15T11:00:00Z' },
+        attendees: [
+            { email: 'colleague@company.com' }
+        ]
     },
+    { timeZone: 'Europe/Berlin' }  // optional
+)
+```
+#### Get Event
+
+```typescript
+// Get an existing event
+const event = await recal.calendar.getEvent(
+    'user_id',
+    'google',
+    'calendar_id',
+    'event_id',
     { timeZone: 'Europe/Berlin' }  // optional
 )
 ```
@@ -159,6 +174,26 @@ const updated = await recal.calendar.updateEvent(
         start: { dateTime: '2024-01-15T14:00:00Z' },
         end: { dateTime: '2024-01-15T15:00:00Z' }
     }
+)
+```
+
+```typescript
+// or with more options
+const updated = await recal.calendar.updateEvent(
+    'user_id',
+    'google',
+    'calendar_id',
+    'event_id',
+    {
+        summary: 'Updated Meeting title',
+        description: 'Updated description',
+        start: { dateTime: '2024-01-15T11:00:00Z' },
+        end: { dateTime: '2024-01-15T12:00:00Z' },
+        attendees: [
+            { email: 'colleague@company.com' }
+        ]
+    },
+    { timeZone: 'Europe/Berlin' }  // optional
 )
 ```
 
@@ -189,7 +224,7 @@ const metaEvent = await recal.calendar.createEventByMetaId(
     }
 )
 
-// Or specify which providers to use
+// Or specify which providers and timezone to use
 const metaEventSpecific = await recal.calendar.createEventByMetaId(
     'user_id',
     {
@@ -197,7 +232,16 @@ const metaEventSpecific = await recal.calendar.createEventByMetaId(
         start: { dateTime: '2024-01-20T15:00:00Z' },
         end: { dateTime: '2024-01-20T16:00:00Z' }
     },
-    { provider: ['google', 'microsoft'] }  // Create on specific providers
+    { 
+        provider: ['google', 'microsoft'] // Create on specific providers
+        timeZone: 'Europe/Berlin' // optional
+    }  
+)
+
+// Get event across all connected calendars (default behavior)
+const metaEventGet = await recal.calendar.getEventByMetaId(
+    'user_id',
+    metaEvent.metaId
 )
 
 // Update across all calendars using meta ID
