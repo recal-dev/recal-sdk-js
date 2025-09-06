@@ -10,8 +10,8 @@ A powerful, type-safe SDK for interacting with the Recal calendar API. Build sop
 
 - **Multi-Provider Support**: Seamlessly work with Google Calendar and Microsoft Outlook
 - **Type Safety**: Full TypeScript support with runtime validation
-- **Rich Calendar Operations**: Events, free/busy queries, scheduling, and more
-- **Organization Management**: Handle teams and multi-user calendar scenarios
+- **Rich Calendar Operations**: Events, busy queries, scheduling, and more
+- **Organization Management**: Handle organizations and users calendars
 - **OAuth Integration**: Built-in OAuth flow support for calendar connections
 - **Error Handling**: Comprehensive error types for robust applications
 - **Modern Architecture**: Clean, testable service-based design
@@ -36,31 +36,12 @@ bun add recal-sdk
 ```typescript
 import { RecalClient } from 'recal-sdk'
 
-// Initialize the client
-const recal = new RecalClient({
-    token: 'recal_your_api_token', // or use RECAL_TOKEN env variable
-    url: 'https://api.recal.dev'   // optional, defaults to production
-})
-```
+// Initialize the client with token from .env file (RECAL_TOKEN)
+const recal = new RecalClient()
 
-### Authentication
-
-The SDK requires a Recal API token. You can provide it in three ways:
-
-1. **Direct in constructor** (recommended for server-side apps):
-```typescript
-const recal = new RecalClient({ token: 'recal_your_token' })
-```
-
-2. **Environment variable**:
-```bash
-export RECAL_TOKEN="recal_your_token"
-```
-
-3. **Function (for dynamic tokens)**:
-```typescript
+// Or manually provide the token
 const recal = new RecalClient({ 
-    token: () => getTokenFromSecureStore() 
+    token: "recal_xyz"
 })
 ```
 
@@ -72,56 +53,68 @@ const recal = new RecalClient({
 
 The SDK is organized into logical service modules:
 
-- **`calendar`** - Event management and free/busy queries
+- **`calendar`** - Event management and busy queries
 - **`scheduling`** - Availability and booking management
 - **`users`** - User profile and settings
 - **`organizations`** - Team and organization management
 - **`oauth`** - Calendar provider authentication
 
-### Providers
-
-Recal supports two calendar providers:
-- `google` - Google Calendar
-- `microsoft` - Microsoft Outlook/Office 365
-
 ### Time Zones
 
-All date/time operations support timezone specification via the `timeZone` parameter or `x-timezone` header.
+All date/time operations support timezone specification via the `timeZone` parameter.
 
 ## API Reference
 
 ### Calendar Service
 
-#### Get Free/Busy Information
+#### Get Busy Information
 
 ```typescript
-// Get user's availability
+// Get user's availability (simplest form)
 const busy = await recal.calendar.getBusy(
     'user_id',
     new Date('2024-01-01'),
+    new Date('2024-01-07')
+)
+
+// Or with optional filters
+const busyFiltered = await recal.calendar.getBusy(
+    'user_id',
+    new Date('2024-01-01'),
     new Date('2024-01-07'),
-    'google',  // optional: filter by provider
-    'America/New_York'  // optional: timezone
+    {
+        provider: 'google',  // optional: filter by provider
+        timeZone: 'America/New_York',  // optional: timezone
+    }
 )
 ```
 
 #### List Events
 
 ```typescript
-// Get all events in a date range
+// Get all events in a date range (simplest form)
 const events = await recal.calendar.getEvents(
     'user_id',
     new Date('2024-01-01'),
+    new Date('2024-01-31')
+)
+
+// Or with optional filters
+const eventsFiltered = await recal.calendar.getEvents(
+    'user_id',
+    new Date('2024-01-01'),
     new Date('2024-01-31'),
-    ['google', 'microsoft'],  // optional: multiple providers
-    'Europe/London'
+    {
+        provider: 'google',  // optional: filter by provider
+        timeZone: 'Europe/London'  // optional: timezone
+    }
 )
 ```
 
 #### Create Event
 
 ```typescript
-// Create a new event
+// Create a new event (without optional timezone)
 const event = await recal.calendar.createEvent(
     'user_id',
     'google',
@@ -134,15 +127,28 @@ const event = await recal.calendar.createEvent(
         attendees: [
             { email: 'colleague@company.com' }
         ]
+    }
+)
+
+// Or with timezone option
+const eventWithTZ = await recal.calendar.createEvent(
+    'user_id',
+    'google',
+    'calendar_id',
+    {
+        summary: 'Team Meeting',
+        description: 'Weekly sync',
+        start: { dateTime: '2024-01-15T10:00:00' },
+        end: { dateTime: '2024-01-15T11:00:00' }
     },
-    'America/Los_Angeles'
+    { timeZone: 'Europe/Berlin' }  // optional
 )
 ```
 
 #### Update Event
 
 ```typescript
-// Update an existing event
+// Update an existing event (simplest form)
 const updated = await recal.calendar.updateEvent(
     'user_id',
     'google',
@@ -173,15 +179,25 @@ await recal.calendar.deleteEvent(
 Meta events allow you to work with events across multiple calendar providers:
 
 ```typescript
-// Create event across all connected calendars
+// Create event across all connected calendars (default behavior)
 const metaEvent = await recal.calendar.createEventByMetaId(
     'user_id',
     {
         summary: 'Cross-platform meeting',
         start: { dateTime: '2024-01-20T15:00:00Z' },
         end: { dateTime: '2024-01-20T16:00:00Z' }
+    }
+)
+
+// Or specify which providers to use
+const metaEventSpecific = await recal.calendar.createEventByMetaId(
+    'user_id',
+    {
+        summary: 'Cross-platform meeting',
+        start: { dateTime: '2024-01-20T15:00:00Z' },
+        end: { dateTime: '2024-01-20T16:00:00Z' }
     },
-    ['google', 'microsoft']  // Create on both providers
+    { provider: ['google', 'microsoft'] }  // Create on specific providers
 )
 
 // Update across all calendars using meta ID
@@ -200,69 +216,149 @@ await recal.calendar.deleteEventByMetaId(
 
 ### Scheduling Service
 
-#### Get Availability
+#### Get User Availability (Basic)
 
 ```typescript
-// Find available time slots
-const availability = await recal.scheduling.getAvailability(
+// Find available time slots (minimal config)
+const availability = await recal.scheduling.userSchedulingBasic(
     'user_id',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
     {
-        duration: 30,  // 30-minute slots
-        interval: 15,  // 15-minute intervals
-        startTime: '09:00',
-        endTime: '17:00'
+        slotDuration: 30  // Only required: slot duration in minutes
+    }
+)
+
+// Or with more options
+const availabilityDetailed = await recal.scheduling.userSchedulingBasic(
+    'user_id',
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    {
+        slotDuration: 30,  // Duration of each slot in minutes
+        padding: 0,  // Padding between slots
+        earliestTimeEachDay: '09:00',  // Format: HH:mm
+        latestTimeEachDay: '17:00',  // Format: HH:mm
+        provider: 'google',  // optional: filter by provider
+        timeZone: 'America/New_York'  // optional
     }
 )
 ```
 
-#### Book Time Slot
+#### Get User Availability (Advanced)
 
 ```typescript
-// Book an available slot
-const booking = await recal.scheduling.bookSlot(
-    'user_id',
+// Find available time slots with custom schedules
+const schedules = [
     {
-        start: '2024-01-15T10:00:00Z',
-        end: '2024-01-15T10:30:00Z',
-        title: 'Consultation',
-        attendees: ['client@example.com']
+        dayOfWeek: 1,  // Monday
+        startTime: '09:00',
+        endTime: '17:00'
+    },
+    // ... more schedule rules
+]
+
+// Minimal config
+const availability = await recal.scheduling.userSchedulingAdvanced(
+    'user_id',
+    schedules,
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    { slotDuration: 30 }  // Only required option
+)
+
+// Or with more options
+const availabilityDetailed = await recal.scheduling.userSchedulingAdvanced(
+    'user_id',
+    schedules,
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    {
+        slotDuration: 30,
+        padding: 15,
+        provider: 'google',  // optional
+        timeZone: 'America/New_York'  // optional
+    }
+)
+```
+
+#### Get Organization-Wide Availability
+
+```typescript
+// Find organization-wide available time slots (minimal)
+const orgAvailability = await recal.scheduling.getOrgWideAvailability(
+    'org-slug',
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    { slotDuration: 60 }  // Only required option
+)
+
+// Or with constraints
+const orgAvailabilityConstrained = await recal.scheduling.getOrgWideAvailability(
+    'org-slug',
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    {
+        slotDuration: 60,
+        padding: 0,
+        earliestTimeEachDay: '09:00',
+        latestTimeEachDay: '17:00',
+        provider: ['google', 'microsoft'],  // optional
+        timeZone: 'America/New_York'  // optional
     }
 )
 ```
 
 ### Users Service
 
-#### Get User Profile
+#### Get User
 
 ```typescript
-// Get user information
-const user = await recal.users.getUser('user_id')
-console.log(user.email, user.name)
+// Get user information (basic)
+const user = await recal.users.get('user_id', {})
+
+// Or with additional data
+const userWithDetails = await recal.users.get('user_id', {
+    includeOrgs: true,  // Include organizations
+    includeOAuth: true  // Include OAuth connections
+})
+console.log(user.id)
 ```
 
-#### List User's Calendars
+#### List All Users
 
 ```typescript
-// Get all connected calendars
-const calendars = await recal.users.getCalendars('user_id', {
-    includeOrganization: true
+// Get all users
+const users = await recal.users.listAll()
+```
+
+#### Create User
+
+```typescript
+// Create a new user (without organizations)
+const user = await recal.users.create('user_id')
+
+// Or with organization memberships
+const userWithOrgs = await recal.users.create(
+    'user_id',
+    ['org-slug-1', 'org-slug-2']  // optional: organization slugs
+)
+```
+
+#### Update User
+
+```typescript
+// Update user ID
+const updatedUser = await recal.users.update('old_user_id', {
+    id: 'new_user_id'
 })
 ```
 
-#### Update User Settings
+#### Delete User
 
 ```typescript
-// Update user preferences
-await recal.users.updateSettings('user_id', {
-    defaultCalendarId: 'calendar_123',
-    timezone: 'America/New_York',
-    workingHours: {
-        start: '09:00',
-        end: '17:00'
-    }
-})
+// Delete a user
+const deletedUser = await recal.users.delete('user_id')
 ```
 
 ### Organizations Service
@@ -271,65 +367,167 @@ await recal.users.updateSettings('user_id', {
 
 ```typescript
 // Get organization by slug
-const org = await recal.organizations.getOrganization('acme-corp', {
-    includeUsers: true,
-    includeSettings: true
+const org = await recal.organizations.get('acme-corp')
+```
+
+#### List All Organizations
+
+```typescript
+// Get all organizations
+const orgs = await recal.organizations.listAll()
+
+// Get organizations for a specific user
+const userOrgs = await recal.organizations.listAllFromUser('user_id')
+```
+
+#### Create Organization
+
+```typescript
+// Create a new organization
+const org = await recal.organizations.create(
+    'acme-corp',  // slug
+    'Acme Corporation'  // name
+)
+```
+
+#### Update Organization
+
+```typescript
+// Update organization
+const updated = await recal.organizations.update('acme-corp', {
+    slug: 'new-slug',
+    name: 'New Name'
 })
 ```
 
-#### List Organization Members
+#### Manage Members
 
 ```typescript
 // Get all members
-const members = await recal.organizations.getMembers('org_id')
+const members = await recal.organizations.getMembers('acme-corp')
+
+// Add members
+await recal.organizations.addMembers(
+    'acme-corp',
+    ['user_id_1', 'user_id_2']
+)
+
+// Remove members
+await recal.organizations.removeMembers(
+    'acme-corp',
+    ['user_id_1', 'user_id_2']
+)
 ```
 
-#### Organization-Wide Free/Busy
+#### Organization-Wide Busy
 
 ```typescript
-// Get team availability
+// Get team availability (simplest form)
 const teamBusy = await recal.calendar.getOrgWideBusy(
     'acme-corp',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
+    true  // primaryOnly: only check primary calendars
+)
+
+// Or with optional filters
+const teamBusyFiltered = await recal.calendar.getOrgWideBusy(
+    'acme-corp',
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
     true,  // primaryOnly: only check primary calendars
-    'google'
+    {
+        provider: 'google',  // optional: filter by provider
+        timeZone: 'America/New_York'  // optional
+    }
 )
 ```
 
 ### OAuth Service
 
-#### Generate OAuth URL
+#### Get OAuth Link
 
 ```typescript
-// Create OAuth authorization URL
-const authUrl = await recal.oauth.generateAuthUrl({
-    provider: 'google',
-    userId: 'user_id',
-    redirectUri: 'https://app.example.com/callback',
-    scopes: ['calendar.events', 'calendar.readonly']
-})
+// Get OAuth authorization URL (with defaults)
+const link = await recal.oauth.getLink(
+    'user_id',
+    'google'
+)
+
+// Or with custom options
+const linkWithOptions = await recal.oauth.getLink(
+    'user_id',
+    'google',
+    {
+        scope: 'edit',  // 'edit' or 'free-busy' (for OAuth scopes)
+        accessType: 'offline',  // 'offline' or 'online'
+        redirectUrl: 'https://app.example.com/callback'  // optional
+    }
+)
+console.log(link.url)  // Use this URL to redirect user
 ```
 
-#### Exchange OAuth Code
+#### Get Multiple OAuth Links
 
 ```typescript
-// Exchange authorization code for tokens
-const tokens = await recal.oauth.exchangeCode({
-    provider: 'google',
-    code: 'auth_code_from_callback',
-    redirectUri: 'https://app.example.com/callback'
-})
+// Get OAuth URLs for all providers (simplest)
+const links = await recal.oauth.getBulkLinks('user_id')
+
+// Or with specific providers and options
+const linksFiltered = await recal.oauth.getBulkLinks(
+    'user_id',
+    {
+        provider: ['google', 'microsoft'],
+        scope: 'edit',
+        accessType: 'offline'
+    }
+)
 ```
 
-#### Refresh OAuth Token
+#### Manage OAuth Connections
 
 ```typescript
-// Refresh expired token
-const newTokens = await recal.oauth.refreshToken({
-    provider: 'google',
-    refreshToken: 'stored_refresh_token'
-})
+// Get all OAuth connections for a user
+const connections = await recal.oauth.getAllConnections(
+    'user_id',
+    true  // redacted (default: true)
+)
+
+// Get specific provider connection
+const googleConnection = await recal.oauth.getConnection(
+    'user_id',
+    'google',
+    false  // redacted
+)
+
+// Set OAuth tokens manually
+const connection = await recal.oauth.setConnection(
+    'user_id',
+    'google',
+    {
+        accessToken: 'access_token',
+        refreshToken: 'refresh_token',  // optional
+        scope: ['calendar.events', 'calendar.readonly'],
+        expiresAt: new Date('2024-12-31'),  // optional
+        email: 'user@example.com'  // optional
+    }
+)
+
+// Disconnect a provider
+await recal.oauth.disconnect('user_id', 'google')
+```
+
+#### Verify OAuth Callback
+
+```typescript
+// Verify OAuth code from callback
+const result = await recal.oauth.verify(
+    'google',
+    'auth_code_from_callback',
+    ['calendar.events', 'calendar.readonly'],
+    'state_parameter',
+    'https://app.example.com/callback'  // optional
+)
 ```
 
 ## Advanced Usage
@@ -367,7 +565,7 @@ try {
 ### Batch Operations
 
 ```typescript
-// Process multiple users' calendars
+// Process multiple users' calendars (simplest form)
 const userIds = ['user1', 'user2', 'user3']
 const allEvents = await Promise.all(
     userIds.map(userId => 
@@ -383,7 +581,17 @@ const allEvents = await Promise.all(
 ### Working with Multiple Providers
 
 ```typescript
-// Aggregate availability across providers
+// Get all busy data (without filtering)
+const startDate = new Date('2024-01-01')
+const endDate = new Date('2024-01-31')
+
+const allBusy = await recal.calendar.getBusy(
+    'user_id',
+    startDate,
+    endDate
+)
+
+// Or aggregate by specific providers
 const providers: Provider[] = ['google', 'microsoft']
 const busyTimes = await Promise.all(
     providers.map(provider =>
@@ -391,28 +599,22 @@ const busyTimes = await Promise.all(
             'user_id',
             startDate,
             endDate,
-            provider
+            { provider }  // filter by specific provider
         )
     )
 )
 
-// Merge busy periods
-const merged = mergeBusyPeriods(busyTimes)
+// Process the busy times as needed for your application
+const allBusyPeriods = busyTimes.flatMap(fb => fb.busy)
 ```
 
 ### Custom Request Configuration
 
 ```typescript
-// Use custom headers or timeout
+// Use custom base URL
 const recal = new RecalClient({
     token: 'recal_token',
-    url: 'https://api.recal.dev',
-    requestConfig: {
-        timeout: 30000,  // 30 seconds
-        headers: {
-            'X-Custom-Header': 'value'
-        }
-    }
+    url: 'https://api.recal.dev'  // optional, this is the default
 })
 ```
 
@@ -422,34 +624,42 @@ const recal = new RecalClient({
 
 ```typescript
 // 1. Check availability
-const slots = await recal.scheduling.getAvailability(
+const availability = await recal.scheduling.userSchedulingBasic(
     'consultant_id',
     new Date(),
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next 7 days
     {
-        duration: 60,
-        interval: 30,
-        startTime: '09:00',
-        endTime: '17:00'
+        slotDuration: 60,  // 60-minute slots
+        padding: 15,  // 15-minute padding between slots
+        earliestTimeEachDay: '09:00',
+        latestTimeEachDay: '17:00',
+        timeZone: 'America/New_York'
     }
 )
 
 // 2. Display available slots to user
-const availableSlots = slots.filter(slot => !slot.busy)
+const availableSlots = availability.slots  // Already filtered for availability
 
-// 3. Book selected slot
-const booking = await recal.scheduling.bookSlot(
+// 3. User selects a slot and provides their information
+const selectedSlot = availableSlots[0]  // Example: first available slot
+const clientName = 'John Doe'
+const clientEmail = 'john@example.com'
+
+// 4. Create an event for the selected slot (using calendar service)
+const booking = await recal.calendar.createEvent(
     'consultant_id',
+    'google',
+    'primary',
     {
-        start: selectedSlot.start,
-        end: selectedSlot.end,
-        title: 'Consultation with ' + clientName,
+        summary: 'Consultation with ' + clientName,
         description: 'Initial consultation',
-        attendees: [clientEmail]
+        start: { dateTime: selectedSlot.start },
+        end: { dateTime: selectedSlot.end },
+        attendees: [{ email: clientEmail }]
     }
 )
 
-// 4. Send confirmation
+// 5. Send confirmation
 console.log('Booking confirmed:', booking.id)
 ```
 
@@ -458,12 +668,19 @@ console.log('Booking confirmed:', booking.id)
 ```typescript
 // Sync events between providers
 async function syncCalendars(userId: string) {
-    // Get events from Google
+    // Get all events from all providers
+    const allEvents = await recal.calendar.getEvents(
+        userId,
+        new Date(),
+        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    )
+    
+    // Or get events from Google only
     const googleEvents = await recal.calendar.getEvents(
         userId,
         new Date(),
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        'google'
+        { provider: 'google' }
     )
     
     // Copy to Microsoft calendar
@@ -496,32 +713,40 @@ async function findTeamSlot(
     startDate: Date,
     endDate: Date
 ) {
-    // Get organization members
-    const org = await recal.organizations.getOrganization(orgSlug, {
-        includeUsers: true
-    })
-    
-    // Get everyone's busy times
+    // Option 1: Get raw busy times for manual processing
     const busyTimes = await recal.calendar.getOrgWideBusy(
         orgSlug,
         startDate,
         endDate,
-        true // Only check primary calendars
+        true  // Only check primary calendars
+    )
+    // Process busyTimes array to find gaps for your needs
+    
+    // Option 2: Use the scheduling service (recommended)
+    const availability = await recal.scheduling.getOrgWideAvailability(
+        orgSlug,
+        startDate,
+        endDate,
+        {
+            slotDuration: duration,
+            padding: 0,
+            earliestTimeEachDay: '09:00',
+            latestTimeEachDay: '17:00'
+        }
     )
     
-    // Find gaps where everyone is free
-    const freeSlots = findFreeSlots(busyTimes, duration)
-    
-    return freeSlots
+    // Returns ready-to-use available time slots
+    return availability.slots
 }
 ```
 
-## Development
+## SDK Development
 
 ### Prerequisites
 
 - Node.js 18+ or Bun 1.0+
 - TypeScript 5.0+
+- Biome 2.1.2 (optional)
 
 ### Setup
 
