@@ -524,7 +524,7 @@ await recal.oauth.disconnect('user_id', 'google')
 const result = await recal.oauth.verify(
     'google',
     'auth_code_from_callback',
-    ['calendar.events', 'calendar.readonly'],
+    'edit',  // 'edit' or 'free-busy' - single scope, not array
     'state_parameter',
     'https://app.example.com/callback'  // optional
 )
