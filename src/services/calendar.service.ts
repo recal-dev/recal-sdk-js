@@ -6,12 +6,12 @@ import {
     ProviderCredentialsNotSetError,
     UserNotFoundError,
 } from 'src/errors'
-import { eventSchema, freeBusySchema, timeRangeSchema } from 'src/typebox/calendar.tb'
+import { busySchema, eventSchema, timeRangeSchema } from 'src/typebox/calendar.tb'
 import type {
+    Busy,
     CreateEvent,
     CreateEventAcrossCalendars,
     Event,
-    FreeBusy,
     Provider,
     TimeRange,
     UpdateEvent,
@@ -24,7 +24,7 @@ export class CalendarService {
     constructor(private fetchHelper: FetchHelper) {}
 
     // ==========================================
-    // MARK: User Calendar - Free/Busy & Events
+    // MARK: User Calendar - Busy & Events
     // ==========================================
 
     /**
@@ -34,7 +34,7 @@ export class CalendarService {
      * @param options The options for the free/busy query (optional)
      * @returns The free/busy period
      */
-    public async getFreeBusy(
+    public async getBusy(
         userId: string,
         minDate: Date,
         maxDate: Date,
@@ -42,11 +42,11 @@ export class CalendarService {
             provider?: Provider | Provider[]
             timeZone?: string
         }
-    ): Promise<FreeBusy> {
+    ): Promise<Busy> {
         const { provider, timeZone } = options || {}
         return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/free-busy`, {
-                schema: freeBusySchema,
+            .get(`/v1/users/${userId}/calendar/busy`, {
+                schema: busySchema,
                 searchParams: { minDate, maxDate, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
@@ -410,7 +410,7 @@ export class CalendarService {
     // ==========================================
 
     /**
-     * Get the org-wide free/busy period
+     * Get the org-wide busy period
      * @param slug The slug of the organization
      * @param minDate The minimum date
      * @param maxDate The maximum date
@@ -418,7 +418,7 @@ export class CalendarService {
      * @param options The options for the org-wide free/busy query (optional)
      * @returns The org-wide free/busy period
      */
-    public async getOrgWideFreeBusy(
+    public async getOrgWideBusy(
         slug: string,
         minDate: Date,
         maxDate: Date,
@@ -430,7 +430,7 @@ export class CalendarService {
     ): Promise<TimeRange[]> {
         const { provider, timeZone } = options || {}
         return this.fetchHelper
-            .get(`/v1/organizations/${slug}/calendar/free-busy`, {
+            .get(`/v1/organizations/${slug}/calendar/busy`, {
                 schema: T.Array(timeRangeSchema),
                 searchParams: { minDate, maxDate, primaryOnly, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,

@@ -96,7 +96,7 @@ All date/time operations support timezone specification via the `timeZone` param
 
 ```typescript
 // Get user's availability
-const freeBusy = await recal.calendar.getFreeBusy(
+const busy = await recal.calendar.getBusy(
     'user_id',
     new Date('2024-01-01'),
     new Date('2024-01-07'),
@@ -288,7 +288,7 @@ const members = await recal.organizations.getMembers('org_id')
 
 ```typescript
 // Get team availability
-const teamBusy = await recal.calendar.getOrgWideFreeBusy(
+const teamBusy = await recal.calendar.getOrgWideBusy(
     'acme-corp',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
@@ -387,7 +387,7 @@ const allEvents = await Promise.all(
 const providers: Provider[] = ['google', 'microsoft']
 const busyTimes = await Promise.all(
     providers.map(provider =>
-        recal.calendar.getFreeBusy(
+        recal.calendar.getBusy(
             'user_id',
             startDate,
             endDate,
@@ -502,7 +502,7 @@ async function findTeamSlot(
     })
     
     // Get everyone's busy times
-    const busyTimes = await recal.calendar.getOrgWideFreeBusy(
+    const busyTimes = await recal.calendar.getOrgWideBusy(
         orgSlug,
         startDate,
         endDate,

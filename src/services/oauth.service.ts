@@ -174,6 +174,7 @@ export class OAuthService {
      * Verify OAuth code (used in OAuth callback flow)
      * @param provider The provider of the OAuth connection
      * @param code The OAuth code
+     * @param scope The OAuth scope (free-busy or edit)
      * @param state The OAuth state
      * @param redirectUrl The redirect URL
      * @returns The OAuth verification result
@@ -181,7 +182,7 @@ export class OAuthService {
     public async verify(
         provider: Provider,
         code: string,
-        scope: string[],
+        scope: 'edit' | 'free-busy',
         state: string,
         redirectUrl?: string
     ): Promise<{ success: boolean }> {

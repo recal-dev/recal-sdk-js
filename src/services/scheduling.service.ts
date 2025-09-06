@@ -20,7 +20,7 @@ export class SchedulingService {
     constructor(private fetchHelper: FetchHelper) {}
 
     /**
-     * Get available time slots based on free-busy data with basic parameters
+     * Get available time slots based on busy data with basic parameters
      * @param userId The ID of the user
      * @param provider The provider(s) of the calendar (optional, can be array)
      * @param padding The padding for the time slots
@@ -64,7 +64,7 @@ export class SchedulingService {
     }
 
     /**
-     * Get available time slots based on free-busy data with advanced parameters
+     * Get available time slots based on busy data with advanced parameters
      * @param userId The ID of the user
      * @param schedules The schedules of the user
      * @param provider The provider(s) of the calendar (optional, can be array)
@@ -109,7 +109,7 @@ export class SchedulingService {
     }
 
     /**
-     * Get available time slots based on free-busy data for an organization
+     * Get available time slots based on busy data for an organization
      * @param orgSlug The slug of the organization
      * @param provider The provider(s) of the calendar (optional, can be array)
      * @param padding The padding for the time slots

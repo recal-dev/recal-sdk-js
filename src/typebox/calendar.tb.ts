@@ -100,4 +100,4 @@ export const timeRangeSchema = T.Object({
     end: T.Date(),
 })
 
-export const freeBusySchema = T.Array(timeRangeSchema)
+export const busySchema = T.Array(timeRangeSchema)
