@@ -778,17 +778,27 @@ src/
 │   └── oauth.service.ts
 ├── entities/             # Domain models
 │   ├── user.ts
-│   ├── organization.ts
-│   └── event.ts
+│   └── organization.ts
 ├── types/                # TypeScript type definitions
 │   ├── calendar.types.ts
 │   ├── scheduling.types.ts
-│   └── internal.types.ts
+│   ├── internal.types.ts
+│   └── oauth.types.ts
 ├── typebox/              # Runtime validation schemas (auto-generated)
+│   ├── calendar.tb.ts
+│   ├── scheduling.tb.ts
+│   ├── oauth.tb.ts
+│   ├── organization.tb.ts
+│   ├── user.tb.ts
+│   ├── timeString.tb.ts
+│   ├── organization.stripped.tb.ts
+│   └── user.stripped.tb.ts
 ├── utils/                # Helper utilities
 │   ├── fetch.helper.ts
+│   ├── fetchErrorHandler.ts
 │   ├── includes.helper.ts
-│   └── functionize.ts
+│   ├── functionize.ts
+│   └── omit.ts
 └── errors.ts             # Custom error classes
 ```
 
