@@ -22,14 +22,15 @@ export class SchedulingService {
     /**
      * Get available time slots based on busy data with basic parameters
      * @param userId The ID of the user
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param padding The padding for the time slots
-     * @param slotDuration The duration of each slot
-     * @param startDate The start date
-     * @param endDate The end date
-     * @param earliestTimeEachDay The earliest time each day
-     * @param latestTimeEachDay The latest time each day
-     * @param timeZone The time zone for the request
+     * @param startDate The start date for availability search
+     * @param endDate The end date for availability search
+     * @param options Scheduling options (all fields optional):
+     *   - provider: Calendar provider(s) to check (optional)
+     *   - padding: Minutes of padding between slots (optional)
+     *   - slotDuration: Duration of each slot in minutes (optional)
+     *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
+     *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
+     *   - timeZone: Time zone for the request (optional)
      * @returns Available time slots with basic scheduling options
      */
     public async userSchedulingBasic(
@@ -66,13 +67,14 @@ export class SchedulingService {
     /**
      * Get available time slots based on busy data with advanced parameters
      * @param userId The ID of the user
-     * @param schedules The schedules of the user
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param padding The padding for the time slots
-     * @param slotDuration The duration of each slot
-     * @param startDate The start date
-     * @param endDate The end date
-     * @param timeZone The time zone for the request
+     * @param schedules Array of schedule rules defining availability windows
+     * @param startDate The start date for availability search
+     * @param endDate The end date for availability search
+     * @param options Advanced scheduling options (all fields optional):
+     *   - provider: Calendar provider(s) to check (optional)
+     *   - padding: Minutes of padding between slots (optional)
+     *   - slotDuration: Duration of each slot in minutes (optional)
+     *   - timeZone: Time zone for the request (optional)
      * @returns Available time slots with advanced scheduling options
      */
     public async userSchedulingAdvanced(
@@ -111,15 +113,16 @@ export class SchedulingService {
     /**
      * Get available time slots based on busy data for an organization
      * @param orgSlug The slug of the organization
-     * @param provider The provider(s) of the calendar (optional, can be array)
-     * @param padding The padding for the time slots
-     * @param slotDuration The duration of each slot
-     * @param startDate The start date
-     * @param endDate The end date
-     * @param earliestTimeEachDay The earliest time each day
-     * @param latestTimeEachDay The latest time each day
-     * @param timeZone The time zone for the request
-     * @returns Available time slots with basic scheduling options
+     * @param startDate The start date for availability search
+     * @param endDate The end date for availability search
+     * @param options Organization scheduling options (all fields optional):
+     *   - provider: Calendar provider(s) to check (optional)
+     *   - padding: Minutes of padding between slots (optional)
+     *   - slotDuration: Duration of each slot in minutes (optional)
+     *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
+     *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
+     *   - timeZone: Time zone for the request (optional)
+     * @returns Available time slots for the organization
      */
     public async getOrgWideAvailability(
         orgSlug: string,
