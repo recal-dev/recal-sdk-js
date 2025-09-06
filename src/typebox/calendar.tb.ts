@@ -55,7 +55,7 @@ export const createEventSchema = T.Object({
     end: T.Optional(T.Date()),
     location: T.Optional(T.String()),
     attendees: T.Optional(T.Array(createAttendeeSchema)),
-    sendNotifications: T.Boolean(),
+    sendNotifications: T.Optional(T.Boolean()),
     meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 
