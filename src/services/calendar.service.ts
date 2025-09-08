@@ -264,15 +264,21 @@ export class CalendarService {
      * @param options The options for the event query (optional)
      * @returns The event
      */
-    public async getEvent(
-        userId: string,
-        provider: Provider,
-        calendarId: string,
-        eventId: string,
+    public async getEvent({
+        userId,
+        provider,
+        calendarId = 'primary',
+        eventId,
+        options,
+    }: {
+        userId: string
+        provider: Provider
+        calendarId?: string
+        eventId: string
         options?: {
             timeZone?: string
         }
-    ): Promise<Event> {
+    }): Promise<Event> {
         const { timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
@@ -301,15 +307,21 @@ export class CalendarService {
      * @param options The options for the event creation (optional)
      * @returns The created event
      */
-    public async createEvent(
-        userId: string,
-        provider: Provider,
-        calendarId: string,
-        event: CreateEvent,
+    public async createEvent({
+        userId,
+        provider,
+        calendarId = 'primary',
+        event,
+        options,
+    }: {
+        userId: string
+        provider: Provider
+        calendarId?: string
+        event: CreateEvent
         options?: {
             timeZone?: string
         }
-    ): Promise<Event> {
+    }): Promise<Event> {
         const { timeZone } = options || {}
         return this.fetchHelper
             .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
@@ -339,16 +351,23 @@ export class CalendarService {
      * @param options The options for the event update (optional)
      * @returns The updated event
      */
-    public async updateEvent(
-        userId: string,
-        provider: Provider,
-        calendarId: string,
-        eventId: string,
-        event: UpdateEvent,
+    public async updateEvent({
+        userId,
+        provider,
+        calendarId = 'primary',
+        eventId,
+        event,
+        options,
+    }: {
+        userId: string
+        provider: Provider
+        calendarId?: string
+        eventId: string
+        event: UpdateEvent
         options?: {
             timeZone?: string
         }
-    ): Promise<Event> {
+    }): Promise<Event> {
         const { timeZone } = options || {}
         return this.fetchHelper
             .put(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
@@ -377,15 +396,21 @@ export class CalendarService {
      * @param options The options for the event deletion (optional)
      * @returns The deleted event
      */
-    public async deleteEvent(
-        userId: string,
-        provider: Provider,
-        calendarId: string,
-        eventId: string,
+    public async deleteEvent({
+        userId,
+        provider,
+        calendarId = 'primary',
+        eventId,
+        options,
+    }: {
+        userId: string
+        provider: Provider
+        calendarId?: string
+        eventId: string
         options?: {
             timeZone?: string
         }
-    ): Promise<void> {
+    }): Promise<void> {
         const { timeZone } = options || {}
         return this.fetchHelper
             .delete(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
