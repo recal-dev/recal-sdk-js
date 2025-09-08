@@ -46,3 +46,9 @@ export class RecalClient {
 export * from './entities/organization'
 export * from './entities/user'
 export * from './errors'
+// Public types
+export * from './types/calendar.types'
+export * from './types/scheduling.types'
+export * from './types/oauth.types'
+export type { RecalOptions } from './types/internal.types'
+export type { RecalOptions as RecalClientOptions } from './types/internal.types'
