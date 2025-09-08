@@ -221,7 +221,7 @@ export class CalendarService {
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
      * @param options The options for the event deletion (optional)
-     * @returns The deleted event
+     * @returns void
      */
     public async deleteEventByMetaId(
         userId: string,
@@ -394,7 +394,7 @@ export class CalendarService {
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
      * @param options The options for the event deletion (optional)
-     * @returns The deleted event
+     * @returns void
      */
     public async deleteEvent({
         userId,
