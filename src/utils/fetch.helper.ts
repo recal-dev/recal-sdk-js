@@ -17,7 +17,7 @@ type JSONBody =
     | null
     | JSONBody[]
     | { [key: string]: JSONBody }
-    | Record<string, unknown>
+    | object
 
 type SearchParams = { [key: string]: Arrayable<string | number | boolean | Date | undefined> | undefined }
 
