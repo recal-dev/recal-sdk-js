@@ -9,8 +9,8 @@ import { functionize } from './utils/functionize'
 
 /**
  * Recal SDK
- * @description Recal SDK for Node.js
- * @version 0.1.0
+ * @description Recal SDK for JavaScript/TypeScript
+ * @version 0.2.0
  * @author Recal <team@recal.dev>
  * @license MIT
  */
