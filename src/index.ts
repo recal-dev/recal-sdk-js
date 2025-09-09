@@ -48,12 +48,13 @@ export class RecalClient {
     }
 }
 
-export * from './entities/organization'
-export * from './entities/user'
-export * from './errors'
+export * from './entities/organization.js'
+export * from './entities/user.js'
+export * from './errors.js'
 // Public types
-export * from './types/calendar.types'
-export * from './types/scheduling.types'
-export * from './types/oauth.types'
-export type { RecalOptions } from './types/internal.types'
-export type { RecalOptions as RecalClientOptions } from './types/internal.types'
+export * from './types/calendar.types.js'
+export type { RecalOptions, RecalOptions as RecalClientOptions } from './types/internal.types.js'
+export * from './types/oauth.types.js'
+export * from './types/organization.types.js'
+export * from './types/scheduling.types.js'
+export * from './types/user.types.js'
