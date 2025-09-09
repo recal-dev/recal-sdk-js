@@ -1,3 +1,4 @@
+import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '@/errors.js'
 import {
     advancedSchedulingResponseSchema,
     schedulingResponseSchema,
@@ -11,10 +12,9 @@ import type {
     SubOrgSchedulingResponse,
     UserSchedulingAdvancedParams,
     UserSchedulingBasicParams,
-} from '@/types/scheduling.types'
+} from '@/types/scheduling.types.js'
 import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 import { omit } from '@/utils/omit.js'
-import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '../errors.js'
 
 export class SchedulingService {
     constructor(private fetchHelper: FetchHelper) {}

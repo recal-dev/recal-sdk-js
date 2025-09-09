@@ -4,8 +4,8 @@ import type {
     schedulingResponseSchema,
     schedulingSchema,
     subOrgSchedulingResponseSchema,
-} from '../typebox/scheduling.tb'
-import type { Provider, TimeRange } from './calendar.types'
+} from '@/typebox/scheduling.tb.js'
+import type { Provider, TimeRange } from './calendar.types.js'
 
 // ==========================================
 // MARK: Scheduling Options

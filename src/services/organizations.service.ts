@@ -1,10 +1,10 @@
 import { Type as T } from '@sinclair/typebox'
+import { Organization } from '@/entities/organization.js'
 import { User } from '@/entities/user.js'
+import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '@/errors.js'
+import { organizationSchema } from '@/typebox/organization.tb.js'
 import { userSchema } from '@/typebox/user.tb.js'
-import { Organization } from '../entities/organization.js'
-import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '../errors.js'
-import { organizationSchema } from '../typebox/organization.tb.js'
-import { errorHandler, type FetchHelper } from '../utils/fetch.helper.js'
+import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 
 export class OrganizationsService {
     constructor(private fetchHelper: FetchHelper) {}
