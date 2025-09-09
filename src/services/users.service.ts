@@ -1,6 +1,6 @@
 import { Type as T } from '@sinclair/typebox'
-import { OrganizationNotFoundError, UserAlreadyExistsError, UserNotFoundError } from 'src/errors'
-import { includesHelper } from 'src/utils/includes.helper'
+import { OrganizationNotFoundError, UserAlreadyExistsError, UserNotFoundError } from '@/errors'
+import { includesHelper } from '@/utils/includes.helper'
 import { User } from '../entities/user'
 import { userSchema } from '../typebox/user.tb'
 import { errorHandler, type FetchHelper } from '../utils/fetch.helper'

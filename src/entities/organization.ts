@@ -1,6 +1,6 @@
 import type { Static } from '@sinclair/typebox'
-import { OrganizationsService } from 'src/services/organizations.service'
-import type { organizationSchema } from 'src/typebox/organization.tb'
+import { OrganizationsService } from '@/services/organizations.service'
+import type { organizationSchema } from '@/typebox/organization.tb'
 import type { FetchHelper } from '../utils/fetch.helper'
 import { User } from './user'
 

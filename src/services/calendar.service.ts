@@ -5,8 +5,8 @@ import {
     OrganizationNotFoundError,
     ProviderCredentialsNotSetError,
     UserNotFoundError,
-} from 'src/errors'
-import { busySchema, eventSchema, timeRangeSchema } from 'src/typebox/calendar.tb'
+} from '@/errors'
+import { busySchema, eventSchema, timeRangeSchema } from '@/typebox/calendar.tb'
 import type {
     Busy,
     CreateEvent,
@@ -16,9 +16,9 @@ import type {
     TimeRange,
     UpdateEvent,
     UpdateEventAcrossCalendars,
-} from 'src/types/calendar.types'
-import type { FetchHelper } from 'src/utils/fetch.helper'
-import { errorHandler } from 'src/utils/fetch.helper'
+} from '@/types/calendar.types'
+import type { FetchHelper } from '@/utils/fetch.helper'
+import { errorHandler } from '@/utils/fetch.helper'
 
 export class CalendarService {
     constructor(private fetchHelper: FetchHelper) {}

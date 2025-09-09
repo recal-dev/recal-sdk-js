@@ -13,9 +13,10 @@
             "types": "./dist/index.d.ts"
         }
     },
+    "type": "module",
     "files": ["dist"],
     "scripts": {
-        "build": "tsc --declaration --emitDeclarationOnly --outDir dist && NODE_ENV=production bun build src/index.ts --outdir dist --target node",
+        "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
         "test": "bun test tests",
         "typecheck": "tsc --noEmit",
         "format": "biome format --fix",
@@ -29,8 +30,9 @@
     "keywords": ["recal", "calendar"],
     "devDependencies": {
         "@biomejs/biome": "2.1.2",
-        "typescript": "^5.8.3",
-        "@types/bun": "latest"
+        "@types/bun": "latest",
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.8.3"
     },
     "dependencies": {
         "@sinclair/typebox": "^0.34.38"

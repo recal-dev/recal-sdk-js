@@ -1,6 +1,6 @@
 import { Type as T } from '@sinclair/typebox'
-import { User } from 'src/entities/user'
-import { userSchema } from 'src/typebox/user.tb'
+import { User } from '@/entities/user'
+import { userSchema } from '@/typebox/user.tb'
 import { Organization } from '../entities/organization'
 import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '../errors'
 import { organizationSchema } from '../typebox/organization.tb'

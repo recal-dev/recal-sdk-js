@@ -2,7 +2,7 @@ import {
     advancedSchedulingResponseSchema,
     schedulingResponseSchema,
     subOrgSchedulingResponseSchema,
-} from 'src/typebox/scheduling.tb'
+} from '@/typebox/scheduling.tb'
 import type {
     AdvancedSchedulingResponse,
     OrgSchedulingParams,
@@ -11,9 +11,9 @@ import type {
     SubOrgSchedulingResponse,
     UserSchedulingAdvancedParams,
     UserSchedulingBasicParams,
-} from 'src/types/scheduling.types'
-import { errorHandler, type FetchHelper } from 'src/utils/fetch.helper'
-import { omit } from 'src/utils/omit'
+} from '@/types/scheduling.types'
+import { errorHandler, type FetchHelper } from '@/utils/fetch.helper'
+import { omit } from '@/utils/omit'
 import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '../errors'
 
 export class SchedulingService {

@@ -1,6 +1,6 @@
 import type { Static, TSchema, TVoid } from '@sinclair/typebox'
 import { Value } from '@sinclair/typebox/value'
-import type { Arrayable } from 'src/types/internal.types'
+import type { Arrayable } from '@/types/internal.types'
 
 // Types
 interface FetchHelperOptions {

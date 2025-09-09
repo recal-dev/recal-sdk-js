@@ -1,4 +1,4 @@
-import { RecalClient } from '../../src'
+import { RecalClient } from '@/index'
 import { testConfig, validateTestConfig } from '../config/test-config'
 
 export class TestClient {
