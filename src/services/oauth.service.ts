@@ -2,7 +2,7 @@ import { Type as T } from '@sinclair/typebox'
 import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from '@/errors.js'
 import { oauthConnectionSchema, oauthLinkSchema } from '@/typebox/oauth.tb.js'
 import type { Provider } from '@/types/calendar.types.js'
-import type { OAuthConnection, OAuthLink } from '@/types/oauth.types.js'
+import type { OAuthConnection, OAuthLink, SetOAuthConnection } from '@/types/oauth.types.js'
 import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 
 export class OAuthService {
@@ -122,13 +122,7 @@ export class OAuthService {
     public async setConnection(
         userId: string,
         provider: Provider,
-        connection: {
-            accessToken: string
-            refreshToken?: string
-            scope: string[]
-            expiresAt?: Date | string | number
-            email?: string
-        }
+        connection: SetOAuthConnection
     ): Promise<OAuthConnection> {
         return this.fetchHelper
             .post(`/v1/users/${userId}/oauth/${provider}`, {
@@ -179,13 +173,19 @@ export class OAuthService {
      * @param redirectUrl The redirect URL
      * @returns The OAuth verification result
      */
-    public async verify(
-        provider: Provider,
-        code: string,
-        scope: 'edit' | 'free-busy',
-        state: string,
+    public async verify({
+        provider,
+        code,
+        scope,
+        state,
+        redirectUrl,
+    }: {
+        provider: Provider
+        code: string
+        scope: 'edit' | 'free-busy'
+        state: string
         redirectUrl?: string
-    ): Promise<{ success: boolean }> {
+    }): Promise<{ success: boolean }> {
         return this.fetchHelper
             .post(`/v1/users/oauth/${provider}/verify`, {
                 body: { code, scope, state },

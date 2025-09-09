@@ -10,6 +10,14 @@ export interface OAuthConnection {
     alive: boolean
 }
 
+export interface SetOAuthConnection {
+    accessToken: string
+    refreshToken?: string
+    scope: string[]
+    expiresAt?: Date
+    email?: string
+}
+
 export interface OAuthLink {
     provider: Provider
     url: string
