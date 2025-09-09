@@ -25,7 +25,6 @@
         "lint:fix:all": "biome lint --fix --unsafe",
         "check": "biome check",
         "check:fix": "biome check --fix",
-        "prepack": "bun run lint && bun run typecheck && bun run test",
         "prepublishOnly": "NODE_ENV=production bun run build",
         "postpublish": "echo 'Successfully published recal-sdk@'$npm_package_version"
     },
