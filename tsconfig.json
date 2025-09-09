@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "es2022",
-        "module": "commonjs",
-        "lib": ["es2022"],
+        "target": "ES2022",
+        "module": "ESNext",
+        "lib": ["ES2024"],
         "allowJs": true,
         "checkJs": true,
         "declaration": true,
@@ -10,7 +10,7 @@
         "sourceMap": true,
         "outDir": "./dist",
         "rootDir": "./src",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "baseUrl": ".",
         "paths": {
             "recal-sdk": ["./src/index"],
