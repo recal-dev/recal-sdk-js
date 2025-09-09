@@ -8,7 +8,7 @@ import type { FetchHelper } from '../utils/fetch.helper'
 import { Organization } from './organization'
 
 export class User {
-    private fetchHelper: FetchHelper
+    private readonly fetchHelper: FetchHelper
     public id: string
     public createdAt: Date
     public organizations?: Organization[]

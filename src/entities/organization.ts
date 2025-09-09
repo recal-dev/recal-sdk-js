@@ -5,7 +5,7 @@ import type { FetchHelper } from '../utils/fetch.helper'
 import { User } from './user'
 
 export class Organization {
-    private fetchHelper: FetchHelper
+    private readonly fetchHelper: FetchHelper
     public slug: string
     public name: string | null
     public createdAt: Date
