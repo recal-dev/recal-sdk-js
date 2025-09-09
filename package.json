@@ -1,6 +1,6 @@
 {
     "name": "recal-sdk",
-    "version": "0.2.0",
+    "version": "0.2.2",
     "description": "Recal SDK",
     "author": "Recal <team@recal.dev>",
     "contributors": ["tkoehlerlg", "jschwxrz"],
@@ -16,7 +16,7 @@
     "type": "module",
     "files": ["dist"],
     "scripts": {
-        "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json && node scripts/fix-esm-extensions.mjs",
+        "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
         "test": "bun test tests",
         "typecheck": "tsc --noEmit",
         "format": "biome format --fix",
@@ -25,7 +25,9 @@
         "lint:fix:all": "biome lint --fix --unsafe",
         "check": "biome check",
         "check:fix": "biome check --fix",
-        "prepublishOnly": "NODE_ENV=production bun run build"
+        "prepack": "bun run lint && bun run typecheck && bun run test",
+        "prepublishOnly": "NODE_ENV=production bun run build",
+        "postpublish": "echo 'Successfully published recal-sdk@'$npm_package_version"
     },
     "keywords": ["recal", "calendar"],
     "devDependencies": {

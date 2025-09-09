@@ -1,4 +1,4 @@
-import type { Functionize } from '../utils/functionize'
+import type { Functionize } from '../utils/functionize.js'
 
 export interface RecalOptions {
     token?: Functionize<string>

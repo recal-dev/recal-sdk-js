@@ -1,11 +1,11 @@
-import { CalendarService } from './services/calendar.service'
-import { OAuthService } from './services/oauth.service'
-import { OrganizationsService } from './services/organizations.service'
-import { SchedulingService } from './services/scheduling.service'
-import { UsersService } from './services/users.service'
-import type { RecalOptions } from './types/internal.types'
-import { FetchHelper } from './utils/fetch.helper'
-import { functionize } from './utils/functionize'
+import { CalendarService } from './services/calendar.service.js'
+import { OAuthService } from './services/oauth.service.js'
+import { OrganizationsService } from './services/organizations.service.js'
+import { SchedulingService } from './services/scheduling.service.js'
+import { UsersService } from './services/users.service.js'
+import type { RecalOptions } from './types/internal.types.js'
+import { FetchHelper } from './utils/fetch.helper.js'
+import { functionize } from './utils/functionize.js'
 
 /**
  * Recal SDK
@@ -28,7 +28,10 @@ export class RecalClient {
 
     public constructor(options?: RecalOptions) {
         // Guard process.env for non-Node runtimes
-        const env = typeof process !== 'undefined' && typeof process.env !== 'undefined' ? (process.env as Record<string, string | undefined>) : {}
+        const env =
+            typeof process !== 'undefined' && typeof process.env !== 'undefined'
+                ? (process.env as Record<string, string | undefined>)
+                : {}
         const _token = functionize(options?.token) || env.RECAL_TOKEN
         this.baseUrl = functionize(options?.url) || env.RECAL_URL || 'https://api.recal.dev'
         if (!_token) console.error('[Recal] No token provided')

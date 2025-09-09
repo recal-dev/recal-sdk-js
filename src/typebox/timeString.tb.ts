@@ -1,5 +1,4 @@
-import type { DateOptions } from '@sinclair/typebox'
-import { Type as T } from '@sinclair/typebox'
+import { type DateOptions, Type as T } from '@sinclair/typebox'
 
 export const timeString = (options?: DateOptions) =>
     T.String({

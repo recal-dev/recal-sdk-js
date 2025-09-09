@@ -1,11 +1,11 @@
 import type { Static } from '@sinclair/typebox'
-import { UserNotFoundError } from '@/errors'
-import { OAuthService } from '@/services/oauth.service'
-import { OrganizationsService } from '@/services/organizations.service'
-import type { userSchema } from '@/typebox/user.tb'
-import type { OAuthConnection } from '../types/oauth.types'
-import type { FetchHelper } from '../utils/fetch.helper'
-import { Organization } from './organization'
+import { UserNotFoundError } from '@/errors.js'
+import { OAuthService } from '@/services/oauth.service.js'
+import { OrganizationsService } from '@/services/organizations.service.js'
+import type { userSchema } from '@/typebox/user.tb.js'
+import type { OAuthConnection } from '@/types/oauth.types.js'
+import type { FetchHelper } from '@/utils/fetch.helper.js'
+import { Organization } from './organization.js'
 
 export class User {
     private readonly fetchHelper: FetchHelper

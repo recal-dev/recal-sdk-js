@@ -1,5 +1,5 @@
 import type { Static } from '@sinclair/typebox'
-import type { attendeeSchema, busySchema, eventSchema, timeRangeSchema } from '../typebox/calendar.tb'
+import type { attendeeSchema, busySchema, eventSchema, timeRangeSchema } from '../typebox/calendar.tb.js'
 
 // MARK: Types
 // Enums

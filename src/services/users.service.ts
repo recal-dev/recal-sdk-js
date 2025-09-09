@@ -1,9 +1,9 @@
 import { Type as T } from '@sinclair/typebox'
-import { OrganizationNotFoundError, UserAlreadyExistsError, UserNotFoundError } from '@/errors'
-import { includesHelper } from '@/utils/includes.helper'
-import { User } from '../entities/user'
-import { userSchema } from '../typebox/user.tb'
-import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
+import { User } from '@/entities/user.js'
+import { OrganizationNotFoundError, UserAlreadyExistsError, UserNotFoundError } from '@/errors.js'
+import { userSchema } from '@/typebox/user.tb.js'
+import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
+import { includesHelper } from '@/utils/includes.helper.js'
 
 interface UserOptions {
     includeOrgs?: boolean

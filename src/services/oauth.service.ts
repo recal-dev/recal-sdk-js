@@ -1,9 +1,9 @@
 import { Type as T } from '@sinclair/typebox'
-import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from '../errors'
-import { oauthConnectionSchema, oauthLinkSchema } from '../typebox/oauth.tb'
-import type { Provider } from '../types/calendar.types'
-import type { OAuthConnection, OAuthLink } from '../types/oauth.types'
-import { errorHandler, type FetchHelper } from '../utils/fetch.helper'
+import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from '@/errors.js'
+import { oauthConnectionSchema, oauthLinkSchema } from '@/typebox/oauth.tb.js'
+import type { Provider } from '@/types/calendar.types'
+import type { OAuthConnection, OAuthLink } from '@/types/oauth.types'
+import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 
 export class OAuthService {
     constructor(private fetchHelper: FetchHelper) {}

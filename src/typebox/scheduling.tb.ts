@@ -1,6 +1,6 @@
 import { Type as T } from '@sinclair/typebox'
-import { timeRangeSchema } from './calendar.tb'
-import { timeString } from './timeString.tb'
+import { timeRangeSchema } from './calendar.tb.js'
+import { timeString } from './timeString.tb.js'
 
 const exampleStartDate = new Date('2025-06-04')
 const exampleEndDate = new Date('2025-06-10')

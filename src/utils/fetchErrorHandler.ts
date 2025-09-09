@@ -1,4 +1,4 @@
-import { FetchError } from './fetch.helper'
+import { FetchError } from './fetch.helper.js'
 
 type HandlerResult<T> = Exclude<T, Error>
 type Handler<T> = ((e: FetchError) => HandlerResult<T>) | HandlerResult<T>

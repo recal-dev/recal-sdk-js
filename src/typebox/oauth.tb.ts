@@ -1,5 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
-import { providerSchema } from './calendar.tb'
+import { providerSchema } from './calendar.tb.js'
 
 export const oauthConnectionSchema = T.Object({
     expiresAt: T.Union([T.Date(), T.Null()]),

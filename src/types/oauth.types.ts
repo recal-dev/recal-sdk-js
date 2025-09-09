@@ -1,4 +1,4 @@
-import type { Provider } from './calendar.types'
+import type { Provider } from './calendar.types.js'
 
 export interface OAuthConnection {
     expiresAt: Date | null

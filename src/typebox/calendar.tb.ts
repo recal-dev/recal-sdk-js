@@ -1,5 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
-import { AttendeeResponseStatus, providers } from '../types/calendar.types'
+import { AttendeeResponseStatus, providers } from '../types/calendar.types.js'
 
 export const providerSchema = T.Union(providers.map((provider) => T.Literal(provider)))
 

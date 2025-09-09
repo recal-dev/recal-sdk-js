@@ -1,8 +1,8 @@
 import type { Static } from '@sinclair/typebox'
-import { OrganizationsService } from '@/services/organizations.service'
-import type { organizationSchema } from '@/typebox/organization.tb'
-import type { FetchHelper } from '../utils/fetch.helper'
-import { User } from './user'
+import { OrganizationsService } from '@/services/organizations.service.js'
+import type { organizationSchema } from '@/typebox/organization.tb.js'
+import type { FetchHelper } from '@/utils/fetch.helper.js'
+import { User } from './user.js'
 
 export class Organization {
     private readonly fetchHelper: FetchHelper
