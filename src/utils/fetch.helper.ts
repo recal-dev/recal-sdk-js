@@ -8,16 +8,7 @@ interface FetchHelperOptions {
     url: string
 }
 
-type JSONBody =
-    | string
-    | number
-    | boolean
-    | Date
-    | undefined
-    | null
-    | JSONBody[]
-    | { [key: string]: JSONBody }
-    | object
+type JSONBody = string | number | boolean | Date | undefined | null | JSONBody[] | { [key: string]: JSONBody } | object
 
 type SearchParams = { [key: string]: Arrayable<string | number | boolean | Date | undefined> | undefined }
 
