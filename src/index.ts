@@ -27,8 +27,10 @@ export class RecalClient {
     scheduling: SchedulingService
 
     public constructor(options?: RecalOptions) {
-        const _token = functionize(options?.token) || process.env.RECAL_TOKEN
-        this.baseUrl = functionize(options?.url) || process.env.RECAL_URL || 'https://api.recal.dev'
+        // Guard process.env for non-Node runtimes
+        const env = typeof process !== 'undefined' && typeof process.env !== 'undefined' ? (process.env as Record<string, string | undefined>) : {}
+        const _token = functionize(options?.token) || env.RECAL_TOKEN
+        this.baseUrl = functionize(options?.url) || env.RECAL_URL || 'https://api.recal.dev'
         if (!_token) console.error('[Recal] No token provided')
         else if (!_token.startsWith('recal_')) console.error('[Recal] Invalid token, must start with "recal_"')
         this.token = _token || ''
