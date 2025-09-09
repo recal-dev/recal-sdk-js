@@ -17,6 +17,7 @@
     "scripts": {
         "build": "tsc --declaration --emitDeclarationOnly --outDir dist && NODE_ENV=production bun build src/index.ts --outdir dist --target node",
         "test": "bun test tests",
+        "typecheck": "tsc --noEmit",
         "format": "biome format --fix",
         "lint": "biome lint",
         "lint:fix": "biome lint --fix",
@@ -28,7 +29,6 @@
     "keywords": ["recal", "calendar"],
     "devDependencies": {
         "@biomejs/biome": "2.1.2",
-        "@types/node": "^22.15.21",
         "typescript": "^5.8.3",
         "@types/bun": "latest"
     },
