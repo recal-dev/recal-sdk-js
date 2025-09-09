@@ -16,7 +16,7 @@ import type {
     TimeRange,
     UpdateEvent,
     UpdateEventAcrossCalendars,
-} from '@/types/calendar.types'
+} from '@/types/calendar.types.js'
 import type { FetchHelper } from '@/utils/fetch.helper.js'
 import { errorHandler } from '@/utils/fetch.helper.js'
 
