@@ -1,7 +1,7 @@
 import { Type as T } from '@sinclair/typebox'
-import { AttendeeResponseStatus, Provider } from '../types/calendar.types'
+import { AttendeeResponseStatus, providers } from '../types/calendar.types'
 
-export const providerSchema = T.Enum(Provider)
+export const providerSchema = T.Union(providers.map((provider) => T.Literal(provider)))
 
 export const attendeeResponseStatusSchema = T.Enum(AttendeeResponseStatus)
 
@@ -67,7 +67,7 @@ export const createEventAcrossCalendarsSchema = T.Object({
     end: T.Optional(T.Date()),
     location: T.Optional(T.String()),
     attendees: T.Optional(T.Array(createAttendeeSchema)),
-    sendNotificationsFor: T.Optional(T.Array(T.Enum(Provider))),
+    sendNotificationsFor: T.Optional(T.Array(providerSchema)),
     meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 
@@ -91,7 +91,7 @@ export const updateEventAcrossCalendarsSchema = T.Object({
     end: T.Optional(T.Date()),
     location: T.Optional(T.String()),
     attendees: T.Optional(T.Array(createAttendeeSchema)),
-    sendNotificationsFor: T.Optional(T.Array(T.Enum(Provider))),
+    sendNotificationsFor: T.Optional(T.Array(providerSchema)),
     meeting: T.Optional(T.Union([T.Boolean(), meetingSchema])),
 })
 

@@ -2,7 +2,7 @@ import type { Provider } from './calendar.types'
 
 export interface OAuthConnection {
     expiresAt: Date | null
-    provider: Provider.GOOGLE | Provider.MICROSOFT
+    provider: Provider
     accessToken?: string
     refreshToken?: string | null
     email: string | null

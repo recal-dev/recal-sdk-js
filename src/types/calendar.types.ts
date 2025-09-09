@@ -6,10 +6,9 @@ import type { attendeeSchema, busySchema, eventSchema, timeRangeSchema } from '.
 /**
  * Provider enum
  */
-export enum Provider {
-    GOOGLE = 'google',
-    MICROSOFT = 'microsoft',
-}
+export const providers = ['google', 'microsoft'] as const
+
+export type Provider = (typeof providers)[number]
 
 /**
  * Calendar access roles enum
