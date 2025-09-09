@@ -38,6 +38,7 @@ export const createAttendeeSchema = T.Object({
 export const eventSchema = T.Object({
     id: T.String(),
     metaId: T.Optional(T.String()),
+    calendarId: T.Optional(T.String()),
     subject: T.Optional(T.String()),
     description: T.Optional(T.String()),
     start: T.Optional(T.Date()),
