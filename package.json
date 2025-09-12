@@ -27,6 +27,14 @@
         "check:fix": "biome check --fix",
         "prepublishOnly": "bun format && bun lint && bun check && NODE_ENV=production bun run build"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/recal-dev/recal-sdk-js.git"
+    },
+    "bugs": {
+        "url": "https://github.com/recal-dev/recal-sdk-js/issues"
+    },
+    "homepage": "https://github.com/recal-dev/recal-sdk-js#readme",
     "keywords": ["recal", "calendar"],
     "devDependencies": {
         "@biomejs/biome": "2.1.2",
