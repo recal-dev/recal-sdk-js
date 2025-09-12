@@ -43,3 +43,11 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 - CHANGELOG.md
 
 ---
+
+## 🚀 v0.2.5 — (2025-09-12)
+
+### 🆕 Added
+- oicd npm publish workflow
+- npm github link
+
+---
