@@ -27,7 +27,7 @@ jobs:
               run: bun install --frozen-lockfile
 
             - name: Run tests
-              run: bun test
+              run: bun run test
               env:
                 RECAL_TOKEN: ${{ secrets.RECAL_TOKEN }}
                 RECAL_URL: ${{ secrets.RECAL_URL }}
