@@ -36,3 +36,10 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 - 🔒 Designed for server-side environments. Keep API tokens in secure backend contexts and never expose them in client-side code.
 
 ---
+
+## 🚀 v0.2.4 — (2025-09-12)
+
+### 🆕 Added
+- CHANGELOG.md
+
+---
