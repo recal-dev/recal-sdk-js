@@ -144,13 +144,13 @@ export class CalendarService {
 
     /**
      * @param userId The ID of the user
-     * @param createEventData The event to create
+     * @param newEvent The event to create
      * @param options The options for the event creation (optional)
      * @returns The created event
      */
     public async createEventByMetaId(
         userId: string,
-        createEventData: CreateEventAcrossCalendars,
+        newEvent: CreateEventAcrossCalendars,
         options?: {
             provider?: Provider | Provider[]
             timeZone?: string
@@ -162,7 +162,7 @@ export class CalendarService {
                 schema: eventSchema,
                 searchParams: { provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: createEventData,
+                body: newEvent,
             })
             .catch(
                 errorHandler([
@@ -181,14 +181,14 @@ export class CalendarService {
     /**
      * @param userId The ID of the user
      * @param metaId The meta ID of the event
-     * @param updateEventData The updated event data
+     * @param updateEvent The updated event data
      * @param options The options for the event update (optional)
      * @returns The updated event
      */
     public async updateEventByMetaId(
         userId: string,
         metaId: string,
-        updateEventData: UpdateEventAcrossCalendars,
+        updateEvent: UpdateEventAcrossCalendars,
         options?: {
             provider?: Provider | Provider[]
             timeZone?: string
@@ -200,7 +200,7 @@ export class CalendarService {
                 schema: eventSchema,
                 searchParams: { provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: updateEventData,
+                body: updateEvent,
             })
             .catch(
                 errorHandler([
@@ -303,7 +303,7 @@ export class CalendarService {
      * @param userId The ID of the user
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
-     * @param createEventData The event data to create
+     * @param newEvent The event data to create
      * @param options The options for the event creation (optional)
      * @returns The created event
      */
@@ -311,13 +311,13 @@ export class CalendarService {
         userId,
         provider,
         calendarId = 'primary',
-        createEventData,
+        newEvent: newEventData,
         options,
     }: {
         userId: string
         provider: Provider
         calendarId?: string
-        createEventData: CreateEvent
+        newEvent: CreateEvent
         options?: {
             timeZone?: string
         }
@@ -327,7 +327,7 @@ export class CalendarService {
             .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
                 schema: eventSchema,
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: createEventData,
+                body: newEventData,
             })
             .catch(
                 errorHandler([
@@ -347,7 +347,7 @@ export class CalendarService {
      * @param provider The provider of the calendar
      * @param calendarId The ID of the calendar
      * @param eventId The ID of the event
-     * @param updateEventData The updated event data
+     * @param updateEvent The updated event data
      * @param options The options for the event update (optional)
      * @returns The updated event
      */
@@ -356,14 +356,14 @@ export class CalendarService {
         provider,
         calendarId = 'primary',
         eventId,
-        updateEventData,
+        updateEvent: updateEventData,
         options,
     }: {
         userId: string
         provider: Provider
         calendarId?: string
         eventId: string
-        updateEventData: UpdateEvent
+        updateEvent: UpdateEvent
         options?: {
             timeZone?: string
         }
