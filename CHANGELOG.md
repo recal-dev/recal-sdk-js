@@ -51,3 +51,11 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 - npm github link
 
 ---
+
+## 🚀 v0.2.8 — (2025-09-13)
+
+### 🆕 Added
+- Clean up scheduling
+- Add maxOverlaps to scheduling
+
+---
