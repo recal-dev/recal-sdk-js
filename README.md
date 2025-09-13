@@ -273,7 +273,7 @@ await recal.calendar.deleteEventByMetaId(
 
 ```typescript
 // Find available time slots (minimal config)
-const availability = await recal.scheduling.userSchedulingBasic(
+const availability = await recal.scheduling.user(
     'user_id',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
@@ -283,7 +283,7 @@ const availability = await recal.scheduling.userSchedulingBasic(
 )
 
 // Or with more options
-const availabilityDetailed = await recal.scheduling.userSchedulingBasic(
+const availabilityDetailed = await recal.scheduling.user(
     'user_id',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
@@ -296,6 +296,26 @@ const availabilityDetailed = await recal.scheduling.userSchedulingBasic(
         timeZone: 'America/New_York'  // optional
     }
 )
+```
+
+#### Allow Overlapping Events
+
+```typescript
+// Find availability even when user already has events scheduled
+const availabilityWithOverlaps = await recal.scheduling.user(
+    'user_id',
+    new Date('2024-01-15'),
+    new Date('2024-01-20'),
+    {
+        slotDuration: 30,
+        maxOverlaps: 2,  // Allow up to 2 overlapping events per slot
+        timeZone: 'America/New_York'
+    }
+)
+
+// maxOverlaps: 2, means 1 slot is still available even if the user has 2 existing events at the same time.
+// This enables booking a n concurrent events - useful for optional meetings,
+// tentative invites, or users who can handle multiple events simultaneous, like a team that has just one calendar.
 ```
 
 #### Get User Availability (Advanced)
@@ -312,7 +332,7 @@ const schedules = [
 ]
 
 // Minimal config
-const availability = await recal.scheduling.userSchedulingAdvanced(
+const availability = await recal.scheduling.userAdvanced(
     'user_id',
     schedules,
     new Date('2024-01-15'),
@@ -321,7 +341,7 @@ const availability = await recal.scheduling.userSchedulingAdvanced(
 )
 
 // Or with more options
-const availabilityDetailed = await recal.scheduling.userSchedulingAdvanced(
+const availabilityDetailed = await recal.scheduling.userAdvanced(
     'user_id',
     schedules,
     new Date('2024-01-15'),
@@ -339,7 +359,7 @@ const availabilityDetailed = await recal.scheduling.userSchedulingAdvanced(
 
 ```typescript
 // Find organization-wide available time slots (minimal)
-const orgAvailability = await recal.scheduling.getOrgWideAvailability(
+const orgAvailability = await recal.scheduling.organization(
     'org-slug',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
@@ -347,7 +367,7 @@ const orgAvailability = await recal.scheduling.getOrgWideAvailability(
 )
 
 // Or with constraints
-const orgAvailabilityConstrained = await recal.scheduling.getOrgWideAvailability(
+const orgAvailabilityConstrained = await recal.scheduling.organization(
     'org-slug',
     new Date('2024-01-15'),
     new Date('2024-01-20'),
@@ -678,7 +698,7 @@ const recal = new RecalClient({
 
 ```typescript
 // 1. Check availability
-const availability = await recal.scheduling.userSchedulingBasic(
+const availability = await recal.scheduling.user(
     'consultant_id',
     new Date(),
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next 7 days
