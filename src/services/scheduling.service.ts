@@ -6,12 +6,12 @@ import {
 } from '@/typebox/scheduling.tb.js'
 import type {
     AdvancedSchedulingResponse,
-    OrgSchedulingParams,
+    OrgSchedulingOptions,
     Schedule,
     SchedulingResponse,
     SubOrgSchedulingResponse,
-    UserSchedulingAdvancedParams,
-    UserSchedulingBasicParams,
+    UserSchedulingAdvancedOptions,
+    UserSchedulingBasicOptions,
 } from '@/types/scheduling.types.js'
 import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 import { omit } from '@/utils/omit.js'
@@ -31,13 +31,14 @@ export class SchedulingService {
      *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
      *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
      *   - timeZone: Time zone for the request (optional)
+     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots with basic scheduling options
      */
     public async userSchedulingBasic(
         userId: string,
         startDate: Date,
         endDate: Date,
-        options: UserSchedulingBasicParams
+        options: UserSchedulingBasicOptions
     ): Promise<SchedulingResponse> {
         return this.fetchHelper
             .get(`/v1/users/${userId}/scheduling`, {
@@ -75,6 +76,7 @@ export class SchedulingService {
      *   - padding: Minutes of padding between slots (optional)
      *   - slotDuration: Duration of each slot in minutes (optional)
      *   - timeZone: Time zone for the request (optional)
+     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots with advanced scheduling options
      */
     public async userSchedulingAdvanced(
@@ -82,7 +84,7 @@ export class SchedulingService {
         schedules: Schedule[],
         startDate: Date,
         endDate: Date,
-        options: UserSchedulingAdvancedParams
+        options: UserSchedulingAdvancedOptions
     ): Promise<AdvancedSchedulingResponse> {
         return this.fetchHelper
             .post(`/v1/users/${userId}/scheduling`, {
@@ -122,13 +124,14 @@ export class SchedulingService {
      *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
      *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
      *   - timeZone: Time zone for the request (optional)
+     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots for the organization
      */
     public async getOrgWideAvailability(
         orgSlug: string,
         startDate: Date,
         endDate: Date,
-        options: OrgSchedulingParams
+        options: OrgSchedulingOptions
     ): Promise<SubOrgSchedulingResponse> {
         return this.fetchHelper
             .get(`/v1/organizations/${orgSlug}/scheduling`, {

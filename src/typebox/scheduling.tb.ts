@@ -59,6 +59,11 @@ export const schedulingOptionsSchema = T.Object({
             description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
         })
     ),
+    maxOverlaps: T.Optional(
+        T.Number({
+            description: 'Maximum number of overlaps allowed',
+        })
+    ),
 })
 
 /**
@@ -89,6 +94,11 @@ export const outputSchedulingOptionsSchema = T.Object({
     latestTimeEachDay: T.Optional(
         timeString({
             description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
+        })
+    ),
+    maxOverlaps: T.Optional(
+        T.Number({
+            description: 'Maximum number of overlaps allowed',
         })
     ),
 })
@@ -122,7 +132,7 @@ export const schedulingResponseSchema = T.Object({
 export const advancedSchedulingResponseSchema = T.Object({
     availableSlots: T.Array(timeRangeSchema),
     options: T.Object({
-        ...T.Omit(schedulingOptionsSchema, ['earliestTimeEachDay', 'latestTimeEachDay']).properties,
+        ...T.Omit(schedulingOptionsSchema, ['earliestTimeEachDay', 'latestTimeEachDay', 'maxOverlaps']).properties,
         schedules: T.Array(schedulingSchema),
     }),
 })

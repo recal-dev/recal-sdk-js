@@ -8,27 +8,6 @@ import type {
 import type { Provider, TimeRange } from './calendar.types.js'
 
 // ==========================================
-// MARK: Scheduling Options
-// ==========================================
-
-export interface SchedulingOptions {
-    padding: number
-    slotDuration: number
-    startDate: Date
-    endDate: Date
-    earliestTimeEachDay?: string
-    latestTimeEachDay?: string
-}
-
-export interface OutputsSchedulingOptions {
-    padding: number
-    slotDuration: number
-    startDate: string
-    endDate: string
-    schedules: Schedule[]
-}
-
-// ==========================================
 // MARK: Time & Schedule Models
 // ==========================================
 
@@ -49,30 +28,33 @@ export type AdvancedSchedulingResponse = Static<typeof advancedSchedulingRespons
 export type SubOrgSchedulingResponse = Static<typeof subOrgSchedulingResponseSchema>
 
 // ==========================================
-// MARK: Scheduling Params
+// MARK: Scheduling Options
 // ==========================================
 
-export interface UserSchedulingBasicParams {
+export interface UserSchedulingBasicOptions {
     provider?: Provider | Provider[]
     padding?: number
     slotDuration?: number
     earliestTimeEachDay?: string
     latestTimeEachDay?: string
     timeZone?: string
+    maxOverlaps?: number
 }
 
-export interface UserSchedulingAdvancedParams {
+export interface UserSchedulingAdvancedOptions {
     provider?: Provider | Provider[]
     padding?: number
     slotDuration?: number
     timeZone?: string
+    maxOverlaps?: number
 }
 
-export interface OrgSchedulingParams {
+export interface OrgSchedulingOptions {
     provider?: Provider | Provider[]
     padding?: number
     slotDuration?: number
     earliestTimeEachDay?: string
     latestTimeEachDay?: string
     timeZone?: string
+    maxOverlaps?: number
 }
