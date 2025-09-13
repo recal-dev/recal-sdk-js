@@ -67,43 +67,6 @@ export const schedulingOptionsSchema = T.Object({
 })
 
 /**
- * Schema for output scheduling options
- */
-export const outputSchedulingOptionsSchema = T.Object({
-    padding: T.Number({
-        default: 0,
-        description: 'Padding in minutes to add before and after busy times',
-    }),
-    slotDuration: T.Number({
-        default: 30,
-        description: 'Duration of each slot in minutes',
-    }),
-    startDate: T.Date({
-        description: 'Start of the time range to scan for availability (inclusive)',
-        examples: [exampleStartDate],
-    }),
-    endDate: T.Date({
-        description: 'End of the time range to scan for availability (inclusive)',
-        examples: [exampleEndDate],
-    }),
-    earliestTimeEachDay: T.Optional(
-        timeString({
-            description: 'Requested earliest time of each day (in the time zone of the request) (e.g., 10:00)',
-        })
-    ),
-    latestTimeEachDay: T.Optional(
-        timeString({
-            description: 'Requested latest time of each day (in the time zone of the request) (e.g., 16:00)',
-        })
-    ),
-    maxOverlaps: T.Optional(
-        T.Number({
-            description: 'Maximum number of overlaps allowed',
-        })
-    ),
-})
-
-/**
  * Schema for time range with user information
  */
 export const timeRangeWithUserSchema = T.Object({
@@ -119,17 +82,17 @@ export const timeRangeWithUserSchema = T.Object({
 })
 
 /**
- * Schema for the response of the scheduling endpoint
+ * Schema for the response of the user scheduling endpoint
  */
-export const schedulingResponseSchema = T.Object({
+export const userSchedulingResponseSchema = T.Object({
     availableSlots: T.Array(timeRangeSchema),
-    options: outputSchedulingOptionsSchema,
+    options: schedulingOptionsSchema,
 })
 
 /**
- * Schema for the response of the advanced scheduling endpoint
+ * Schema for the response of the user advanced scheduling endpoint
  */
-export const advancedSchedulingResponseSchema = T.Object({
+export const userAdvancedSchedulingResponseSchema = T.Object({
     availableSlots: T.Array(timeRangeSchema),
     options: T.Object({
         ...T.Omit(schedulingOptionsSchema, ['earliestTimeEachDay', 'latestTimeEachDay', 'maxOverlaps']).properties,
@@ -138,9 +101,9 @@ export const advancedSchedulingResponseSchema = T.Object({
 })
 
 /**
- * Schema for the response of the sub-organization scheduling endpoint
+ * Schema for the response of the organization scheduling endpoint
  */
-export const subOrgSchedulingResponseSchema = T.Object({
+export const orgSchedulingResponseSchema = T.Object({
     availableSlots: T.Array(timeRangeWithUserSchema),
-    options: outputSchedulingOptionsSchema,
+    options: schedulingOptionsSchema,
 })

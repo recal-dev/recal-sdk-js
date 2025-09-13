@@ -1,9 +1,9 @@
 import type { Static } from '@sinclair/typebox'
 import type {
-    advancedSchedulingResponseSchema,
-    schedulingResponseSchema,
+    orgSchedulingResponseSchema,
     schedulingSchema,
-    subOrgSchedulingResponseSchema,
+    userAdvancedSchedulingResponseSchema,
+    userSchedulingResponseSchema,
 } from '@/typebox/scheduling.tb.js'
 import type { Provider, TimeRange } from './calendar.types.js'
 
@@ -21,11 +21,11 @@ export type Schedule = Static<typeof schedulingSchema>
 // MARK: Response Types
 // ==========================================
 
-export type SchedulingResponse = Static<typeof schedulingResponseSchema>
+export type UserSchedulingResponse = Static<typeof userSchedulingResponseSchema>
 
-export type AdvancedSchedulingResponse = Static<typeof advancedSchedulingResponseSchema>
+export type UserAdvancedSchedulingResponse = Static<typeof userAdvancedSchedulingResponseSchema>
 
-export type SubOrgSchedulingResponse = Static<typeof subOrgSchedulingResponseSchema>
+export type OrgSchedulingResponse = Static<typeof orgSchedulingResponseSchema>
 
 // ==========================================
 // MARK: Scheduling Options

@@ -1,17 +1,17 @@
 import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '@/errors.js'
 import {
-    advancedSchedulingResponseSchema,
-    schedulingResponseSchema,
-    subOrgSchedulingResponseSchema,
+    orgSchedulingResponseSchema,
+    userAdvancedSchedulingResponseSchema,
+    userSchedulingResponseSchema,
 } from '@/typebox/scheduling.tb.js'
 import type {
-    AdvancedSchedulingResponse,
     OrgSchedulingOptions,
+    OrgSchedulingResponse,
     Schedule,
-    SchedulingResponse,
-    SubOrgSchedulingResponse,
+    UserAdvancedSchedulingResponse,
     UserSchedulingAdvancedOptions,
     UserSchedulingBasicOptions,
+    UserSchedulingResponse,
 } from '@/types/scheduling.types.js'
 import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
 import { omit } from '@/utils/omit.js'
@@ -34,15 +34,15 @@ export class SchedulingService {
      *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots with basic scheduling options
      */
-    public async userSchedulingBasic(
+    public async user(
         userId: string,
         startDate: Date,
         endDate: Date,
         options: UserSchedulingBasicOptions
-    ): Promise<SchedulingResponse> {
+    ): Promise<UserSchedulingResponse> {
         return this.fetchHelper
             .get(`/v1/users/${userId}/scheduling`, {
-                schema: schedulingResponseSchema,
+                schema: userSchedulingResponseSchema,
                 searchParams: {
                     ...omit(options, ['timeZone']),
                     startDate,
@@ -79,16 +79,16 @@ export class SchedulingService {
      *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots with advanced scheduling options
      */
-    public async userSchedulingAdvanced(
+    public async userAdvanced(
         userId: string,
         schedules: Schedule[],
         startDate: Date,
         endDate: Date,
         options: UserSchedulingAdvancedOptions
-    ): Promise<AdvancedSchedulingResponse> {
+    ): Promise<UserAdvancedSchedulingResponse> {
         return this.fetchHelper
             .post(`/v1/users/${userId}/scheduling`, {
-                schema: advancedSchedulingResponseSchema,
+                schema: userAdvancedSchedulingResponseSchema,
                 searchParams: {
                     ...omit(options, ['timeZone']),
                     startDate,
@@ -127,15 +127,15 @@ export class SchedulingService {
      *   - maxOverlaps: Maximum number of overlaps allowed (optional)
      * @returns Available time slots for the organization
      */
-    public async getOrgWideAvailability(
+    public async organization(
         orgSlug: string,
         startDate: Date,
         endDate: Date,
         options: OrgSchedulingOptions
-    ): Promise<SubOrgSchedulingResponse> {
+    ): Promise<OrgSchedulingResponse> {
         return this.fetchHelper
             .get(`/v1/organizations/${orgSlug}/scheduling`, {
-                schema: subOrgSchedulingResponseSchema,
+                schema: orgSchedulingResponseSchema,
                 searchParams: {
                     ...omit(options, ['timeZone']),
                     startDate,
