@@ -532,7 +532,7 @@ const linkWithOptions = await recal.oauth.getLink(
     'user_id',
     'google',
     {
-        scope: 'edit',  // 'edit' or 'free-busy' (for OAuth scopes)
+        scope: ['edit'],  // 'edit' or 'free-busy' (for OAuth scopes)
         accessType: 'offline',  // 'offline' or 'online'
         redirectUrl: 'https://app.example.com/callback'  // optional
     }
@@ -551,7 +551,7 @@ const linksFiltered = await recal.oauth.getBulkLinks(
     'user_id',
     {
         provider: ['google', 'microsoft'],
-        scope: 'edit',
+        scope: ['edit'],
         accessType: 'offline'
     }
 )
@@ -580,7 +580,7 @@ const connection = await recal.oauth.setConnection(
     {
         accessToken: 'access_token',
         refreshToken: 'refresh_token',  // optional
-        scope: ['calendar.events', 'calendar.readonly'],
+        scope: ['edit'],
         expiresAt: new Date('2024-12-31'),  // optional
         email: 'user@example.com'  // optional
     }
@@ -597,7 +597,7 @@ await recal.oauth.disconnect('user_id', 'google')
 const result = await recal.oauth.verify(
     'google',
     'auth_code_from_callback',
-    'edit',  // 'edit' or 'free-busy' - single scope, not array
+    ['edit'],  // 'edit' or 'free-busy' - single scope, not array
     'state_parameter',
     'https://app.example.com/callback'  // optional
 )

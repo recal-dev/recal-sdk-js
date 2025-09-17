@@ -58,7 +58,7 @@ export class OAuthService {
         userId: string,
         options?: {
             provider?: Provider | Provider[]
-            scope?: 'edit' | 'free-busy'
+            scope?: ('edit' | 'free-busy')[]
             accessType?: 'offline' | 'online'
         }
     ): Promise<OAuthLink[]> {
@@ -85,7 +85,7 @@ export class OAuthService {
         userId: string,
         provider: Provider,
         options?: {
-            scope?: 'edit' | 'free-busy'
+            scope?: ('edit' | 'free-busy')[]
             accessType?: 'offline' | 'online'
             redirectUrl?: string
         }
@@ -182,7 +182,7 @@ export class OAuthService {
     }: {
         provider: Provider
         code: string
-        scope: 'edit' | 'free-busy'
+        scope: ('edit' | 'free-busy')[]
         state: string
         redirectUrl?: string
     }): Promise<{ success: boolean }> {
