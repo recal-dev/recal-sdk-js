@@ -1,4 +1,5 @@
 import type { Static, TSchema, TVoid } from '@sinclair/typebox'
+import { Type as T } from '@sinclair/typebox'
 import { Value } from '@sinclair/typebox/value'
 import type { Arrayable } from '@/types/internal.types.js'
 
@@ -13,14 +14,35 @@ type JSONBody = string | number | boolean | Date | undefined | null | JSONBody[]
 type SearchParams = { [key: string]: Arrayable<string | number | boolean | Date | undefined> | undefined }
 
 // Error
-export class FetchError extends Error {
-    public status: number
-    public statusText: string
+const apiErrorSchema = T.Object({
+    error: T.String(),
+})
 
-    public constructor(url: string, status: number, statusText: string) {
-        super(`[Recal] Failed to fetch from ${url} with status ${status} and ${statusText}`)
-        this.status = status
-        this.statusText = statusText
+export class FetchError extends Error {
+    public url: string
+    public res: Response
+
+    public constructor(url: string, res: Response) {
+        super(`[Recal] Failed to fetch from ${url} with status ${res.status} and ${res.statusText}`)
+        this.url = url
+        this.res = res
+    }
+
+    get status() {
+        return this.res.status
+    }
+
+    get statusText() {
+        return this.res.statusText
+    }
+
+    async getError(): Promise<string> {
+        if (this.res.headers.get('Content-Type')?.includes('application/json')) {
+            const json = await this.res.json()
+            if (Value.Check(apiErrorSchema, json)) return Value.Parse(apiErrorSchema, json).error
+            return JSON.stringify(json)
+        }
+        return this.res.text()
     }
 }
 
@@ -78,7 +100,7 @@ export class FetchHelper {
         }
         const url = params.toString() ? `${_url}?${params.toString()}` : _url
         const response = await this.__fetch(url, { ...options, body: JSON.stringify(body), headers })
-        if (!response.ok) throw new FetchError(url, response.status, response.statusText)
+        if (!response.ok) throw new FetchError(url, response)
         if (schema !== undefined) {
             const data = await response.json()
             return Value.Parse(schema, data)

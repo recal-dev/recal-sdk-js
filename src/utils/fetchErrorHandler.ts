@@ -12,32 +12,34 @@ type CatchHandler<T> = (e: unknown) => HandlerResult<T>
 type ErrorHandlerObj<T> = {
     code: number
     filter?: (error: FetchError) => boolean
-    statusTextInclFilter?: string | string[]
+    errorInclFilter?: string | string[]
 } & ({ error: Error } | { result: Handler<T> })
 
 export const errorHandler =
     <T = never>(errHandlers: ErrorHandlerObj<T>[], _catch?: CatchHandler<T>) =>
-    (error: Error): HandlerResult<T> => {
+    async (error: Error): Promise<HandlerResult<T>> => {
         if (error instanceof FetchError) {
             for (const errHandler of errHandlers) {
                 if (errHandler.code === error.status) {
                     // if filter is set, check if it matches, if not: continue
                     if (errHandler.filter && !errHandler.filter(error)) continue
-                    // if statusTextInclFilter is set, check if any matches, if not: continue
-                    if (errHandler.statusTextInclFilter) {
-                        if (Array.isArray(errHandler.statusTextInclFilter)) {
-                            if (!errHandler.statusTextInclFilter.some((filter) => error.statusText.includes(filter)))
-                                continue
-                        } else if (!error.statusText.includes(errHandler.statusTextInclFilter)) continue
+                    // if errorInclFilter is set, check if any matches, if not: continue
+                    const errorText = await error.getError()
+                    if (errHandler.errorInclFilter) {
+                        if (Array.isArray(errHandler.errorInclFilter)) {
+                            if (!errHandler.errorInclFilter.some((filter) => errorText.includes(filter))) continue
+                        } else if (!errorText.includes(errHandler.errorInclFilter)) continue
                     }
                     // if result is set, return it, if not: throw the defined error
                     if ('result' in errHandler) {
                         if (errHandler.result instanceof Function) return errHandler.result(error)
                         return errHandler.result
                     }
-                    throw errHandler.error
+                    throw new Error(`[Recal] API error (${error.status} ${error.statusText}): ${errorText}`)
                 }
             }
+            const errorText = await error.getError()
+            throw new Error(`[Recal] Unknown API error (${error.status} ${error.statusText}): ${errorText}`)
         }
         if (_catch) return _catch(error)
         throw error
