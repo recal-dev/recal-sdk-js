@@ -19,8 +19,8 @@ const apiErrorSchema = T.Object({
 })
 
 export class FetchError extends Error {
-    public url: string
-    public res: Response
+    url: string
+    private res: Response
 
     public constructor(url: string, res: Response) {
         super(`[Recal] Failed to fetch from ${url} with status ${res.status} and ${res.statusText}`)
@@ -37,7 +37,11 @@ export class FetchError extends Error {
     }
 
     async getError(): Promise<string> {
-        if (this.res.headers.get('Content-Type')?.includes('application/json')) {
+        if (this.status === 422) {
+            const json = (await this.res.json()) as any
+            return `Validation error: ${JSON.stringify(json.error)}`
+        }
+        if (this.res.headers.get('content-type')?.includes('application/json')) {
             const json = await this.res.json()
             if (Value.Check(apiErrorSchema, json)) return Value.Parse(apiErrorSchema, json).error
             return JSON.stringify(json)
