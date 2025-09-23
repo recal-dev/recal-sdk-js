@@ -2,6 +2,7 @@ import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundEr
 import {
     orgSchedulingResponseSchema,
     userAdvancedSchedulingResponseSchema,
+    userBulkSchedulingResponseSchema,
     userSchedulingResponseSchema,
 } from '@/typebox/scheduling.tb.js'
 import type {
@@ -9,6 +10,8 @@ import type {
     OrgSchedulingResponse,
     Schedule,
     UserAdvancedSchedulingResponse,
+    UserBulkSchedulingOptions,
+    UserBulkSchedulingResponse,
     UserSchedulingAdvancedOptions,
     UserSchedulingBasicOptions,
     UserSchedulingResponse,
@@ -110,6 +113,40 @@ export class SchedulingService {
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
             )
+    }
+
+    /**
+     *
+     * @param startDate The start date for availability search
+     * @param endDate The end date for availability search
+     * @param options User bulk scheduling options
+     *   - provider: Calendar provider(s) to check (optional)
+     *   - padding: Minutes of padding between slots (optional)
+     *   - slotDuration: Duration of each slot in minutes (optional)
+     *   - timeZone: Time zone for the request (optional)
+     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
+     *   - users: Array of users with their schedules
+     * @returns Available time slots for the users
+     */
+    public async userBulk(
+        startDate: Date,
+        endDate: Date,
+        options: UserBulkSchedulingOptions
+    ): Promise<UserBulkSchedulingResponse> {
+        return this.fetchHelper
+            .post(`/v1/users/scheduling`, {
+                schema: userBulkSchedulingResponseSchema,
+                body: {
+                    users: options.users,
+                },
+                searchParams: {
+                    ...omit(options, ['timeZone', 'users']),
+                    startDate,
+                    endDate,
+                },
+                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
+            })
+            .catch(errorHandler([]))
     }
 
     /**

@@ -1,4 +1,5 @@
 import { Type as T } from '@sinclair/typebox'
+import { omit } from '@/utils/omit.js'
 import { timeRangeSchema } from './calendar.tb.js'
 import { timeString } from './timeString.tb.js'
 
@@ -99,6 +100,21 @@ export const userAdvancedSchedulingResponseSchema = T.Object({
         schedules: T.Array(schedulingSchema),
     }),
 })
+
+export const userBulkSchedulingResponseSchema = T.Array(
+    T.Object({
+        userId: T.String(),
+        calendarIds: T.Optional(T.Array(T.String())),
+        availableSlots: T.Optional(T.Array(timeRangeSchema)),
+        options: T.Optional(
+            T.Object({
+                ...omit(schedulingOptionsSchema.properties, ['earliestTimeEachDay', 'latestTimeEachDay']),
+                schedules: T.Optional(T.Array(schedulingSchema)),
+            })
+        ),
+        error: T.Optional(T.String()),
+    })
+)
 
 /**
  * Schema for the response of the organization scheduling endpoint
