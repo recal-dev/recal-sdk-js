@@ -38,8 +38,8 @@ export class FetchError extends Error {
 
     async getError(): Promise<string> {
         if (this.status === 422) {
-            const json = (await this.res.json()) as any
-            return `Validation error: ${JSON.stringify(json.error)}`
+            const json = await this.res.json()
+            return `Validation error: ${JSON.stringify(json)}`
         }
         if (this.res.headers.get('content-type')?.includes('application/json')) {
             const json = await this.res.json()
