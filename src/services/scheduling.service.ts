@@ -58,7 +58,7 @@ export class SchedulingService {
                             userId,
                             Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
                         ),
-                        statusTextInclFilter: 'User has no connected calendars',
+                        errorInclFilter: 'User has no connected calendars',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
@@ -105,7 +105,7 @@ export class SchedulingService {
                             userId,
                             Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
                         ),
-                        statusTextInclFilter: 'User has no connected calendars',
+                        errorInclFilter: 'User has no connected calendars',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
@@ -147,7 +147,7 @@ export class SchedulingService {
                 errorHandler([
                     {
                         code: 400,
-                        statusTextInclFilter: 'User has no connected calendars',
+                        errorInclFilter: 'User has no connected calendars',
                         error: new OAuthConnectionNotFoundError(
                             'organization',
                             Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
@@ -155,12 +155,12 @@ export class SchedulingService {
                     },
                     {
                         code: 404,
-                        statusTextInclFilter: 'Organization not found',
+                        errorInclFilter: 'Organization not found',
                         error: new OrganizationNotFoundError(orgSlug),
                     },
                     {
                         code: 404,
-                        statusTextInclFilter: 'No users found in this organization',
+                        errorInclFilter: 'No users found in this organization',
                         error: new UserNotFoundError('organization'),
                     },
                 ])

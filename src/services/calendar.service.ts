@@ -95,7 +95,7 @@ export class CalendarService {
                             userId,
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
-                        statusTextInclFilter: 'User has not the needed calendars connected',
+                        errorInclFilter: 'User has not the needed calendars connected',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
@@ -136,7 +136,7 @@ export class CalendarService {
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new EventNotFoundError(metaId) },
                 ])
             )
@@ -211,7 +211,7 @@ export class CalendarService {
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new EventNotFoundError(metaId) },
                 ])
             )
@@ -290,10 +290,10 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
-                    { code: 404, error: new EventNotFoundError(eventId), statusTextInclFilter: 'Event not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
+                    { code: 404, error: new EventNotFoundError(eventId), errorInclFilter: 'Event not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -334,9 +334,9 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -380,9 +380,9 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -422,7 +422,7 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                     { code: 404, error: new EventNotFoundError(eventId) },
