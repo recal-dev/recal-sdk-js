@@ -59,3 +59,10 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 - Add maxOverlaps to scheduling
 
 ---
+
+## 🚀 v0.3.0 — (2025-09-28)
+
+### 🆕 Added
+- Better error handling
+- Conistent start and end date parameter names
+
