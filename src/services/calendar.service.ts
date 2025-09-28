@@ -29,15 +29,15 @@ export class CalendarService {
 
     /**
      * @param userId The ID of the user
-     * @param minDate The start date of the free/busy period
-     * @param maxDate The end date of the free/busy period
+     * @param startDate The start date of the free/busy period
+     * @param endDate The end date of the free/busy period
      * @param options The options for the free/busy query (optional)
      * @returns The free/busy period
      */
     public async getBusy(
         userId: string,
-        minDate: Date,
-        maxDate: Date,
+        startDate: Date,
+        endDate: Date,
         options?: {
             provider?: Provider | Provider[]
             timeZone?: string
@@ -47,7 +47,7 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/busy`, {
                 schema: busySchema,
-                searchParams: { minDate, maxDate, provider },
+                searchParams: { startDate, endDate, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
@@ -66,15 +66,15 @@ export class CalendarService {
 
     /**
      * @param userId The ID of the user
-     * @param minDate The start date of the events
-     * @param maxDate The end date of the events
+     * @param startDate The start date of the events
+     * @param endDate The end date of the events
      * @param options The options for the events query (optional)
      * @returns The events
      */
     public async getEvents(
         userId: string,
-        minDate: Date,
-        maxDate: Date,
+        startDate: Date,
+        endDate: Date,
         options?: {
             provider?: Provider | Provider[]
             timeZone?: string
@@ -84,7 +84,7 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events`, {
                 schema: T.Array(eventSchema),
-                searchParams: { minDate, maxDate, provider },
+                searchParams: { startDate, endDate, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
@@ -95,7 +95,7 @@ export class CalendarService {
                             userId,
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
-                        statusTextInclFilter: 'User has not the needed calendars connected',
+                        errorInclFilter: 'User has not the needed calendars connected',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                 ])
@@ -136,7 +136,7 @@ export class CalendarService {
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new EventNotFoundError(metaId) },
                 ])
             )
@@ -211,7 +211,7 @@ export class CalendarService {
                             Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
                         ),
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new EventNotFoundError(metaId) },
                 ])
             )
@@ -290,10 +290,10 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
-                    { code: 404, error: new EventNotFoundError(eventId), statusTextInclFilter: 'Event not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
+                    { code: 404, error: new EventNotFoundError(eventId), errorInclFilter: 'Event not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -334,9 +334,9 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -380,9 +380,9 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
-                    { code: 404, error: new UserNotFoundError(userId), statusTextInclFilter: 'User not found' },
+                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
                     { code: 404, error: new ProviderCredentialsNotSetError(provider) },
                 ])
             )
@@ -422,7 +422,7 @@ export class CalendarService {
                     {
                         code: 400,
                         error: new OAuthConnectionNotFoundError(userId, provider),
-                        statusTextInclFilter: 'User has not connected this calendar provider',
+                        errorInclFilter: 'User has not connected this calendar provider',
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
                     { code: 404, error: new EventNotFoundError(eventId) },
@@ -437,16 +437,16 @@ export class CalendarService {
     /**
      * Get the org-wide busy period
      * @param slug The slug of the organization
-     * @param minDate The minimum date
-     * @param maxDate The maximum date
+     * @param startDate The minimum date
+     * @param endDate The maximum date
      * @param primaryOnly Whether to only include the primary calendar (default: true)
      * @param options The options for the org-wide free/busy query (optional)
      * @returns The org-wide free/busy period
      */
     public async getOrgWideBusy(
         slug: string,
-        minDate: Date,
-        maxDate: Date,
+        startDate: Date,
+        endDate: Date,
         primaryOnly?: boolean,
         options?: {
             provider?: Provider | Provider[]
@@ -457,7 +457,7 @@ export class CalendarService {
         return this.fetchHelper
             .get(`/v1/organizations/${slug}/calendar/busy`, {
                 schema: T.Array(timeRangeSchema),
-                searchParams: { minDate, maxDate, primaryOnly, provider },
+                searchParams: { startDate, endDate, primaryOnly, provider },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(

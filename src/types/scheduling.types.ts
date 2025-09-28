@@ -3,6 +3,7 @@ import type {
     orgSchedulingResponseSchema,
     schedulingSchema,
     userAdvancedSchedulingResponseSchema,
+    userBulkSchedulingResponseSchema,
     userSchedulingResponseSchema,
 } from '@/typebox/scheduling.tb.js'
 import type { Provider, TimeRange } from './calendar.types.js'
@@ -17,6 +18,12 @@ export interface TimeRangeWithUser extends TimeRange {
 
 export type Schedule = Static<typeof schedulingSchema>
 
+export type UserWithSchedules = {
+    userId: string
+    calendarIds?: string[]
+    schedules?: Schedule[]
+}
+
 // ==========================================
 // MARK: Response Types
 // ==========================================
@@ -26,6 +33,8 @@ export type UserSchedulingResponse = Static<typeof userSchedulingResponseSchema>
 export type UserAdvancedSchedulingResponse = Static<typeof userAdvancedSchedulingResponseSchema>
 
 export type OrgSchedulingResponse = Static<typeof orgSchedulingResponseSchema>
+
+export type UserBulkSchedulingResponse = Static<typeof userBulkSchedulingResponseSchema>
 
 // ==========================================
 // MARK: Scheduling Options
@@ -47,6 +56,15 @@ export interface UserSchedulingAdvancedOptions {
     slotDuration?: number
     timeZone?: string
     maxOverlaps?: number
+}
+
+export interface UserBulkSchedulingOptions {
+    provider?: Provider | Provider[]
+    padding?: number
+    slotDuration?: number
+    timeZone?: string
+    maxOverlaps?: number
+    users: UserWithSchedules[]
 }
 
 export interface OrgSchedulingOptions {

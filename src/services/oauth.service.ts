@@ -40,7 +40,7 @@ export class OAuthService {
                 errorHandler([
                     {
                         code: 404,
-                        statusTextInclFilter: 'OAuth connection not found',
+                        errorInclFilter: 'OAuth connection not found',
                         error: new OAuthConnectionNotFoundError(userId, provider),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
@@ -103,7 +103,7 @@ export class OAuthService {
                 errorHandler([
                     {
                         code: 404,
-                        statusTextInclFilter: 'OAuth credentials not found',
+                        errorInclFilter: 'OAuth credentials not found',
                         error: new ProviderCredentialsNotSetError(provider),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
@@ -133,7 +133,7 @@ export class OAuthService {
                 errorHandler([
                     {
                         code: 404,
-                        statusTextInclFilter: 'OAuth connection not found',
+                        errorInclFilter: 'OAuth connection not found',
                         error: new OAuthConnectionNotFoundError(userId, provider),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
@@ -156,7 +156,7 @@ export class OAuthService {
                 errorHandler([
                     {
                         code: 404,
-                        statusTextInclFilter: 'OAuth connection not found',
+                        errorInclFilter: 'OAuth connection not found',
                         error: new OAuthConnectionNotFoundError(userId, provider),
                     },
                     { code: 404, error: new UserNotFoundError(userId) },
@@ -196,13 +196,13 @@ export class OAuthService {
                 errorHandler([
                     {
                         code: 404,
-                        statusTextInclFilter: 'OAuth authorization provider not found',
+                        errorInclFilter: 'OAuth authorization provider not found',
                         error: new ProviderCredentialsNotSetError(provider),
                     },
                     { code: 404, error: new UserNotFoundError('User not found in state parameter') },
                     {
                         code: 400,
-                        statusTextInclFilter: 'OAuth credentials not configured',
+                        errorInclFilter: 'OAuth credentials not configured',
                         error: new ProviderCredentialsNotSetError(provider),
                     },
                     {
