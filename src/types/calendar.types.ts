@@ -36,6 +36,7 @@ export enum AttendeeResponseStatus {
  */
 export interface Calendar {
     id: string
+    provider: Provider
     timeZone?: string
     subject?: string
     backgroundColor?: string
