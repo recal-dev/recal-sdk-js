@@ -93,6 +93,7 @@ const busyFiltered = await recal.calendar.getBusy(
     new Date('2024-01-07'),
     {
         provider: 'google',  // optional: filter by provider
+        calendarIds: ["calendar_id"] // optional: filter by calendarIds
         timeZone: 'America/New_York',  // optional: timezone
     }
 )
@@ -115,6 +116,7 @@ const eventsFiltered = await recal.calendar.getEvents(
     new Date('2024-01-31'),
     {
         provider: 'google',  // optional: filter by provider
+        calendarIds: ["calendar_id"] // optional: filter by calendarIds
         timeZone: 'Europe/London'  // optional: timezone
     }
 )

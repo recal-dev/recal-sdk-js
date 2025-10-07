@@ -40,14 +40,15 @@ export class CalendarService {
         endDate: Date,
         options?: {
             provider?: Provider | Provider[]
+            calendarIds?: string[]
             timeZone?: string
         }
     ): Promise<Busy> {
-        const { provider, timeZone } = options || {}
+        const { provider, calendarIds, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/busy`, {
                 schema: busySchema,
-                searchParams: { startDate, endDate, provider },
+                searchParams: { startDate, endDate, provider, calendarIds },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
@@ -77,14 +78,15 @@ export class CalendarService {
         endDate: Date,
         options?: {
             provider?: Provider | Provider[]
+            calendarIds?: string[]
             timeZone?: string
         }
     ): Promise<Event[]> {
-        const { provider, timeZone } = options || {}
+        const { provider, calendarIds, timeZone } = options || {}
         return this.fetchHelper
             .get(`/v1/users/${userId}/calendar/events`, {
                 schema: T.Array(eventSchema),
-                searchParams: { startDate, endDate, provider },
+                searchParams: { startDate, endDate, provider, calendarIds },
                 headers: timeZone ? { 'x-timezone': timeZone } : undefined,
             })
             .catch(
