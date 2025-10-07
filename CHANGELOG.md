@@ -66,3 +66,8 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 - Better error handling
 - Conistent start and end date parameter names
 
+## v0.3.1 - (2025-10-07)
+
+### 🆕 Added
+- Calendar Id filtering for busy and events functions
+
