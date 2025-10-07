@@ -4,7 +4,7 @@
     "files": {
         "ignoreUnknown": false,
         "experimentalScannerIgnores": ["node_modules"],
-        "includes": ["**", "!**/dist/**", "!**/build/**", "!**/node_modules/**"]
+        "includes": ["**", "!**/dist/**", "!**/node_modules/**"]
     },
     "formatter": {
         "enabled": true,
@@ -22,7 +22,7 @@
     "linter": {
         "enabled": true,
         "rules": { "recommended": true },
-        "includes": ["**", "!**/dist/**", "!**/node_modules/**", "!develop.test.ts"]
+        "includes": ["**", "!**/dist/**", "!**/node_modules/**", "!**/develop.test.ts"]
     },
     "javascript": {
         "formatter": {
