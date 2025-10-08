@@ -6,7 +6,7 @@ import {
     ProviderCredentialsNotSetError,
     UserNotFoundError,
 } from '@/errors.js'
-import { busySchema, eventSchema, timeRangeSchema } from '@/typebox/calendar.tb.js'
+import { busySchema, calendarSchema, eventSchema, timeRangeSchema } from '@/typebox/calendar.tb.js'
 import type {
     Busy,
     CreateEvent,
@@ -22,6 +22,35 @@ import { errorHandler } from '@/utils/fetch.helper.js'
 
 export class CalendarService {
     constructor(private fetchHelper: FetchHelper) {}
+
+    // ==========================================
+    // MARK: Calendar -
+    // ==========================================
+
+    /**
+     * @param userId The ID of the user
+     * @param provider The provider of the calendar
+     * @returns The calendars of the user
+     */
+    public async listCalendars(userId: string, provider?: Provider | Provider[]) {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/calendar/`, {
+                schema: T.Array(calendarSchema),
+                searchParams: { provider },
+            })
+            .catch(
+                errorHandler([
+                    {
+                        code: 400,
+                        error: new OAuthConnectionNotFoundError(
+                            userId,
+                            Array.isArray(provider) ? provider.join(',') : provider || 'all'
+                        ),
+                    },
+                    { code: 404, error: new UserNotFoundError(userId) },
+                ])
+            )
+    }
 
     // ==========================================
     // MARK: User Calendar - Busy & Events

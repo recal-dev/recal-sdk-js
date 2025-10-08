@@ -76,6 +76,25 @@ All date/time operations support timezone specification via the `timeZone` param
 
 ### Calendar Service
 
+#### List Calendars
+
+```typescript
+// Get all calendars for a user
+const calendars = await recal.calendar.listCalendars('user_id')
+
+// Or filter by provider
+const googleCalendars = await recal.calendar.listCalendars(
+    'user_id',
+    'google'  // optional: filter by provider
+)
+
+// Or filter by multiple providers
+const multiProviderCalendars = await recal.calendar.listCalendars(
+    'user_id',
+    ['google', 'microsoft']  // optional: filter by multiple providers
+)
+```
+
 #### Get Busy Information
 
 ```typescript
