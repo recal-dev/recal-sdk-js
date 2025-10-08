@@ -71,3 +71,7 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 ### 🆕 Added
 - Calendar Id filtering for busy and events functions
 
+## v0.3.2 - (2025-10-08)
+
+### 🆕 Added
+- listCalendars method to calendar service

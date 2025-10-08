@@ -1,6 +1,6 @@
 {
     "name": "recal-sdk",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Recal SDK",
     "author": "Recal <team@recal.dev>",
     "contributors": ["tkoehlerlg", "jschwxrz"],
