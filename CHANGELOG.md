@@ -75,3 +75,8 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 
 ### 🆕 Added
 - listCalendars method to calendar service
+
+## v0.3.2 - (2025-10-10)
+
+### 🆕 Added
+- getFreshAccessToken to oauth service
