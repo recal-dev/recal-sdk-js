@@ -212,4 +212,19 @@ export class OAuthService {
                 ])
             )
     }
+
+    /**
+     * Get a fresh access token for a provider
+     * @param userId The ID of the user
+     * @param provider The provider of the OAuth connection
+     * @returns The fresh access token
+     */
+
+    public async getFreshAccessToken(userId: string, provider: Provider): Promise<{ accessToken: string }> {
+        return this.fetchHelper
+            .get(`/v1/users/${userId}/oauth/${provider}/token`, {
+                schema: T.Object({ accessToken: T.String() }),
+            })
+            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+    }
 }

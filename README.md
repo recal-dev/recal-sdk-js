@@ -609,6 +609,10 @@ const connection = await recal.oauth.setConnection(
 
 // Disconnect a provider
 await recal.oauth.disconnect('user_id', 'google')
+
+// Get a fresh access token (useful when you need to make direct API calls)
+const tokenData = await recal.oauth.getFreshAccessToken('user_id', 'google')
+console.log(tokenData.accessToken)
 ```
 
 #### Verify OAuth Callback
