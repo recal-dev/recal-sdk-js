@@ -1,504 +1,83 @@
-import { Type as T } from '@sinclair/typebox'
-import {
-    EventNotFoundError,
-    OAuthConnectionNotFoundError,
-    OrganizationNotFoundError,
-    ProviderCredentialsNotSetError,
-    UserNotFoundError,
-} from '@/errors.js'
-import { busySchema, calendarSchema, eventSchema, timeRangeSchema } from '@/typebox/calendar.tb.js'
+import type { Client } from '../client/client'
+import * as sdk from '../client/sdk.gen'
 import type {
-    Busy,
-    CreateEvent,
-    CreateEventAcrossCalendars,
-    Event,
-    Provider,
-    TimeRange,
-    UpdateEvent,
-    UpdateEventAcrossCalendars,
-} from '@/types/calendar.types.js'
-import type { FetchHelper } from '@/utils/fetch.helper.js'
-import { errorHandler } from '@/utils/fetch.helper.js'
+    GetUsersUserIdCalendarBusyData,
+    GetUsersUserIdCalendarData,
+    GetUsersUserIdCalendarEventsData,
+} from '../client/types.gen'
 
+/**
+ * Calendar Service
+ *
+ * Provides methods for managing calendars
+ */
 export class CalendarService {
-    constructor(private fetchHelper: FetchHelper) {}
-
-    // ==========================================
-    // MARK: Calendar -
-    // ==========================================
+    constructor(private client: Client) {}
 
     /**
-     * @param userId The ID of the user
-     * @param provider The provider of the calendar
-     * @returns The calendars of the user
+     * List all calendars for a user
+     *
+     * @param userId - The user ID
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * const calendars = await recal.calendar.list('user-123', {
+     *   provider: 'google'
+     * })
+     * ```
      */
-    public async listCalendars(userId: string, provider?: Provider | Provider[]) {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/`, {
-                schema: T.Array(calendarSchema),
-                searchParams: { provider },
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'all'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    // ==========================================
-    // MARK: User Calendar - Busy & Events
-    // ==========================================
-
-    /**
-     * @param userId The ID of the user
-     * @param startDate The start date of the free/busy period
-     * @param endDate The end date of the free/busy period
-     * @param options The options for the free/busy query (optional)
-     * @returns The free/busy period
-     */
-    public async getBusy(
-        userId: string,
-        startDate: Date,
-        endDate: Date,
-        options?: {
-            provider?: Provider | Provider[]
-            calendarIds?: string[]
-            timeZone?: string
-        }
-    ): Promise<Busy> {
-        const { provider, calendarIds, timeZone } = options || {}
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/busy`, {
-                schema: busySchema,
-                searchParams: { startDate, endDate, provider, calendarIds },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'all'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
+    async list(userId: string, options?: GetUsersUserIdCalendarData['query']) {
+        return sdk.getUsersUserIdCalendar({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
     }
 
     /**
-     * @param userId The ID of the user
-     * @param startDate The start date of the events
-     * @param endDate The end date of the events
-     * @param options The options for the events query (optional)
-     * @returns The events
+     * Get busy times for a user across all calendars
+     *
+     * @param userId - The user ID
+     * @param options - Query options with time range
+     *
+     * @example
+     * ```typescript
+     * const busy = await recal.calendar.getBusyTimes('user-123', {
+     *   start: '2024-01-01T00:00:00Z',
+     *   end: '2024-01-31T23:59:59Z',
+     *   provider: ['google', 'microsoft']
+     * })
+     * ```
      */
-    public async getEvents(
-        userId: string,
-        startDate: Date,
-        endDate: Date,
-        options?: {
-            provider?: Provider | Provider[]
-            calendarIds?: string[]
-            timeZone?: string
-        }
-    ): Promise<Event[]> {
-        const { provider, calendarIds, timeZone } = options || {}
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/events`, {
-                schema: T.Array(eventSchema),
-                searchParams: { startDate, endDate, provider, calendarIds },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
-                        ),
-                        errorInclFilter: 'User has not the needed calendars connected',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    // ==========================================
-    // MARK: Meta Event Operations (Cross-Calendar)
-    // ==========================================
-
-    /**
-     * @param userId The ID of the user
-     * @param metaId The meta ID of the event
-     * @param options The options for the event query (optional)
-     * @returns The event
-     */
-    public async getEventByMetaId(
-        userId: string,
-        metaId: string,
-        options?: {
-            provider?: Provider | Provider[]
-            timeZone?: string
-        }
-    ): Promise<Event> {
-        const { provider, timeZone } = options || {}
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
-                schema: eventSchema,
-                searchParams: { provider },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
-                    { code: 404, error: new EventNotFoundError(metaId) },
-                ])
-            )
+    async getBusyTimes(userId: string, options: GetUsersUserIdCalendarBusyData['query']) {
+        return sdk.getUsersUserIdCalendarBusy({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
     }
 
     /**
-     * @param userId The ID of the user
-     * @param newEvent The event to create
-     * @param options The options for the event creation (optional)
-     * @returns The created event
+     * List events for a user across all calendars
+     *
+     * @param userId - The user ID
+     * @param options - Query options with time range
+     *
+     * @example
+     * ```typescript
+     * const events = await recal.calendar.listEvents('user-123', {
+     *   start: '2024-01-01T00:00:00Z',
+     *   end: '2024-01-31T23:59:59Z',
+     *   provider: 'google'
+     * })
+     * ```
      */
-    public async createEventByMetaId(
-        userId: string,
-        newEvent: CreateEventAcrossCalendars,
-        options?: {
-            provider?: Provider | Provider[]
-            timeZone?: string
-        }
-    ): Promise<Event> {
-        const { provider, timeZone } = options || {}
-        return this.fetchHelper
-            .post(`/v1/users/${userId}/calendar/events/meta`, {
-                schema: eventSchema,
-                searchParams: { provider },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: newEvent,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    /**
-     * @param userId The ID of the user
-     * @param metaId The meta ID of the event
-     * @param updateEvent The updated event data
-     * @param options The options for the event update (optional)
-     * @returns The updated event
-     */
-    public async updateEventByMetaId(
-        userId: string,
-        metaId: string,
-        updateEvent: UpdateEventAcrossCalendars,
-        options?: {
-            provider?: Provider | Provider[]
-            timeZone?: string
-        }
-    ): Promise<Event> {
-        const { provider, timeZone } = options || {}
-        return this.fetchHelper
-            .put(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
-                schema: eventSchema,
-                searchParams: { provider },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: updateEvent,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
-                    { code: 404, error: new EventNotFoundError(metaId) },
-                ])
-            )
-    }
-
-    /**
-     * @param userId The ID of the user
-     * @param metaId The meta ID of the event
-     * @param options The options for the event deletion (optional)
-     * @returns void
-     */
-    public async deleteEventByMetaId(
-        userId: string,
-        metaId: string,
-        options?: {
-            provider?: Provider | Provider[]
-            timeZone?: string
-        }
-    ): Promise<void> {
-        const { provider, timeZone } = options || {}
-        return this.fetchHelper
-            .delete(`/v1/users/${userId}/calendar/events/meta/${metaId}`, {
-                searchParams: { provider },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                schema: T.Void(),
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(provider) ? provider.join(',') : provider || 'unknown'
-                        ),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    // ==========================================
-    // MARK: Provider-Specific Event Operations
-    // ==========================================
-
-    /**
-     * @param userId The ID of the user
-     * @param provider The provider of the calendar
-     * @param calendarId The ID of the calendar
-     * @param eventId The ID of the event
-     * @param options The options for the event query (optional)
-     * @returns The event
-     */
-    public async getEvent({
-        userId,
-        provider,
-        calendarId = 'primary',
-        eventId,
-        options,
-    }: {
-        userId: string
-        provider: Provider
-        calendarId?: string
-        eventId: string
-        options?: {
-            timeZone?: string
-        }
-    }): Promise<Event> {
-        const { timeZone } = options || {}
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
-                schema: eventSchema,
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                        errorInclFilter: 'User has not connected this calendar provider',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
-                    { code: 404, error: new EventNotFoundError(eventId), errorInclFilter: 'Event not found' },
-                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
-                ])
-            )
-    }
-
-    /**
-     * @param userId The ID of the user
-     * @param provider The provider of the calendar
-     * @param calendarId The ID of the calendar
-     * @param newEvent The event data to create
-     * @param options The options for the event creation (optional)
-     * @returns The created event
-     */
-    public async createEvent({
-        userId,
-        provider,
-        calendarId = 'primary',
-        newEvent: newEventData,
-        options,
-    }: {
-        userId: string
-        provider: Provider
-        calendarId?: string
-        newEvent: CreateEvent
-        options?: {
-            timeZone?: string
-        }
-    }): Promise<Event> {
-        const { timeZone } = options || {}
-        return this.fetchHelper
-            .post(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}`, {
-                schema: eventSchema,
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: newEventData,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                        errorInclFilter: 'User has not connected this calendar provider',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
-                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
-                ])
-            )
-    }
-
-    /**
-     * @param userId The ID of the user
-     * @param provider The provider of the calendar
-     * @param calendarId The ID of the calendar
-     * @param eventId The ID of the event
-     * @param updateEvent The updated event data
-     * @param options The options for the event update (optional)
-     * @returns The updated event
-     */
-    public async updateEvent({
-        userId,
-        provider,
-        calendarId = 'primary',
-        eventId,
-        updateEvent: updateEventData,
-        options,
-    }: {
-        userId: string
-        provider: Provider
-        calendarId?: string
-        eventId: string
-        updateEvent: UpdateEvent
-        options?: {
-            timeZone?: string
-        }
-    }): Promise<Event> {
-        const { timeZone } = options || {}
-        return this.fetchHelper
-            .put(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
-                schema: eventSchema,
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                body: updateEventData,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                        errorInclFilter: 'User has not connected this calendar provider',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId), errorInclFilter: 'User not found' },
-                    { code: 404, error: new ProviderCredentialsNotSetError(provider) },
-                ])
-            )
-    }
-
-    /**
-     * @param userId The ID of the user
-     * @param provider The provider of the calendar
-     * @param calendarId The ID of the calendar
-     * @param eventId The ID of the event
-     * @param options The options for the event deletion (optional)
-     * @returns void
-     */
-    public async deleteEvent({
-        userId,
-        provider,
-        calendarId = 'primary',
-        eventId,
-        options,
-    }: {
-        userId: string
-        provider: Provider
-        calendarId?: string
-        eventId: string
-        options?: {
-            timeZone?: string
-        }
-    }): Promise<void> {
-        const { timeZone } = options || {}
-        return this.fetchHelper
-            .delete(`/v1/users/${userId}/calendar/events/${provider}/${calendarId}/${eventId}`, {
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-                schema: T.Void(),
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                        errorInclFilter: 'User has not connected this calendar provider',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                    { code: 404, error: new EventNotFoundError(eventId) },
-                ])
-            )
-    }
-
-    // ==========================================
-    // MARK: Organization-Wide Operations
-    // ==========================================
-
-    /**
-     * Get the org-wide busy period
-     * @param slug The slug of the organization
-     * @param startDate The minimum date
-     * @param endDate The maximum date
-     * @param primaryOnly Whether to only include the primary calendar (default: true)
-     * @param options The options for the org-wide free/busy query (optional)
-     * @returns The org-wide free/busy period
-     */
-    public async getOrgWideBusy(
-        slug: string,
-        startDate: Date,
-        endDate: Date,
-        primaryOnly?: boolean,
-        options?: {
-            provider?: Provider | Provider[]
-            timeZone?: string
-        }
-    ): Promise<TimeRange[]> {
-        const { provider, timeZone } = options || {}
-        return this.fetchHelper
-            .get(`/v1/organizations/${slug}/calendar/busy`, {
-                schema: T.Array(timeRangeSchema),
-                searchParams: { startDate, endDate, primaryOnly, provider },
-                headers: timeZone ? { 'x-timezone': timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        error: new Error(`OAuth credentials for provider ${provider} not found for the user`),
-                    },
-                    { code: 404, error: new OrganizationNotFoundError(slug) },
-                ])
-            )
+    async listEvents(userId: string, options: GetUsersUserIdCalendarEventsData['query']) {
+        return sdk.getUsersUserIdCalendarEvents({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
     }
 }

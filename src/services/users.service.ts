@@ -1,104 +1,116 @@
-import { Type as T } from '@sinclair/typebox'
-import { User } from '@/entities/user.js'
-import { OrganizationNotFoundError, UserAlreadyExistsError, UserNotFoundError } from '@/errors.js'
-import { userSchema } from '@/typebox/user.tb.js'
-import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
-import { includesHelper } from '@/utils/includes.helper.js'
+import type { Client } from '../client/client'
+import * as sdk from '../client/sdk.gen'
+import type { GetUsersUserIdData } from '../client/types.gen'
 
-interface UserOptions {
-    includeOrgs?: boolean
-    includeOAuth?: boolean
-}
-
+/**
+ * Users Service
+ *
+ * Provides methods for managing users
+ */
 export class UsersService {
-    constructor(private fetchHelper: FetchHelper) {}
+    constructor(private client: Client) {}
 
     /**
      * List all users
-     * @returns An array of users
+     *
+     * @example
+     * ```typescript
+     * const users = await recal.users.list()
+     * ```
      */
-    public async listAll(): Promise<User[]> {
-        return this.fetchHelper
-            .get('/v1/users', { schema: T.Array(userSchema) })
-            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
+    async list() {
+        return sdk.getUsers({ client: this.client })
     }
 
     /**
      * Get a user by ID
-     * @param id The ID of the user
-     * @param options Options for the user
-     * @returns The user
+     *
+     * @param userId - The user ID
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * const user = await recal.users.get('user-123', {
+     *   include: ['organizations', 'oauthConnections']
+     * })
+     * ```
      */
-    public async get(id: string, { includeOrgs = false, includeOAuth = false }: UserOptions): Promise<User | null> {
-        return this.fetchHelper
-            .get(`/v1/users/${id}`, {
-                schema: userSchema,
-                searchParams: {
-                    ...includesHelper([
-                        [includeOrgs, 'organizations'],
-                        [includeOAuth, 'oauthConnections'],
-                    ]),
-                },
-            })
-            .catch(errorHandler([{ code: 404, result: null }]))
-            .then((user) => (user ? User.fromJson(user, this.fetchHelper) : null))
+    async get(userId: string, options?: GetUsersUserIdData['query']) {
+        return sdk.getUsersUserId({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
     }
 
     /**
      * Create a new user
-     * @param id The ID of the user
-     * @param organizationSlugs The slugs of the organizations the user is a member of
-     * @returns The new user
+     *
+     * @param userId - The user ID
+     * @param organizationSlugs - Optional organization slugs to add user to
+     *
+     * @example
+     * ```typescript
+     * const user = await recal.users.create('user-123', ['org-1'])
+     * ```
      */
-    public async create(id: string, organizationSlugs?: string[]): Promise<User> {
-        return this.fetchHelper
-            .post(`/v1/users`, {
-                body: { id, organizationSlugs },
-                schema: userSchema,
-            })
-            .catch(
-                errorHandler([
-                    { code: 404, error: new OrganizationNotFoundError(id) },
-                    { code: 409, error: new UserAlreadyExistsError(id) },
-                ])
-            )
-            .then((user) => User.fromJson(user, this.fetchHelper))
+    async create(userId: string, organizationSlugs?: string[]) {
+        return sdk.postUsers({
+            body: { id: userId, organizationSlugs },
+            client: this.client,
+        })
     }
 
     /**
      * Update a user
-     * @param id The ID of the user
-     * @param updatedUserData The updated user data
-     * @returns The updated user
+     *
+     * @param userId - The current user ID
+     * @param newUserId - The new user ID
+     *
+     * @example
+     * ```typescript
+     * const user = await recal.users.update('user-123', 'user-456')
+     * ```
      */
-    public async update(id: string, updatedUserData: { id: string }): Promise<User | null> {
-        return this.fetchHelper
-            .put(`/v1/users/${id}`, {
-                body: {
-                    userId: updatedUserData.id,
-                },
-                schema: userSchema,
-            })
-            .catch(
-                errorHandler([
-                    { code: 404, result: null },
-                    { code: 409, error: new UserAlreadyExistsError(id) },
-                ])
-            )
-            .then((updatedUser) => (updatedUser ? User.fromJson(updatedUser, this.fetchHelper) : null))
+    async update(userId: string, newUserId: string) {
+        return sdk.putUsersUserId({
+            path: { userId },
+            body: { userId: newUserId },
+            client: this.client,
+        })
     }
 
     /**
      * Delete a user
-     * @param id The ID of the user
-     * @returns The deleted user
+     *
+     * @param userId - The user ID
+     *
+     * @example
+     * ```typescript
+     * await recal.users.delete('user-123')
+     * ```
      */
-    public async delete(id: string): Promise<User> {
-        return this.fetchHelper
-            .delete(`/v1/users/${id}`, {
-                schema: userSchema,
-            })
-            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(id) }]))
-            .then((user) => User.fromJson(user, this.fetchHelper))
+    async delete(userId: string) {
+        return sdk.deleteUsersUserId({
+            path: { userId },
+            client: this.client,
+        })
+    }
+
+    /**
+     * Get all organizations a user is connected to
+     *
+     * @param userId - The user ID
+     *
+     * @example
+     * ```typescript
+     * const orgs = await recal.users.getOrganizations('user-123')
+     * ```
+     */
+    async getOrganizations(userId: string) {
+        return sdk.getUsersUserIdOrganizations({
+            path: { userId },
+            client: this.client,
+        })
     }
 }

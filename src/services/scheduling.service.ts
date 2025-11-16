@@ -1,206 +1,118 @@
-import { OAuthConnectionNotFoundError, OrganizationNotFoundError, UserNotFoundError } from '@/errors.js'
-import {
-    orgSchedulingResponseSchema,
-    userAdvancedSchedulingResponseSchema,
-    userBulkSchedulingResponseSchema,
-    userSchedulingResponseSchema,
-} from '@/typebox/scheduling.tb.js'
+import type { Client } from '../client/client'
+import * as sdk from '../client/sdk.gen'
 import type {
-    OrgSchedulingOptions,
-    OrgSchedulingResponse,
-    Schedule,
-    UserAdvancedSchedulingResponse,
-    UserBulkSchedulingOptions,
-    UserBulkSchedulingResponse,
-    UserSchedulingAdvancedOptions,
-    UserSchedulingBasicOptions,
-    UserSchedulingResponse,
-} from '@/types/scheduling.types.js'
-import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
-import { omit } from '@/utils/omit.js'
+    GetUsersUserIdSchedulingData,
+    PostUsersSchedulingData,
+    PostUsersUserIdSchedulingData,
+} from '../client/types.gen'
 
+/**
+ * Scheduling Service
+ *
+ * Provides methods for finding available time slots
+ */
 export class SchedulingService {
-    constructor(private fetchHelper: FetchHelper) {}
+    constructor(private client: Client) {}
 
     /**
-     * Get available time slots based on busy data with basic parameters
-     * @param userId The ID of the user
-     * @param startDate The start date for availability search
-     * @param endDate The end date for availability search
-     * @param options Scheduling options (all fields optional):
-     *   - provider: Calendar provider(s) to check (optional)
-     *   - padding: Minutes of padding between slots (optional)
-     *   - slotDuration: Duration of each slot in minutes (optional)
-     *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
-     *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
-     *   - timeZone: Time zone for the request (optional)
-     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
-     * @returns Available time slots with basic scheduling options
-     */
-    public async user(
-        userId: string,
-        startDate: Date,
-        endDate: Date,
-        options: UserSchedulingBasicOptions
-    ): Promise<UserSchedulingResponse> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/scheduling`, {
-                schema: userSchedulingResponseSchema,
-                searchParams: {
-                    ...omit(options, ['timeZone']),
-                    startDate,
-                    endDate,
-                },
-                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
-                        ),
-                        errorInclFilter: 'User has no connected calendars',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    /**
-     * Get available time slots based on busy data with advanced parameters
-     * @param userId The ID of the user
-     * @param schedules Array of schedule rules defining availability windows
-     * @param startDate The start date for availability search
-     * @param endDate The end date for availability search
-     * @param options Advanced scheduling options (all fields optional):
-     *   - provider: Calendar provider(s) to check (optional)
-     *   - padding: Minutes of padding between slots (optional)
-     *   - slotDuration: Duration of each slot in minutes (optional)
-     *   - timeZone: Time zone for the request (optional)
-     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
-     * @returns Available time slots with advanced scheduling options
-     */
-    public async userAdvanced(
-        userId: string,
-        schedules: Schedule[],
-        startDate: Date,
-        endDate: Date,
-        options: UserSchedulingAdvancedOptions
-    ): Promise<UserAdvancedSchedulingResponse> {
-        return this.fetchHelper
-            .post(`/v1/users/${userId}/scheduling`, {
-                schema: userAdvancedSchedulingResponseSchema,
-                searchParams: {
-                    ...omit(options, ['timeZone']),
-                    startDate,
-                    endDate,
-                },
-                body: { schedules },
-                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        error: new OAuthConnectionNotFoundError(
-                            userId,
-                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
-                        ),
-                        errorInclFilter: 'User has no connected calendars',
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    /**
+     * Get available time slots for a user (basic parameters)
      *
-     * @param startDate The start date for availability search
-     * @param endDate The end date for availability search
-     * @param options User bulk scheduling options
-     *   - provider: Calendar provider(s) to check (optional)
-     *   - padding: Minutes of padding between slots (optional)
-     *   - slotDuration: Duration of each slot in minutes (optional)
-     *   - timeZone: Time zone for the request (optional)
-     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
-     *   - users: Array of users with their schedules
-     * @returns Available time slots for the users
+     * @param userId - The user ID
+     * @param options - Scheduling options
+     *
+     * @example
+     * ```typescript
+     * const slots = await recal.scheduling.getSlots('user-123', {
+     *   start: '2024-01-15T00:00:00Z',
+     *   end: '2024-01-19T23:59:59Z',
+     *   slotDuration: '30',
+     *   padding: '15',
+     *   provider: 'google'
+     * })
+     * ```
      */
-    public async userBulk(
-        startDate: Date,
-        endDate: Date,
-        options: UserBulkSchedulingOptions
-    ): Promise<UserBulkSchedulingResponse> {
-        return this.fetchHelper
-            .post(`/v1/users/scheduling`, {
-                schema: userBulkSchedulingResponseSchema,
-                body: {
-                    users: options.users,
-                },
-                searchParams: {
-                    ...omit(options, ['timeZone', 'users']),
-                    startDate,
-                    endDate,
-                },
-                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
-            })
-            .catch(errorHandler([]))
+    async getSlots(userId: string, options: GetUsersUserIdSchedulingData['query']) {
+        return sdk.getUsersUserIdScheduling({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
     }
 
     /**
-     * Get available time slots based on busy data for an organization
-     * @param orgSlug The slug of the organization
-     * @param startDate The start date for availability search
-     * @param endDate The end date for availability search
-     * @param options Organization scheduling options (all fields optional):
-     *   - provider: Calendar provider(s) to check (optional)
-     *   - padding: Minutes of padding between slots (optional)
-     *   - slotDuration: Duration of each slot in minutes (optional)
-     *   - earliestTimeEachDay: Earliest time each day (HH:mm format) (optional)
-     *   - latestTimeEachDay: Latest time each day (HH:mm format) (optional)
-     *   - timeZone: Time zone for the request (optional)
-     *   - maxOverlaps: Maximum number of overlaps allowed (optional)
-     * @returns Available time slots for the organization
+     * Get available time slots for a user (advanced with custom schedules)
+     *
+     * @param userId - The user ID
+     * @param options - Query scheduling options
+     * @param body - Custom schedules
+     *
+     * @example
+     * ```typescript
+     * const slots = await recal.scheduling.getAdvancedSlots(
+     *   'user-123',
+     *   {
+     *     start: '2024-01-15T00:00:00Z',
+     *     end: '2024-01-19T23:59:59Z',
+     *     slotDuration: '60',
+     *     padding: '10'
+     *   },
+     *   {
+     *     schedules: [
+     *       {
+     *         days: ['monday', 'wednesday', 'friday'],
+     *         start: '09:00',
+     *         end: '17:00'
+     *       }
+     *     ]
+     *   }
+     * )
+     * ```
      */
-    public async organization(
-        orgSlug: string,
-        startDate: Date,
-        endDate: Date,
-        options: OrgSchedulingOptions
-    ): Promise<OrgSchedulingResponse> {
-        return this.fetchHelper
-            .get(`/v1/organizations/${orgSlug}/scheduling`, {
-                schema: orgSchedulingResponseSchema,
-                searchParams: {
-                    ...omit(options, ['timeZone']),
-                    startDate,
-                    endDate,
-                },
-                headers: options.timeZone ? { 'x-timezone': options.timeZone } : undefined,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 400,
-                        errorInclFilter: 'User has no connected calendars',
-                        error: new OAuthConnectionNotFoundError(
-                            'organization',
-                            Array.isArray(options.provider) ? options.provider.join(',') : options.provider || 'unknown'
-                        ),
-                    },
-                    {
-                        code: 404,
-                        errorInclFilter: 'Organization not found',
-                        error: new OrganizationNotFoundError(orgSlug),
-                    },
-                    {
-                        code: 404,
-                        errorInclFilter: 'No users found in this organization',
-                        error: new UserNotFoundError('organization'),
-                    },
-                ])
-            )
+    async getAdvancedSlots(
+        userId: string,
+        options: PostUsersUserIdSchedulingData['query'],
+        body?: PostUsersUserIdSchedulingData['body']
+    ) {
+        return sdk.postUsersUserIdScheduling({
+            path: { userId },
+            query: options,
+            body,
+            client: this.client,
+        })
+    }
+
+    /**
+     * Get available time slots for multiple users
+     *
+     * @param options - Query scheduling options
+     * @param users - Array of users with optional schedules
+     *
+     * @example
+     * ```typescript
+     * const slots = await recal.scheduling.getMultiUserSlots(
+     *   {
+     *     start: '2024-01-15T00:00:00Z',
+     *     end: '2024-01-19T23:59:59Z',
+     *     slotDuration: '60',
+     *     padding: '10'
+     *   },
+     *   {
+     *     users: [
+     *       {
+     *         id: 'user-1',
+     *         schedules: [{ days: ['monday'], start: '09:00', end: '17:00' }]
+     *       },
+     *       { id: 'user-2' }
+     *     ]
+     *   }
+     * )
+     * ```
+     */
+    async getMultiUserSlots(options: PostUsersSchedulingData['query'], body?: PostUsersSchedulingData['body']) {
+        return sdk.postUsersScheduling({
+            query: options,
+            body,
+            client: this.client,
+        })
     }
 }

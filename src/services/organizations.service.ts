@@ -1,140 +1,208 @@
-import { Type as T } from '@sinclair/typebox'
-import { Organization } from '@/entities/organization.js'
-import { User } from '@/entities/user.js'
-import { OrganizationAlreadyExistsError, OrganizationNotFoundError } from '@/errors.js'
-import { organizationSchema } from '@/typebox/organization.tb.js'
-import { userSchema } from '@/typebox/user.tb.js'
-import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
+import type { Client } from '../client/client'
+import * as sdk from '../client/sdk.gen'
+import type {
+    GetOrganizationsOrgSlugCalendarBusyData,
+    GetOrganizationsOrgSlugMembersData,
+    GetOrganizationsOrgSlugSchedulingData,
+} from '../client/types.gen'
 
+/**
+ * Organizations Service
+ *
+ * Provides methods for managing organizations
+ */
 export class OrganizationsService {
-    constructor(private fetchHelper: FetchHelper) {}
+    constructor(private client: Client) {}
 
     /**
      * List all organizations
-     * @returns An array of organizations
+     *
+     * @example
+     * ```typescript
+     * const orgs = await recal.organizations.list()
+     * ```
      */
-    public async listAll(): Promise<Organization[]> {
-        return this.fetchHelper
-            .get('/v1/organizations', {
-                schema: T.Array(organizationSchema),
-            })
-            .then((organizations) => organizations.map((org) => Organization.fromJson(org, this.fetchHelper)))
-    }
-
-    public async listAllFromUser(userId: string): Promise<Organization[] | null> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/organizations`, {
-                schema: T.Array(organizationSchema),
-            })
-            .catch(errorHandler([{ code: 404, result: null }]))
-            .then((orgs) => (orgs ? orgs.map((org) => Organization.fromJson(org, this.fetchHelper)) : null))
+    async list() {
+        return sdk.getOrganizations({ client: this.client })
     }
 
     /**
      * Get an organization by slug
-     * @param slug The slug of the organization
-     * @returns The organization
+     *
+     * @param slug - The organization slug
+     *
+     * @example
+     * ```typescript
+     * const org = await recal.organizations.get('acme-corp')
+     * ```
      */
-    public async get(slug: string): Promise<Organization> {
-        return this.fetchHelper
-            .get(`/v1/organizations/${slug}`, {
-                schema: organizationSchema,
-            })
-            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((org) => Organization.fromJson(org, this.fetchHelper))
+    async get(slug: string) {
+        return sdk.getOrganizationsOrgSlug({
+            path: { orgSlug: slug },
+            client: this.client,
+        })
     }
 
     /**
-     * Create an organization
-     * @param slug The slug of the organization
-     * @param name The name of the organization
-     * @returns The created organization
+     * Create a new organization
+     *
+     * @param slug - The organization slug
+     * @param name - The organization name
+     *
+     * @example
+     * ```typescript
+     * const org = await recal.organizations.create('acme-corp', 'Acme Corporation')
+     * ```
      */
-    public async create(slug: string, name: string): Promise<Organization> {
-        return this.fetchHelper
-            .post(`/v1/organizations`, {
-                body: { slug, name },
-                schema: organizationSchema,
-            })
-            .catch(errorHandler([{ code: 409, error: new OrganizationAlreadyExistsError(slug) }]))
-            .then((org) => Organization.fromJson(org, this.fetchHelper))
+    async create(slug: string, name: string | null) {
+        return sdk.postOrganizations({
+            body: { slug, name },
+            client: this.client,
+        })
     }
 
     /**
      * Update an organization
-     * @param slug The slug of the organization
-     * @param updatedOrganizationData The updated organization data
-     * @returns The updated organization
+     *
+     * @param slug - The organization slug
+     * @param data - Updated organization data
+     *
+     * @example
+     * ```typescript
+     * const org = await recal.organizations.update('acme-corp', {
+     *   slug: 'acme-corp',
+     *   name: 'Acme Corp (Updated)'
+     * })
+     * ```
      */
-    public async update(slug: string, updatedOrganizationData: { slug: string; name: string }): Promise<Organization> {
-        return this.fetchHelper
-            .put(`/v1/organizations/${slug}`, {
-                body: updatedOrganizationData,
-                schema: organizationSchema,
-            })
-            .catch(
-                errorHandler([
-                    { code: 404, error: new OrganizationNotFoundError(slug) },
-                    { code: 409, error: new OrganizationAlreadyExistsError(slug) },
-                ])
-            )
-            .then((org) => Organization.fromJson(org, this.fetchHelper))
+    async update(slug: string, data: { slug: string; name: string | null }) {
+        return sdk.putOrganizationsOrgSlug({
+            path: { orgSlug: slug },
+            body: data,
+            client: this.client,
+        })
     }
 
     /**
      * Delete an organization
-     * @param slug The slug of the organization
-     * @returns The deleted organization
+     *
+     * @param slug - The organization slug
+     *
+     * @example
+     * ```typescript
+     * await recal.organizations.delete('acme-corp')
+     * ```
      */
-    public async delete(slug: string): Promise<Organization> {
-        return this.fetchHelper
-            .delete(`/v1/organizations/${slug}`, {
-                schema: organizationSchema,
-            })
-            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((org) => Organization.fromJson(org, this.fetchHelper))
+    async delete(slug: string) {
+        return sdk.deleteOrganizationsOrgSlug({
+            path: { orgSlug: slug },
+            client: this.client,
+        })
     }
 
     /**
-     * Get the members of an organization
-     * @param slug The slug of the organization
-     * @returns The members of the organization
+     * Get all members of an organization
+     *
+     * @param slug - The organization slug
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * const members = await recal.organizations.getMembers('acme-corp', {
+     *   include: ['oauthConnections']
+     * })
+     * ```
      */
-    public async getMembers(slug: string): Promise<User[]> {
-        return this.fetchHelper
-            .get(`/v1/organizations/${slug}/members`, {
-                schema: T.Array(userSchema),
-            })
-            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
-            .then((users) => users.map((user) => User.fromJson(user, this.fetchHelper)))
+    async getMembers(slug: string, options?: GetOrganizationsOrgSlugMembersData['query']) {
+        return sdk.getOrganizationsOrgSlugMembers({
+            path: { orgSlug: slug },
+            query: options,
+            client: this.client,
+        })
     }
 
     /**
      * Add members to an organization
-     * @param slug The slug of the organization
-     * @param userIds The IDs of the users to add
-     * @returns The added users
+     *
+     * @param slug - The organization slug
+     * @param userIds - Array of user IDs to add
+     *
+     * @example
+     * ```typescript
+     * await recal.organizations.addMembers('acme-corp', ['user-1', 'user-2'])
+     * ```
      */
-    public async addMembers(slug: string, userIds: string[]) {
-        return this.fetchHelper
-            .post(`/v1/organizations/${slug}/members`, {
-                body: { userIds },
-            })
-            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
+    async addMembers(slug: string, userIds: string[]) {
+        return sdk.postOrganizationsOrgSlugMembers({
+            path: { orgSlug: slug },
+            body: { userIds },
+            client: this.client,
+        })
     }
 
     /**
      * Remove members from an organization
-     * @param slug The slug of the organization
-     * @param userIds The IDs of the users to remove
-     * @returns Success message
+     *
+     * @param slug - The organization slug
+     * @param userIds - Array of user IDs to remove
+     *
+     * @example
+     * ```typescript
+     * await recal.organizations.removeMembers('acme-corp', ['user-1'])
+     * ```
      */
-    public async removeMembers(slug: string, userIds: string[]): Promise<string> {
-        return this.fetchHelper
-            .delete(`/v1/organizations/${slug}/members`, {
-                body: { userIds },
-                schema: T.String(),
-            })
-            .catch(errorHandler([{ code: 404, error: new OrganizationNotFoundError(slug) }]))
+    async removeMembers(slug: string, userIds: string[]) {
+        return sdk.deleteOrganizationsOrgSlugMembers({
+            path: { orgSlug: slug },
+            body: { userIds },
+            client: this.client,
+        })
+    }
+
+    /**
+     * Get consolidated busy times for all users in an organization
+     *
+     * @param slug - The organization slug
+     * @param options - Query options with time range
+     *
+     * @example
+     * ```typescript
+     * const busy = await recal.organizations.getBusyTimes('acme-corp', {
+     *   start: '2024-01-01T00:00:00Z',
+     *   end: '2024-01-31T23:59:59Z',
+     *   provider: 'google'
+     * })
+     * ```
+     */
+    async getBusyTimes(slug: string, options: GetOrganizationsOrgSlugCalendarBusyData['query']) {
+        return sdk.getOrganizationsOrgSlugCalendarBusy({
+            path: { orgSlug: slug },
+            query: options,
+            client: this.client,
+        })
+    }
+
+    /**
+     * Get available time slots for all users in an organization
+     *
+     * @param slug - The organization slug
+     * @param options - Scheduling options
+     *
+     * @example
+     * ```typescript
+     * const slots = await recal.organizations.getScheduling('acme-corp', {
+     *   start: '2024-01-15T00:00:00Z',
+     *   end: '2024-01-19T23:59:59Z',
+     *   slotDuration: '30',
+     *   padding: '15'
+     * })
+     * ```
+     */
+    async getScheduling(slug: string, options: GetOrganizationsOrgSlugSchedulingData['query']) {
+        return sdk.getOrganizationsOrgSlugScheduling({
+            path: { orgSlug: slug },
+            query: options,
+            client: this.client,
+        })
     }
 }

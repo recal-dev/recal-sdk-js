@@ -41,10 +41,11 @@
         "@biomejs/biome": "2.1.2",
         "@hey-api/openapi-ts": "0.86.8",
         "@types/bun": "latest",
+        "knip": "^5.69.1",
         "tsc-alias": "^1.8.16",
         "typescript": "^5.8.3"
     },
     "dependencies": {
-        "@sinclair/typebox": "^0.34.38"
+        "zod": "^3.24.1"
     }
 }
