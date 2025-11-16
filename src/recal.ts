@@ -36,7 +36,7 @@ export interface RecalOptions {
  * ```typescript
  * import { Recal } from 'recal-sdk'
  *
- * const recal = new Recal({ token: 'recal_...' })
+ * const recal = new Recal({ token: 'recal_...' }) // or RECAL_TOKEN in env
  *
  * // Use clean service-based API
  * const user = await recal.users.get('user-123', {

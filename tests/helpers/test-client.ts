@@ -17,7 +17,6 @@ export class TestClient {
 
         this.sdk = new RecalClient({
             url: testConfig.url,
-            token: testConfig.token,
         })
     }
 

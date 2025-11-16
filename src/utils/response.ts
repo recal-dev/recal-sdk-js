@@ -4,9 +4,10 @@
 
 /**
  * HeyAPI SDK response structure
+ * Can contain either nested data ({ data: T }) or direct data (T)
  */
 export interface HeyApiResponse<T> {
-    data?: { data: T }
+    data?: { data: T } | T
     error?: unknown
     request?: Request
     response?: Response
@@ -55,9 +56,15 @@ export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
         throw new RecalError(errorMessage, statusCode, response.error)
     }
 
-    if (!response.data?.data) {
+    if (!response.data) {
         throw new RecalError('No data in response', response.response?.status, response)
     }
 
-    return response.data.data
+    // Check if data is nested ({ data: T }) or direct (T)
+    if (typeof response.data === 'object' && response.data !== null && 'data' in response.data) {
+        return response.data.data
+    }
+
+    // Return direct data
+    return response.data
 }
