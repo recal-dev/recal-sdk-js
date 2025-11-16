@@ -1,4 +1,4 @@
-import { RecalClient } from '@/index'
+import { RecalClient } from '@/recal'
 import { testConfig, validateTestConfig } from '../config/test-config'
 
 export class TestClient {
@@ -22,18 +22,38 @@ export class TestClient {
     }
 
     async teardown(prefix: string): Promise<void> {
-        const orgs = await this.sdk.organizations.listAll()
-        for (const org of orgs) {
-            if (org.name?.startsWith(prefix)) {
-                await this.sdk.organizations.delete(org.slug)
+        // Clean up organizations
+        try {
+            const orgs = await this.sdk.organizations.list()
+
+            for (const org of orgs) {
+                if (org.name?.startsWith(prefix) || org.slug?.startsWith(prefix)) {
+                    try {
+                        await this.sdk.organizations.delete(org.slug)
+                    } catch (err) {
+                        console.warn(`Failed to delete org ${org.slug}:`, err)
+                    }
+                }
             }
+        } catch (err) {
+            console.warn('Failed to list organizations during teardown:', err)
         }
 
-        const users = await this.sdk.users.listAll()
-        for (const user of users) {
-            if (user.id.startsWith(prefix)) {
-                await this.sdk.users.delete(user.id)
+        // Clean up users
+        try {
+            const users = await this.sdk.users.list()
+
+            for (const user of users) {
+                if (user.id.startsWith(prefix)) {
+                    try {
+                        await this.sdk.users.delete(user.id)
+                    } catch (err) {
+                        console.warn(`Failed to delete user ${user.id}:`, err)
+                    }
+                }
             }
+        } catch (err) {
+            console.warn('Failed to list users during teardown:', err)
         }
     }
 }

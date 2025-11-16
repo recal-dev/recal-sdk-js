@@ -1,10 +1,11 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetOrganizationsOrgSlugCalendarBusyData,
-    GetOrganizationsOrgSlugMembersData,
-    GetOrganizationsOrgSlugSchedulingData,
+    GetV1OrganizationsOrgSlugCalendarBusyData,
+    GetV1OrganizationsOrgSlugMembersData,
+    GetV1OrganizationsOrgSlugSchedulingData,
 } from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
 /**
  * Organizations Service
@@ -23,7 +24,8 @@ export class OrganizationsService {
      * ```
      */
     async list() {
-        return sdk.getOrganizations({ client: this.client })
+        const response = await sdk.getV1Organizations({ client: this.client })
+        return unwrapResponse(response)
     }
 
     /**
@@ -37,10 +39,11 @@ export class OrganizationsService {
      * ```
      */
     async get(slug: string) {
-        return sdk.getOrganizationsOrgSlug({
+        const response = await sdk.getV1OrganizationsOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -55,10 +58,11 @@ export class OrganizationsService {
      * ```
      */
     async create(slug: string, name: string | null) {
-        return sdk.postOrganizations({
+        const response = await sdk.postV1Organizations({
             body: { slug, name },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -76,11 +80,12 @@ export class OrganizationsService {
      * ```
      */
     async update(slug: string, data: { slug: string; name: string | null }) {
-        return sdk.putOrganizationsOrgSlug({
+        const response = await sdk.putV1OrganizationsOrgSlug({
             path: { orgSlug: slug },
             body: data,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -94,10 +99,11 @@ export class OrganizationsService {
      * ```
      */
     async delete(slug: string) {
-        return sdk.deleteOrganizationsOrgSlug({
+        const response = await sdk.deleteV1OrganizationsOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -113,12 +119,13 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getMembers(slug: string, options?: GetOrganizationsOrgSlugMembersData['query']) {
-        return sdk.getOrganizationsOrgSlugMembers({
+    async getMembers(slug: string, options?: GetV1OrganizationsOrgSlugMembersData['query']) {
+        const response = await sdk.getV1OrganizationsOrgSlugMembers({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -133,11 +140,12 @@ export class OrganizationsService {
      * ```
      */
     async addMembers(slug: string, userIds: string[]) {
-        return sdk.postOrganizationsOrgSlugMembers({
+        const response = await sdk.postV1OrganizationsOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -152,11 +160,12 @@ export class OrganizationsService {
      * ```
      */
     async removeMembers(slug: string, userIds: string[]) {
-        return sdk.deleteOrganizationsOrgSlugMembers({
+        const response = await sdk.deleteV1OrganizationsOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -174,12 +183,13 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getBusyTimes(slug: string, options: GetOrganizationsOrgSlugCalendarBusyData['query']) {
-        return sdk.getOrganizationsOrgSlugCalendarBusy({
+    async getBusyTimes(slug: string, options: GetV1OrganizationsOrgSlugCalendarBusyData['query']) {
+        const response = await sdk.getV1OrganizationsOrgSlugCalendarBusy({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -198,11 +208,12 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getScheduling(slug: string, options: GetOrganizationsOrgSlugSchedulingData['query']) {
-        return sdk.getOrganizationsOrgSlugScheduling({
+    async getScheduling(slug: string, options: GetV1OrganizationsOrgSlugSchedulingData['query']) {
+        const response = await sdk.getV1OrganizationsOrgSlugScheduling({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 }

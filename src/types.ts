@@ -22,81 +22,81 @@ export type {
      * Create event across calendars payload
      */
     CreateEventAcrossCalendars,
-    DeleteOrganizationsOrgSlugData,
-    DeleteOrganizationsOrgSlugResponse,
-    DeleteUsersUserIdCalendarEventsMetaMetaIdData,
-    DeleteUsersUserIdCalendarEventsMetaMetaIdResponse,
-    DeleteUsersUserIdData,
-    DeleteUsersUserIdResponse,
+    DeleteV1OrganizationsOrgSlugData,
+    DeleteV1OrganizationsOrgSlugResponse,
+    DeleteV1UsersUserIdCalendarEventsMetaMetaIdData,
+    DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse,
+    DeleteV1UsersUserIdData,
+    DeleteV1UsersUserIdResponse,
     /**
      * Event entity
      */
     Event,
     // Organizations
-    GetOrganizationsOrgSlugData,
-    GetOrganizationsOrgSlugResponse,
-    GetOrganizationsOrgSlugSchedulingData,
-    GetOrganizationsOrgSlugSchedulingResponse,
+    GetV1OrganizationsOrgSlugData,
+    GetV1OrganizationsOrgSlugResponse,
+    GetV1OrganizationsOrgSlugSchedulingData,
+    GetV1OrganizationsOrgSlugSchedulingResponse,
     // Organizations
-    GetOrganizationsResponse,
+    GetV1OrganizationsResponse,
     // ==================== Common Response Types ====================
 
     // Users
-    GetUsersResponse,
-    GetUsersUserIdCalendarBusyData,
-    GetUsersUserIdCalendarBusyResponse,
+    GetV1UsersResponse,
+    GetV1UsersUserIdCalendarBusyData,
+    GetV1UsersUserIdCalendarBusyResponse,
     // Calendars
-    GetUsersUserIdCalendarData,
-    GetUsersUserIdCalendarEventsData,
-    GetUsersUserIdCalendarEventsMetaMetaIdData,
-    GetUsersUserIdCalendarEventsMetaMetaIdResponse,
-    GetUsersUserIdCalendarEventsResponse,
+    GetV1UsersUserIdCalendarData,
+    GetV1UsersUserIdCalendarEventsData,
+    GetV1UsersUserIdCalendarEventsMetaMetaIdData,
+    GetV1UsersUserIdCalendarEventsMetaMetaIdResponse,
+    GetV1UsersUserIdCalendarEventsResponse,
     // Calendars
-    GetUsersUserIdCalendarResponse,
+    GetV1UsersUserIdCalendarResponse,
     // ==================== Common Request Types ====================
 
     // Users
-    GetUsersUserIdData,
+    GetV1UsersUserIdData,
     // OAuth
-    GetUsersUserIdOauthData,
-    GetUsersUserIdOauthLinksData,
-    GetUsersUserIdOauthLinksResponse,
-    GetUsersUserIdOauthProviderLinkData,
-    GetUsersUserIdOauthProviderLinkResponse,
-    GetUsersUserIdOauthProviderTokenData,
-    GetUsersUserIdOauthProviderTokenResponse,
+    GetV1UsersUserIdOauthData,
+    GetV1UsersUserIdOauthLinksData,
+    GetV1UsersUserIdOauthLinksResponse,
+    GetV1UsersUserIdOauthProviderLinkData,
+    GetV1UsersUserIdOauthProviderLinkResponse,
+    GetV1UsersUserIdOauthProviderTokenData,
+    GetV1UsersUserIdOauthProviderTokenResponse,
     // OAuth
-    GetUsersUserIdOauthResponse,
-    GetUsersUserIdResponse,
+    GetV1UsersUserIdOauthResponse,
+    GetV1UsersUserIdResponse,
     // Scheduling
-    GetUsersUserIdSchedulingData,
+    GetV1UsersUserIdSchedulingData,
     // Scheduling
-    GetUsersUserIdSchedulingResponse,
+    GetV1UsersUserIdSchedulingResponse,
     /**
      * Organization entity
      */
     Organization,
-    PostOrganizationsData,
-    PostOrganizationsResponse,
-    PostUsersData,
-    PostUsersOauthProviderVerifyData,
-    PostUsersResponse,
-    PostUsersSchedulingData,
-    PostUsersSchedulingResponse,
+    PostV1OrganizationsData,
+    PostV1OrganizationsResponse,
+    PostV1UsersData,
+    PostV1UsersOauthProviderVerifyData,
+    PostV1UsersResponse,
+    PostV1UsersSchedulingData,
+    PostV1UsersSchedulingResponse,
     // Events
-    PostUsersUserIdCalendarEventsMetaData,
+    PostV1UsersUserIdCalendarEventsMetaData,
     // Events
-    PostUsersUserIdCalendarEventsMetaResponse,
-    PostUsersUserIdOauthProviderData,
-    PostUsersUserIdOauthProviderResponse,
-    PostUsersUserIdSchedulingData,
-    PostUsersUserIdSchedulingResponse,
-    PutOrganizationsOrgSlugData,
-    PutOrganizationsOrgSlugResponse,
-    PutUsersUserIdCalendarEventsMetaMetaIdData,
-    PutUsersUserIdCalendarEventsMetaMetaIdResponse,
-    PutUsersUserIdData,
-    PutUsersUserIdResponse,
+    PostV1UsersUserIdCalendarEventsMetaResponse,
+    PostV1UsersUserIdOauthProviderData,
+    PostV1UsersUserIdOauthProviderResponse,
+    PostV1UsersUserIdSchedulingData,
+    PostV1UsersUserIdSchedulingResponse,
+    PutV1OrganizationsOrgSlugData,
+    PutV1OrganizationsOrgSlugResponse,
+    PutV1UsersUserIdCalendarEventsMetaMetaIdData,
+    PutV1UsersUserIdCalendarEventsMetaMetaIdResponse,
+    PutV1UsersUserIdData,
+    PutV1UsersUserIdResponse,
     /**
      * Time range with start and end dates
      */

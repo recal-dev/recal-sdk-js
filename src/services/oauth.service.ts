@@ -1,14 +1,15 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetUsersUserIdOauthData,
-    GetUsersUserIdOauthLinksData,
-    GetUsersUserIdOauthProviderData,
-    GetUsersUserIdOauthProviderLinkData,
-    GetUsersUserIdOauthProviderTokenData,
-    PostUsersOauthProviderVerifyData,
-    PostUsersUserIdOauthProviderData,
+    GetV1UsersUserIdOauthData,
+    GetV1UsersUserIdOauthLinksData,
+    GetV1UsersUserIdOauthProviderData,
+    GetV1UsersUserIdOauthProviderLinkData,
+    GetV1UsersUserIdOauthProviderTokenData,
+    PostV1UsersOauthProviderVerifyData,
+    PostV1UsersUserIdOauthProviderData,
 } from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
 /**
  * OAuth Service
@@ -31,12 +32,13 @@ export class OAuthService {
      * })
      * ```
      */
-    async list(userId: string, options?: GetUsersUserIdOauthData['query']) {
-        return sdk.getUsersUserIdOauth({
+    async list(userId: string, options?: GetV1UsersUserIdOauthData['query']) {
+        const response = await sdk.getV1UsersUserIdOauth({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -51,12 +53,13 @@ export class OAuthService {
      * const connection = await recal.oauth.get('user-123', 'google')
      * ```
      */
-    async get(userId: string, provider: 'google' | 'microsoft', options?: GetUsersUserIdOauthProviderData['query']) {
-        return sdk.getUsersUserIdOauthProvider({
+    async get(userId: string, provider: 'google' | 'microsoft', options?: GetV1UsersUserIdOauthProviderData['query']) {
+        const response = await sdk.getV1UsersUserIdOauthProvider({
             path: { userId, provider },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -80,13 +83,14 @@ export class OAuthService {
     async create(
         userId: string,
         provider: 'google' | 'microsoft',
-        data: NonNullable<PostUsersUserIdOauthProviderData['body']>
+        data: NonNullable<PostV1UsersUserIdOauthProviderData['body']>
     ) {
-        return sdk.postUsersUserIdOauthProvider({
+        const response = await sdk.postV1UsersUserIdOauthProvider({
             path: { userId, provider },
             body: data,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -101,10 +105,11 @@ export class OAuthService {
      * ```
      */
     async delete(userId: string, provider: 'google' | 'microsoft') {
-        return sdk.deleteUsersUserIdOauthProvider({
+        const response = await sdk.deleteV1UsersUserIdOauthProvider({
             path: { userId, provider },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -122,12 +127,13 @@ export class OAuthService {
      * })
      * ```
      */
-    async getAuthLinks(userId: string, options: GetUsersUserIdOauthLinksData['query']) {
-        return sdk.getUsersUserIdOauthLinks({
+    async getAuthLinks(userId: string, options: GetV1UsersUserIdOauthLinksData['query']) {
+        const response = await sdk.getV1UsersUserIdOauthLinks({
             path: { userId, provider: options.provider },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -150,13 +156,14 @@ export class OAuthService {
     async getAuthLink(
         userId: string,
         provider: 'google' | 'microsoft',
-        options: GetUsersUserIdOauthProviderLinkData['query']
+        options: GetV1UsersUserIdOauthProviderLinkData['query']
     ) {
-        return sdk.getUsersUserIdOauthProviderLink({
+        const response = await sdk.getV1UsersUserIdOauthProviderLink({
             path: { userId, provider },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -179,15 +186,16 @@ export class OAuthService {
      */
     async verifyCode(
         provider: 'google' | 'microsoft',
-        data: NonNullable<PostUsersOauthProviderVerifyData['body']>,
-        options?: PostUsersOauthProviderVerifyData['query']
+        data: NonNullable<PostV1UsersOauthProviderVerifyData['body']>,
+        options?: PostV1UsersOauthProviderVerifyData['query']
     ) {
-        return sdk.postUsersOauthProviderVerify({
+        const response = await sdk.postV1UsersOauthProviderVerify({
             path: { provider },
             body: data,
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -207,12 +215,13 @@ export class OAuthService {
     async getFreshToken(
         userId: string,
         provider: 'google' | 'microsoft',
-        options: GetUsersUserIdOauthProviderTokenData['query']
+        options: GetV1UsersUserIdOauthProviderTokenData['query']
     ) {
-        return sdk.getUsersUserIdOauthProviderToken({
+        const response = await sdk.getV1UsersUserIdOauthProviderToken({
             path: { userId, provider },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 }

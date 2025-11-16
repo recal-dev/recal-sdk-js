@@ -1,4 +1,4 @@
-import { createClient, createConfig } from './client/client.gen'
+import { createClient, createConfig } from './client/client'
 import type { ClientOptions } from './client/types.gen'
 import { CalendarService } from './services/calendar.service'
 import { EventsService } from './services/events.service'

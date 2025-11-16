@@ -9,12 +9,13 @@ createClient({
             dates: { offset: true },
         },
         {
-            name: '@hey-api/sdk',
-            validator: true,
-        },
-        {
             name: '@hey-api/transformers',
             dates: true,
+        },
+        {
+            name: '@hey-api/sdk',
+            validator: true,
+            transformer: true,
         },
     ],
 })

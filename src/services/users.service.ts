@@ -1,6 +1,7 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
-import type { GetUsersUserIdData } from '../client/types.gen'
+import type { GetV1UsersUserIdData } from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
 /**
  * Users Service
@@ -19,7 +20,8 @@ export class UsersService {
      * ```
      */
     async list() {
-        return sdk.getUsers({ client: this.client })
+        const response = await sdk.getV1Users({ client: this.client })
+        return unwrapResponse(response)
     }
 
     /**
@@ -35,12 +37,13 @@ export class UsersService {
      * })
      * ```
      */
-    async get(userId: string, options?: GetUsersUserIdData['query']) {
-        return sdk.getUsersUserId({
+    async get(userId: string, options?: GetV1UsersUserIdData['query']) {
+        const response = await sdk.getV1UsersUserId({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -55,10 +58,11 @@ export class UsersService {
      * ```
      */
     async create(userId: string, organizationSlugs?: string[]) {
-        return sdk.postUsers({
+        const response = await sdk.postV1Users({
             body: { id: userId, organizationSlugs },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -73,11 +77,12 @@ export class UsersService {
      * ```
      */
     async update(userId: string, newUserId: string) {
-        return sdk.putUsersUserId({
+        const response = await sdk.putV1UsersUserId({
             path: { userId },
             body: { userId: newUserId },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -91,10 +96,11 @@ export class UsersService {
      * ```
      */
     async delete(userId: string) {
-        return sdk.deleteUsersUserId({
+        const response = await sdk.deleteV1UsersUserId({
             path: { userId },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -108,9 +114,10 @@ export class UsersService {
      * ```
      */
     async getOrganizations(userId: string) {
-        return sdk.getUsersUserIdOrganizations({
+        const response = await sdk.getV1UsersUserIdOrganizations({
             path: { userId },
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 }

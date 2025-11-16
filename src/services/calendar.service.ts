@@ -1,10 +1,11 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetUsersUserIdCalendarBusyData,
-    GetUsersUserIdCalendarData,
-    GetUsersUserIdCalendarEventsData,
+    GetV1UsersUserIdCalendarBusyData,
+    GetV1UsersUserIdCalendarData,
+    GetV1UsersUserIdCalendarEventsData,
 } from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
 /**
  * Calendar Service
@@ -27,12 +28,13 @@ export class CalendarService {
      * })
      * ```
      */
-    async list(userId: string, options?: GetUsersUserIdCalendarData['query']) {
-        return sdk.getUsersUserIdCalendar({
+    async list(userId: string, options?: GetV1UsersUserIdCalendarData['query']) {
+        const response = await sdk.getV1UsersUserIdCalendar({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -50,12 +52,13 @@ export class CalendarService {
      * })
      * ```
      */
-    async getBusyTimes(userId: string, options: GetUsersUserIdCalendarBusyData['query']) {
-        return sdk.getUsersUserIdCalendarBusy({
+    async getBusyTimes(userId: string, options: GetV1UsersUserIdCalendarBusyData['query']) {
+        const response = await sdk.getV1UsersUserIdCalendarBusy({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -73,11 +76,12 @@ export class CalendarService {
      * })
      * ```
      */
-    async listEvents(userId: string, options: GetUsersUserIdCalendarEventsData['query']) {
-        return sdk.getUsersUserIdCalendarEvents({
+    async listEvents(userId: string, options: GetV1UsersUserIdCalendarEventsData['query']) {
+        const response = await sdk.getV1UsersUserIdCalendarEvents({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 }

@@ -192,7 +192,7 @@ export const zCreateEvent = z.object({
     subject: z.optional(z.string())
 });
 
-export const zGetOrganizationsData = z.object({
+export const zGetV1OrganizationsData = z.object({
     body: z.optional(z.never()),
     path: z.optional(z.never()),
     query: z.optional(z.never())
@@ -201,11 +201,11 @@ export const zGetOrganizationsData = z.object({
 /**
  * All organizations
  */
-export const zGetOrganizationsResponse = z.object({
+export const zGetV1OrganizationsResponse = z.object({
     data: z.array(zOrganization)
 });
 
-export const zPostOrganizationsData = z.object({
+export const zPostV1OrganizationsData = z.object({
     body: z.optional(z.object({
         name: z.union([
             z.string().min(3).max(128),
@@ -220,11 +220,11 @@ export const zPostOrganizationsData = z.object({
 /**
  * Created organization
  */
-export const zPostOrganizationsResponse = z.object({
+export const zPostV1OrganizationsResponse = z.object({
     data: zOrganization
 });
 
-export const zDeleteOrganizationsOrgSlugData = z.object({
+export const zDeleteV1OrganizationsOrgSlugData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -235,11 +235,11 @@ export const zDeleteOrganizationsOrgSlugData = z.object({
 /**
  * Deleted organization
  */
-export const zDeleteOrganizationsOrgSlugResponse = z.object({
+export const zDeleteV1OrganizationsOrgSlugResponse = z.object({
     data: zOrganization
 });
 
-export const zGetOrganizationsOrgSlugData = z.object({
+export const zGetV1OrganizationsOrgSlugData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -250,11 +250,11 @@ export const zGetOrganizationsOrgSlugData = z.object({
 /**
  * Organization
  */
-export const zGetOrganizationsOrgSlugResponse = z.object({
+export const zGetV1OrganizationsOrgSlugResponse = z.object({
     data: zOrganization
 });
 
-export const zPutOrganizationsOrgSlugData = z.object({
+export const zPutV1OrganizationsOrgSlugData = z.object({
     body: z.optional(z.object({
         name: z.union([
             z.string().min(3).max(128),
@@ -271,11 +271,11 @@ export const zPutOrganizationsOrgSlugData = z.object({
 /**
  * Updated organization
  */
-export const zPutOrganizationsOrgSlugResponse = z.object({
+export const zPutV1OrganizationsOrgSlugResponse = z.object({
     data: zOrganization
 });
 
-export const zDeleteOrganizationsOrgSlugMembersData = z.object({
+export const zDeleteV1OrganizationsOrgSlugMembersData = z.object({
     body: z.optional(z.object({
         userIds: z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/))
     })),
@@ -285,11 +285,11 @@ export const zDeleteOrganizationsOrgSlugMembersData = z.object({
     query: z.optional(z.never())
 });
 
-export const zDeleteOrganizationsOrgSlugMembersResponse = z.object({
+export const zDeleteV1OrganizationsOrgSlugMembersResponse = z.object({
     data: z.string()
 });
 
-export const zGetOrganizationsOrgSlugMembersData = z.object({
+export const zGetV1OrganizationsOrgSlugMembersData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -309,7 +309,7 @@ export const zGetOrganizationsOrgSlugMembersData = z.object({
 /**
  * All members of an organization
  */
-export const zGetOrganizationsOrgSlugMembersResponse = z.object({
+export const zGetV1OrganizationsOrgSlugMembersResponse = z.object({
     data: z.array(z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -320,7 +320,7 @@ export const zGetOrganizationsOrgSlugMembersResponse = z.object({
     }))
 });
 
-export const zPostOrganizationsOrgSlugMembersData = z.object({
+export const zPostV1OrganizationsOrgSlugMembersData = z.object({
     body: z.optional(z.object({
         userIds: z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/))
     })),
@@ -330,7 +330,7 @@ export const zPostOrganizationsOrgSlugMembersData = z.object({
     query: z.optional(z.never())
 });
 
-export const zPostOrganizationsOrgSlugMembersResponse = z.union([
+export const zPostV1OrganizationsOrgSlugMembersResponse = z.union([
     z.object({
         data: z.string()
     }),
@@ -339,7 +339,7 @@ export const zPostOrganizationsOrgSlugMembersResponse = z.union([
     })
 ]);
 
-export const zGetOrganizationsOrgSlugCalendarBusyData = z.object({
+export const zGetV1OrganizationsOrgSlugCalendarBusyData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -365,11 +365,11 @@ export const zGetOrganizationsOrgSlugCalendarBusyData = z.object({
 /**
  * Busy times of all users of an organization
  */
-export const zGetOrganizationsOrgSlugCalendarBusyResponse = z.object({
+export const zGetV1OrganizationsOrgSlugCalendarBusyResponse = z.object({
     data: z.array(zTimeRange)
 });
 
-export const zGetOrganizationsOrgSlugSchedulingData = z.object({
+export const zGetV1OrganizationsOrgSlugSchedulingData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -405,7 +405,7 @@ export const zGetOrganizationsOrgSlugSchedulingData = z.object({
 /**
  * Available time slots
  */
-export const zGetOrganizationsOrgSlugSchedulingResponse = z.object({
+export const zGetV1OrganizationsOrgSlugSchedulingResponse = z.object({
     data: z.object({
         availableSlots: z.array(z.object({
             end: z.iso.datetime({
@@ -432,7 +432,7 @@ export const zGetOrganizationsOrgSlugSchedulingResponse = z.object({
     })
 });
 
-export const zGetUsersData = z.object({
+export const zGetV1UsersData = z.object({
     body: z.optional(z.never()),
     path: z.optional(z.never()),
     query: z.optional(z.never())
@@ -441,7 +441,7 @@ export const zGetUsersData = z.object({
 /**
  * List of users
  */
-export const zGetUsersResponse = z.object({
+export const zGetV1UsersResponse = z.object({
     data: z.array(z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -452,7 +452,7 @@ export const zGetUsersResponse = z.object({
     }))
 });
 
-export const zPostUsersData = z.object({
+export const zPostV1UsersData = z.object({
     body: z.optional(z.object({
         id: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/),
         organizationSlugs: z.optional(z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)))
@@ -464,7 +464,7 @@ export const zPostUsersData = z.object({
 /**
  * Created user
  */
-export const zPostUsersResponse = z.object({
+export const zPostV1UsersResponse = z.object({
     data: z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -475,7 +475,7 @@ export const zPostUsersResponse = z.object({
     })
 });
 
-export const zDeleteUsersUserIdData = z.object({
+export const zDeleteV1UsersUserIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -486,7 +486,7 @@ export const zDeleteUsersUserIdData = z.object({
 /**
  * User
  */
-export const zDeleteUsersUserIdResponse = z.object({
+export const zDeleteV1UsersUserIdResponse = z.object({
     data: z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -497,7 +497,7 @@ export const zDeleteUsersUserIdResponse = z.object({
     })
 });
 
-export const zGetUsersUserIdData = z.object({
+export const zGetV1UsersUserIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -517,7 +517,7 @@ export const zGetUsersUserIdData = z.object({
 /**
  * User
  */
-export const zGetUsersUserIdResponse = z.object({
+export const zGetV1UsersUserIdResponse = z.object({
     data: z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -528,7 +528,7 @@ export const zGetUsersUserIdResponse = z.object({
     })
 });
 
-export const zPutUsersUserIdData = z.object({
+export const zPutV1UsersUserIdData = z.object({
     body: z.optional(z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
     })),
@@ -541,7 +541,7 @@ export const zPutUsersUserIdData = z.object({
 /**
  * User
  */
-export const zPutUsersUserIdResponse = z.object({
+export const zPutV1UsersUserIdResponse = z.object({
     data: z.object({
         createdAt: z.iso.datetime({
             offset: true
@@ -552,7 +552,7 @@ export const zPutUsersUserIdResponse = z.object({
     })
 });
 
-export const zGetUsersUserIdOrganizationsData = z.object({
+export const zGetV1UsersUserIdOrganizationsData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -563,11 +563,11 @@ export const zGetUsersUserIdOrganizationsData = z.object({
 /**
  * List of organizations
  */
-export const zGetUsersUserIdOrganizationsResponse = z.object({
+export const zGetV1UsersUserIdOrganizationsResponse = z.object({
     data: z.array(zOrganization)
 });
 
-export const zGetUsersUserIdCalendarData = z.object({
+export const zGetV1UsersUserIdCalendarData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -587,11 +587,11 @@ export const zGetUsersUserIdCalendarData = z.object({
 /**
  * List of calendars
  */
-export const zGetUsersUserIdCalendarResponse = z.object({
+export const zGetV1UsersUserIdCalendarResponse = z.object({
     data: z.array(zCalendar)
 });
 
-export const zGetUsersUserIdCalendarBusyData = z.object({
+export const zGetV1UsersUserIdCalendarBusyData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -614,11 +614,11 @@ export const zGetUsersUserIdCalendarBusyData = z.object({
 /**
  * List of busy intervals
  */
-export const zGetUsersUserIdCalendarBusyResponse = z.object({
+export const zGetV1UsersUserIdCalendarBusyResponse = z.object({
     data: z.array(zTimeRange)
 });
 
-export const zGetUsersUserIdCalendarEventsData = z.object({
+export const zGetV1UsersUserIdCalendarEventsData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -641,11 +641,11 @@ export const zGetUsersUserIdCalendarEventsData = z.object({
 /**
  * List of events
  */
-export const zGetUsersUserIdCalendarEventsResponse = z.object({
+export const zGetV1UsersUserIdCalendarEventsResponse = z.object({
     data: z.array(zEvent)
 });
 
-export const zPostUsersUserIdCalendarEventsMetaData = z.object({
+export const zPostV1UsersUserIdCalendarEventsMetaData = z.object({
     body: z.optional(zCreateEventAcrossCalendars),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -665,11 +665,11 @@ export const zPostUsersUserIdCalendarEventsMetaData = z.object({
 /**
  * Event created
  */
-export const zPostUsersUserIdCalendarEventsMetaResponse = z.object({
+export const zPostV1UsersUserIdCalendarEventsMetaResponse = z.object({
     data: zEvent
 });
 
-export const zDeleteUsersUserIdCalendarEventsMetaMetaIdData = z.object({
+export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         metaId: z.string(),
@@ -690,11 +690,11 @@ export const zDeleteUsersUserIdCalendarEventsMetaMetaIdData = z.object({
 /**
  * Event deleted
  */
-export const zDeleteUsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
+export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
     data: zEvent
 });
 
-export const zGetUsersUserIdCalendarEventsMetaMetaIdData = z.object({
+export const zGetV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         metaId: z.string(),
@@ -715,11 +715,11 @@ export const zGetUsersUserIdCalendarEventsMetaMetaIdData = z.object({
 /**
  * Event
  */
-export const zGetUsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
+export const zGetV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
     data: zEvent
 });
 
-export const zPutUsersUserIdCalendarEventsMetaMetaIdData = z.object({
+export const zPutV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(zUpdateEvent),
     path: z.object({
         metaId: z.string(),
@@ -740,11 +740,11 @@ export const zPutUsersUserIdCalendarEventsMetaMetaIdData = z.object({
 /**
  * Event updated
  */
-export const zPutUsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
+export const zPutV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
     data: zEvent
 });
 
-export const zPostUsersUserIdCalendarEventsProviderCalendarIdData = z.object({
+export const zPostV1UsersUserIdCalendarEventsProviderCalendarIdData = z.object({
     body: z.optional(zCreateEvent),
     path: z.object({
         calendarId: z.string(),
@@ -760,11 +760,11 @@ export const zPostUsersUserIdCalendarEventsProviderCalendarIdData = z.object({
 /**
  * Event created
  */
-export const zPostUsersUserIdCalendarEventsProviderCalendarIdResponse = z.object({
+export const zPostV1UsersUserIdCalendarEventsProviderCalendarIdResponse = z.object({
     data: zEvent
 });
 
-export const zDeleteUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
+export const zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         calendarId: z.string(),
@@ -781,11 +781,11 @@ export const zDeleteUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.o
 /**
  * Event deleted
  */
-export const zDeleteUsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
+export const zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
     data: zEvent
 });
 
-export const zGetUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
+export const zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         calendarId: z.string(),
@@ -802,11 +802,11 @@ export const zGetUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.obje
 /**
  * Event found
  */
-export const zGetUsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
+export const zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
     data: zEvent
 });
 
-export const zPutUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
+export const zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
     body: z.optional(zUpdateEvent),
     path: z.object({
         calendarId: z.string(),
@@ -823,11 +823,11 @@ export const zPutUsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.obje
 /**
  * Event updated
  */
-export const zPutUsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
+export const zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
     data: zEvent
 });
 
-export const zGetUsersUserIdOauthData = z.object({
+export const zGetV1UsersUserIdOauthData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -843,11 +843,11 @@ export const zGetUsersUserIdOauthData = z.object({
 /**
  * All oauth connections of the user
  */
-export const zGetUsersUserIdOauthResponse = z.object({
+export const zGetV1UsersUserIdOauthResponse = z.object({
     data: z.array(zAuthConnection)
 });
 
-export const zDeleteUsersUserIdOauthProviderData = z.object({
+export const zDeleteV1UsersUserIdOauthProviderData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         provider: z.enum([
@@ -859,7 +859,7 @@ export const zDeleteUsersUserIdOauthProviderData = z.object({
     query: z.optional(z.never())
 });
 
-export const zGetUsersUserIdOauthProviderData = z.object({
+export const zGetV1UsersUserIdOauthProviderData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         provider: z.enum([
@@ -879,11 +879,11 @@ export const zGetUsersUserIdOauthProviderData = z.object({
 /**
  * OAuth connection of the user
  */
-export const zGetUsersUserIdOauthProviderResponse = z.object({
+export const zGetV1UsersUserIdOauthProviderResponse = z.object({
     data: zAuthConnection
 });
 
-export const zPostUsersUserIdOauthProviderData = z.object({
+export const zPostV1UsersUserIdOauthProviderData = z.object({
     body: z.optional(z.object({
         accessToken: z.string(),
         email: z.union([
@@ -913,11 +913,11 @@ export const zPostUsersUserIdOauthProviderData = z.object({
 /**
  * OAuth connection created
  */
-export const zPostUsersUserIdOauthProviderResponse = z.object({
+export const zPostV1UsersUserIdOauthProviderResponse = z.object({
     data: zAuthConnection
 });
 
-export const zGetUsersUserIdOauthLinksData = z.object({
+export const zGetV1UsersUserIdOauthLinksData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         provider: z.enum([
@@ -946,11 +946,11 @@ export const zGetUsersUserIdOauthLinksData = z.object({
 /**
  * Auth urls for the oauth providers
  */
-export const zGetUsersUserIdOauthLinksResponse = z.object({
+export const zGetV1UsersUserIdOauthLinksResponse = z.object({
     data: zAuthConnection
 });
 
-export const zGetUsersUserIdOauthProviderLinkData = z.object({
+export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         provider: z.enum([
@@ -980,11 +980,11 @@ export const zGetUsersUserIdOauthProviderLinkData = z.object({
 /**
  * Auth url for the oauth provider
  */
-export const zGetUsersUserIdOauthProviderLinkResponse = z.object({
+export const zGetV1UsersUserIdOauthProviderLinkResponse = z.object({
     data: zAuthConnection
 });
 
-export const zPostUsersOauthProviderVerifyData = z.object({
+export const zPostV1UsersOauthProviderVerifyData = z.object({
     body: z.optional(z.object({
         code: z.string(),
         scope: z.array(z.string()),
@@ -1001,7 +1001,7 @@ export const zPostUsersOauthProviderVerifyData = z.object({
     }))
 });
 
-export const zGetUsersUserIdOauthProviderTokenData = z.object({
+export const zGetV1UsersUserIdOauthProviderTokenData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         provider: z.enum([
@@ -1018,13 +1018,13 @@ export const zGetUsersUserIdOauthProviderTokenData = z.object({
 /**
  * Access token
  */
-export const zGetUsersUserIdOauthProviderTokenResponse = z.object({
+export const zGetV1UsersUserIdOauthProviderTokenResponse = z.object({
     data: z.object({
         accessToken: z.string()
     })
 });
 
-export const zGetUsersUserIdSchedulingData = z.object({
+export const zGetV1UsersUserIdSchedulingData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -1060,7 +1060,7 @@ export const zGetUsersUserIdSchedulingData = z.object({
 /**
  * Available time slots
  */
-export const zGetUsersUserIdSchedulingResponse = z.object({
+export const zGetV1UsersUserIdSchedulingResponse = z.object({
     data: z.object({
         availableSlots: z.array(zTimeRange),
         options: z.object({
@@ -1079,7 +1079,7 @@ export const zGetUsersUserIdSchedulingResponse = z.object({
     })
 });
 
-export const zPostUsersUserIdSchedulingData = z.object({
+export const zPostV1UsersUserIdSchedulingData = z.object({
     body: z.optional(z.object({
         schedules: z.array(z.object({
             days: z.array(z.enum([
@@ -1127,7 +1127,7 @@ export const zPostUsersUserIdSchedulingData = z.object({
 /**
  * Available time slots
  */
-export const zPostUsersUserIdSchedulingResponse = z.object({
+export const zPostV1UsersUserIdSchedulingResponse = z.object({
     data: z.object({
         availableSlots: z.array(zTimeRange),
         options: z.object({
@@ -1146,7 +1146,7 @@ export const zPostUsersUserIdSchedulingResponse = z.object({
     })
 });
 
-export const zPostUsersSchedulingData = z.object({
+export const zPostV1UsersSchedulingData = z.object({
     body: z.optional(z.object({
         users: z.array(z.object({
             id: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/),
@@ -1196,7 +1196,7 @@ export const zPostUsersSchedulingData = z.object({
 /**
  * Available time slots for each user
  */
-export const zPostUsersSchedulingResponse = z.object({
+export const zPostV1UsersSchedulingResponse = z.object({
     data: z.union([
         z.object({
             error: z.string(),

@@ -1,10 +1,11 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetUsersUserIdSchedulingData,
-    PostUsersSchedulingData,
-    PostUsersUserIdSchedulingData,
+    GetV1UsersUserIdSchedulingData,
+    PostV1UsersSchedulingData,
+    PostV1UsersUserIdSchedulingData,
 } from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
 /**
  * Scheduling Service
@@ -31,12 +32,13 @@ export class SchedulingService {
      * })
      * ```
      */
-    async getSlots(userId: string, options: GetUsersUserIdSchedulingData['query']) {
-        return sdk.getUsersUserIdScheduling({
+    async getSlots(userId: string, options: GetV1UsersUserIdSchedulingData['query']) {
+        const response = await sdk.getV1UsersUserIdScheduling({
             path: { userId },
             query: options,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -70,15 +72,16 @@ export class SchedulingService {
      */
     async getAdvancedSlots(
         userId: string,
-        options: PostUsersUserIdSchedulingData['query'],
-        body?: PostUsersUserIdSchedulingData['body']
+        options: PostV1UsersUserIdSchedulingData['query'],
+        body?: PostV1UsersUserIdSchedulingData['body']
     ) {
-        return sdk.postUsersUserIdScheduling({
+        const response = await sdk.postV1UsersUserIdScheduling({
             path: { userId },
             query: options,
             body,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 
     /**
@@ -108,11 +111,12 @@ export class SchedulingService {
      * )
      * ```
      */
-    async getMultiUserSlots(options: PostUsersSchedulingData['query'], body?: PostUsersSchedulingData['body']) {
-        return sdk.postUsersScheduling({
+    async getMultiUserSlots(options: PostV1UsersSchedulingData['query'], body?: PostV1UsersSchedulingData['body']) {
+        const response = await sdk.postV1UsersScheduling({
             query: options,
             body,
             client: this.client,
         })
+        return unwrapResponse(response)
     }
 }
