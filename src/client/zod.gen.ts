@@ -920,10 +920,6 @@ export const zPostV1UsersUserIdOauthProviderResponse = z.object({
 export const zGetV1UsersUserIdOauthLinksData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        provider: z.enum([
-            'google',
-            'microsoft'
-        ]),
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
     }),
     query: z.object({
@@ -931,15 +927,15 @@ export const zGetV1UsersUserIdOauthLinksData = z.object({
             z.literal('offline'),
             z.literal('online')
         ]),
-        provider: z.enum([
-            'google',
-            'microsoft'
-        ]),
         scope: z.union([
             z.array(z.string()),
             z.literal('edit'),
             z.literal('free-busy')
-        ])
+        ]),
+        provider: z.optional(z.array(z.enum([
+            'google',
+            'microsoft'
+        ])))
     })
 });
 
@@ -964,16 +960,12 @@ export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
             z.literal('offline'),
             z.literal('online')
         ]),
-        provider: z.enum([
-            'google',
-            'microsoft'
-        ]),
-        redirectUrl: z.url(),
         scope: z.union([
             z.array(z.string()),
             z.literal('edit'),
             z.literal('free-busy')
-        ])
+        ]),
+        redirectUrl: z.optional(z.url())
     })
 });
 
@@ -981,7 +973,7 @@ export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
  * Auth url for the oauth provider
  */
 export const zGetV1UsersUserIdOauthProviderLinkResponse = z.object({
-    data: zAuthConnection
+    data: z.url()
 });
 
 export const zPostV1UsersOauthProviderVerifyData = z.object({

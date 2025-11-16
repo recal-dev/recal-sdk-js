@@ -129,7 +129,7 @@ export class OAuthService {
      */
     async getAuthLinks(userId: string, options: GetV1UsersUserIdOauthLinksData['query']) {
         const response = await sdk.getV1UsersUserIdOauthLinks({
-            path: { userId, provider: options.provider },
+            path: { userId },
             query: options,
             client: this.client,
         })
@@ -203,23 +203,15 @@ export class OAuthService {
      *
      * @param userId - The user ID
      * @param provider - The OAuth provider
-     * @param options - Query options
      *
      * @example
      * ```typescript
-     * const token = await recal.oauth.getFreshToken('user-123', 'google', {
-     *   redirectUrl: 'https://app.com/callback'
-     * })
+     * const token = await recal.oauth.getFreshAccessToken('user-123', 'google')
      * ```
      */
-    async getFreshToken(
-        userId: string,
-        provider: 'google' | 'microsoft',
-        options: GetV1UsersUserIdOauthProviderTokenData['query']
-    ) {
+    async getFreshAccessToken(userId: string, provider: 'google' | 'microsoft') {
         const response = await sdk.getV1UsersUserIdOauthProviderToken({
             path: { userId, provider },
-            query: options,
             client: this.client,
         })
         return unwrapResponse(response)

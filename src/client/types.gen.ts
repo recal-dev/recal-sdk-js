@@ -1399,7 +1399,6 @@ export type PostV1UsersUserIdOauthProviderResponse = PostV1UsersUserIdOauthProvi
 export type GetV1UsersUserIdOauthLinksData = {
     body?: never;
     path: {
-        provider: 'google' | 'microsoft';
         userId: string;
     };
     query: {
@@ -1407,11 +1406,11 @@ export type GetV1UsersUserIdOauthLinksData = {
          * Access type of the oauth connection
          */
         accessType: 'offline' | 'online';
-        provider: 'google' | 'microsoft';
         /**
          * Scope of the oauth connection
          */
         scope: Array<string> | 'edit' | 'free-busy';
+        provider?: Array<'google' | 'microsoft'>;
     };
     url: '/v1/users/{userId}/oauth/links';
 };
@@ -1457,15 +1456,14 @@ export type GetV1UsersUserIdOauthProviderLinkData = {
          * Access type of the oauth connection
          */
         accessType: 'offline' | 'online';
-        provider: 'google' | 'microsoft';
-        /**
-         * Redirect url for the oauth provider
-         */
-        redirectUrl: string;
         /**
          * Scope of the oauth connection
          */
         scope: Array<string> | 'edit' | 'free-busy';
+        /**
+         * Redirect url for the oauth provider
+         */
+        redirectUrl?: string;
     };
     url: '/v1/users/{userId}/oauth/{provider}/link';
 };
@@ -1494,7 +1492,10 @@ export type GetV1UsersUserIdOauthProviderLinkResponses = {
      * Auth url for the oauth provider
      */
     200: {
-        data: AuthConnection;
+        /**
+         * Auth url for the user to connect to the oauth provider
+         */
+        data: string;
     };
 };
 
@@ -1510,6 +1511,9 @@ export type PostV1UsersOauthProviderVerifyData = {
         provider: 'google' | 'microsoft';
     };
     query?: {
+        /**
+         * Redirect url for the oauth provider
+         */
         redirectUrl?: string;
     };
     url: '/v1/users/oauth/{provider}/verify';
