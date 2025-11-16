@@ -100,7 +100,7 @@ describe('Organization Integration Tests', () => {
         expect(Array.isArray(members)).toBe(true)
     })
 
-    test.skip('should add members to an organization', async () => {
+    test('should add members to an organization', async () => {
         // Has API issues with member management
         const memberOrgSlug = testClient.generateTestId('org', 'member-org')
         const memberOrgName = testClient.generateTestId('org', 'Member Org')
@@ -115,7 +115,7 @@ describe('Organization Integration Tests', () => {
         expect(Array.isArray(result)).toBe(true)
     })
 
-    test.skip('should remove members from an organization', async () => {
+    test('should remove members from an organization', async () => {
         // Has API issues with member management
         const memberOrgSlug = testClient.generateTestId('org', 'remove-member-org')
         const memberOrgName = testClient.generateTestId('org', 'Remove Member Org')

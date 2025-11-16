@@ -19,6 +19,57 @@ export class TestClient {
         this.createdEventMetaIds.set(userId, existing)
     }
 
+    /**
+     * Create OAuth connection directly with tokens from environment (for testing)
+     * This uses the refresh token to create a valid OAuth connection
+     *
+     * NOTE: This requires the platform to have OAuth credentials configured in the Dashboard.
+     * If OAuth is not configured at the platform level, this will fail gracefully.
+     *
+     * @returns true if OAuth was set up successfully, false otherwise
+     */
+    async setupOAuthForUser(
+        userId: string,
+        provider: 'google' | 'microsoft' = 'google'
+    ): Promise<boolean> {
+        if (!process.env.GOOGLE_REFRESH_TOKEN) {
+            console.warn('OAuth tokens not found in environment, skipping OAuth setup')
+            return false
+        }
+
+        try {
+            // Create OAuth connection with tokens from environment
+            // Even if access token is expired, having refresh token allows SDK to refresh it
+            await this.sdk.oauth.create(userId, provider, {
+                accessToken: process.env.GOOGLE_ACCESS_TOKEN || 'expired',
+                refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+                email: null,
+                expiresAt: null,
+                scope: ['https://www.googleapis.com/auth/calendar'],
+            })
+            return true
+        } catch (error: unknown) {
+            // Check if error is due to platform OAuth not configured
+            const errorMessage =
+                typeof error === 'object' && error !== null && 'details' in error
+                    ? String((error as { details?: { error?: string } }).details?.error)
+                    : ''
+
+            if (errorMessage.includes('OAuth credentials not found for provider')) {
+                console.warn(`\n⚠️  Platform OAuth not configured for ${provider}`)
+                console.warn('   To run OAuth-dependent tests, configure OAuth credentials in the Recal Dashboard')
+                console.warn('   Tests requiring OAuth will be skipped\n')
+                return false
+            }
+
+            if (testConfig.ignoreCleanupErrors) {
+                console.warn(`Failed to create OAuth connection for user ${userId}:`, error)
+                return false
+            }
+            throw error
+        }
+    }
+
     async setup(): Promise<void> {
         validateTestConfig()
 

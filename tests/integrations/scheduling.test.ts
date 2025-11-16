@@ -1,9 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import { TestClient } from '../helpers/test-client'
 
-// Note: Scheduling tests require OAuth credentials to be set up for users
-// Skipping entire suite as it requires external OAuth provider setup
-describe.skip('Scheduling Integration Tests', () => {
+describe('Scheduling Integration Tests', () => {
     const testClient = new TestClient()
 
     let testUserId: string
@@ -18,6 +16,10 @@ describe.skip('Scheduling Integration Tests', () => {
 
         await testClient.client.users.create(testUserId)
         await testClient.client.users.create(secondUserId)
+
+        // Set up OAuth connections for both users
+        await testClient.setupOAuthForUser(testUserId, 'google')
+        await testClient.setupOAuthForUser(secondUserId, 'google')
     })
 
     afterAll(async () => {
