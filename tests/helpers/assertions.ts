@@ -78,7 +78,7 @@ export function assertEvent(event: Event) {
     expect(event).toBeDefined()
     expect(event.id).toBeDefined()
     expect(event.calendarId).toBeDefined()
-    expect(event.provider).toBeDefined()
+    // Note: provider is not a property on Event in the API schema
 }
 
 /**

@@ -7,9 +7,9 @@
  */
 export interface HeyApiResponse<T> {
     data?: { data: T }
-    error?: any
-    request?: any
-    response?: any
+    error?: unknown
+    request?: Request
+    response?: Response
 }
 
 /**
@@ -17,9 +17,9 @@ export interface HeyApiResponse<T> {
  */
 export class RecalError extends Error {
     public readonly statusCode?: number
-    public readonly details?: any
+    public readonly details?: unknown
 
-    constructor(message: string, statusCode?: number, details?: any) {
+    constructor(message: string, statusCode?: number, details?: unknown) {
         // Add red [RECAL] prefix to error message
         const formattedMessage = `\x1b[31m[RECAL]\x1b[0m ${message}`
         super(formattedMessage)
@@ -39,10 +39,18 @@ export class RecalError extends Error {
  */
 export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
     // Check if error object has actual content (not just empty {})
-    if (response.error && Object.keys(response.error).length > 0) {
+    if (response.error && typeof response.error === 'object' && Object.keys(response.error).length > 0) {
         const statusCode = response.response?.status
-        const errorMessage =
-            typeof response.error === 'string' ? response.error : response.error.message || 'Unknown API error'
+
+        // Extract error message safely from unknown type
+        let errorMessage = 'Unknown API error'
+        if (typeof response.error === 'string') {
+            errorMessage = response.error
+        } else if (response.error && typeof response.error === 'object' && 'message' in response.error) {
+            errorMessage = String(response.error.message)
+        } else if (response.error && typeof response.error === 'object' && 'error' in response.error) {
+            errorMessage = String(response.error.error)
+        }
 
         throw new RecalError(errorMessage, statusCode, response.error)
     }

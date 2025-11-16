@@ -54,7 +54,7 @@ describe('Organization Integration Tests', () => {
     })
 
     test('should list all organizations', async () => {
-        const orgs = await testClient.client.organizations.listAll()
+        const orgs = await testClient.client.organizations.list()
 
         expect(orgs).toBeDefined()
         expect(Array.isArray(orgs)).toBe(true)
