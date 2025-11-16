@@ -118,4 +118,18 @@ describe('User Integration Tests', () => {
         expect(deletedUser.id).toBe(tempUserId)
         expect(deletedUser.createdAt).toBeInstanceOf(Date)
     })
+
+    test('should get organizations for a user', async () => {
+        const userId = testClient.generateTestId('user', 'org-user')
+        await testClient.client.users.create(userId, [testOrgSlug])
+
+        const orgs = await testClient.client.users.getOrganizations(userId)
+
+        expect(orgs).toBeDefined()
+        expect(Array.isArray(orgs)).toBe(true)
+        expect(orgs.length).toBeGreaterThan(0)
+
+        const orgSlugs = orgs.map((org) => org.slug)
+        expect(orgSlugs).toContain(testOrgSlug)
+    })
 })
