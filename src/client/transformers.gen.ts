@@ -17,11 +17,6 @@ const userSchemaResponseTransformer = (data: any) => {
     return data;
 };
 
-const calendarSchemaResponseTransformer = (data: any) => {
-    // Calendars don't have date fields that need transformation
-    return data;
-};
-
 export const getV1OrganizationsResponseTransformer = async (data: any): Promise<GetV1OrganizationsResponse> => {
     data.data = data.data.map((item: any) => {
         return organizationSchemaResponseTransformer(item);

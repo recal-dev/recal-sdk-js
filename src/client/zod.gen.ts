@@ -968,7 +968,7 @@ export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
             'google',
             'microsoft'
         ]),
-        redirectUrl: z.string(),
+        redirectUrl: z.url(),
         scope: z.union([
             z.array(z.string()),
             z.literal('edit'),
@@ -997,7 +997,7 @@ export const zPostV1UsersOauthProviderVerifyData = z.object({
         ])
     }),
     query: z.optional(z.object({
-        redirectUrl: z.optional(z.string())
+        redirectUrl: z.optional(z.url())
     }))
 });
 
@@ -1010,9 +1010,7 @@ export const zGetV1UsersUserIdOauthProviderTokenData = z.object({
         ]),
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
     }),
-    query: z.object({
-        redirectUrl: z.url()
-    })
+    query: z.optional(z.never())
 });
 
 /**

@@ -1547,9 +1547,7 @@ export type GetV1UsersUserIdOauthProviderTokenData = {
         provider: 'google' | 'microsoft';
         userId: string;
     };
-    query: {
-        redirectUrl: string;
-    };
+    query?: never;
     url: '/v1/users/{userId}/oauth/{provider}/token';
 };
 
