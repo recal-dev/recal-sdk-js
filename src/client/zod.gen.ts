@@ -87,25 +87,17 @@ export const zCalendar = z.object({
 });
 
 /**
+ * Recal Normalized Attendee
+ */
+export const zAttendee = z.lazy((): any => {
+    return zAttendee;
+});
+
+/**
  * Recal Normalized Event
  */
 export const zEvent = z.object({
-    attendees: z.array(z.union([
-        z.object({
-            email: z.string(),
-            responseStatus: z.union([
-                z.literal('accepted'),
-                z.literal('declined'),
-                z.literal('needsAction'),
-                z.literal('tentative'),
-                z.unknown()
-            ])
-        }),
-        z.object({
-            email: z.string(),
-            self: z.literal(true)
-        })
-    ])),
+    attendees: z.array(zAttendee),
     calendarId: z.string(),
     id: z.string(),
     original: z.unknown(),
@@ -122,9 +114,34 @@ export const zEvent = z.object({
 });
 
 /**
- * Recal Normalized Create Event
+ * Recal Normalized Meta Event Attendee
  */
-export const zCreateEventAcrossCalendars = z.object({
+export const zMetaEventAttendee = z.lazy((): any => {
+    return zMetaEventAttendee;
+});
+
+/**
+ * Recal Normalized Meta Event
+ */
+export const zMetaEvent = z.object({
+    attendees: z.array(zMetaEventAttendee),
+    originals: z.array(z.unknown()),
+    description: z.optional(z.string()),
+    end: z.optional(z.iso.datetime({
+        offset: true
+    }).regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/)),
+    location: z.optional(z.string()),
+    metaId: z.optional(z.string()),
+    start: z.optional(z.iso.datetime({
+        offset: true
+    }).regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/)),
+    subject: z.optional(z.string())
+});
+
+/**
+ * Recal Normalized Create Meta Event
+ */
+export const zCreateMetaEvent = z.object({
     attendees: z.optional(z.array(z.object({
         email: z.email().regex(/^[\w%+.-]+@[\d.A-Za-z-]+\.[A-Za-z]{2,}$/)
     }))),
@@ -147,9 +164,34 @@ export const zCreateEventAcrossCalendars = z.object({
 });
 
 /**
- * Recal Normalized Update Event
+ * Recal Normalized Update Meta Event
  */
-export const zUpdateEvent = z.object({
+export const zUpdateMetaEvent = z.object({
+    attendees: z.optional(z.array(z.object({
+        email: z.email().regex(/^[\w%+.-]+@[\d.A-Za-z-]+\.[A-Za-z]{2,}$/)
+    }))),
+    description: z.optional(z.string()),
+    end: z.optional(z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/)),
+    location: z.optional(z.string()),
+    meeting: z.optional(z.union([
+        z.object({
+            url: z.url()
+        }),
+        z.boolean()
+    ])),
+    metaId: z.optional(z.string()),
+    sendNotificationsFor: z.optional(z.array(z.enum([
+        'google',
+        'microsoft'
+    ]))),
+    start: z.optional(z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/)),
+    subject: z.optional(z.string())
+});
+
+/**
+ * Recal Normalized Create Event
+ */
+export const zCreateEvent = z.object({
     attendees: z.optional(z.array(z.object({
         email: z.email().regex(/^[\w%+.-]+@[\d.A-Za-z-]+\.[A-Za-z]{2,}$/)
     }))),
@@ -170,12 +212,12 @@ export const zUpdateEvent = z.object({
 });
 
 /**
- * Recal Normalized Create Event
+ * Recal Normalized Update Event
  */
-export const zCreateEvent = z.object({
-    attendees: z.array(z.object({
+export const zUpdateEvent = z.object({
+    attendees: z.optional(z.array(z.object({
         email: z.email().regex(/^[\w%+.-]+@[\d.A-Za-z-]+\.[A-Za-z]{2,}$/)
-    })),
+    }))),
     description: z.optional(z.string()),
     end: z.optional(z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/)),
     id: z.optional(z.string()),
@@ -646,7 +688,7 @@ export const zGetV1UsersUserIdCalendarEventsResponse = z.object({
 });
 
 export const zPostV1UsersUserIdCalendarEventsMetaData = z.object({
-    body: z.optional(zCreateEventAcrossCalendars),
+    body: z.optional(zCreateMetaEvent),
     path: z.object({
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
     }),
@@ -663,10 +705,10 @@ export const zPostV1UsersUserIdCalendarEventsMetaData = z.object({
 });
 
 /**
- * Event created
+ * Meta event created
  */
 export const zPostV1UsersUserIdCalendarEventsMetaResponse = z.object({
-    data: zEvent
+    data: zMetaEvent
 });
 
 export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
@@ -685,13 +727,6 @@ export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
             z.literal('microsoft')
         ]))
     }))
-});
-
-/**
- * Event deleted
- */
-export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
-    data: zEvent
 });
 
 export const zGetV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
@@ -716,11 +751,11 @@ export const zGetV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
  * Event
  */
 export const zGetV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
-    data: zEvent
+    data: zMetaEvent
 });
 
 export const zPutV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
-    body: z.optional(zUpdateEvent),
+    body: z.optional(zUpdateMetaEvent),
     path: z.object({
         metaId: z.string(),
         userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -738,10 +773,10 @@ export const zPutV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
 });
 
 /**
- * Event updated
+ * Meta event updated
  */
 export const zPutV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
-    data: zEvent
+    data: zMetaEvent
 });
 
 export const zPostV1UsersUserIdCalendarEventsProviderCalendarIdData = z.object({
@@ -847,6 +882,90 @@ export const zGetV1UsersUserIdOauthResponse = z.object({
     data: z.array(zAuthConnection)
 });
 
+export const zGetV1UsersUserIdOauthLinksData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+    }),
+    query: z.object({
+        accessType: z.union([
+            z.literal('offline'),
+            z.literal('online')
+        ]),
+        scope: z.union([
+            z.array(z.string()),
+            z.literal('edit'),
+            z.literal('free-busy')
+        ]),
+        provider: z.optional(z.array(z.enum([
+            'google',
+            'microsoft'
+        ])))
+    })
+});
+
+/**
+ * Auth urls for the oauth providers
+ */
+export const zGetV1UsersUserIdOauthLinksResponse = z.object({
+    data: z.array(z.object({
+        link: z.url(),
+        provider: z.enum([
+            'google',
+            'microsoft'
+        ])
+    }))
+});
+
+export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        provider: z.enum([
+            'google',
+            'microsoft'
+        ]),
+        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+    }),
+    query: z.object({
+        accessType: z.union([
+            z.literal('offline'),
+            z.literal('online')
+        ]),
+        scope: z.union([
+            z.array(z.string()),
+            z.literal('edit'),
+            z.literal('free-busy')
+        ]),
+        redirectUrl: z.optional(z.url())
+    })
+});
+
+/**
+ * Auth url for the oauth provider
+ */
+export const zGetV1UsersUserIdOauthProviderLinkResponse = z.object({
+    data: z.object({
+        link: z.url()
+    })
+});
+
+export const zPostV1UsersOauthProviderVerifyData = z.object({
+    body: z.optional(z.object({
+        code: z.string(),
+        scope: z.array(z.string()),
+        state: z.string()
+    })),
+    path: z.object({
+        provider: z.enum([
+            'google',
+            'microsoft'
+        ])
+    }),
+    query: z.optional(z.object({
+        redirectUrl: z.optional(z.url())
+    }))
+});
+
 export const zDeleteV1UsersUserIdOauthProviderData = z.object({
     body: z.optional(z.never()),
     path: z.object({
@@ -915,82 +1034,6 @@ export const zPostV1UsersUserIdOauthProviderData = z.object({
  */
 export const zPostV1UsersUserIdOauthProviderResponse = z.object({
     data: zAuthConnection
-});
-
-export const zGetV1UsersUserIdOauthLinksData = z.object({
-    body: z.optional(z.never()),
-    path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
-    }),
-    query: z.object({
-        accessType: z.union([
-            z.literal('offline'),
-            z.literal('online')
-        ]),
-        scope: z.union([
-            z.array(z.string()),
-            z.literal('edit'),
-            z.literal('free-busy')
-        ]),
-        provider: z.optional(z.array(z.enum([
-            'google',
-            'microsoft'
-        ])))
-    })
-});
-
-/**
- * Auth urls for the oauth providers
- */
-export const zGetV1UsersUserIdOauthLinksResponse = z.object({
-    data: zAuthConnection
-});
-
-export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
-    body: z.optional(z.never()),
-    path: z.object({
-        provider: z.enum([
-            'google',
-            'microsoft'
-        ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
-    }),
-    query: z.object({
-        accessType: z.union([
-            z.literal('offline'),
-            z.literal('online')
-        ]),
-        scope: z.union([
-            z.array(z.string()),
-            z.literal('edit'),
-            z.literal('free-busy')
-        ]),
-        redirectUrl: z.optional(z.url())
-    })
-});
-
-/**
- * Auth url for the oauth provider
- */
-export const zGetV1UsersUserIdOauthProviderLinkResponse = z.object({
-    data: z.url()
-});
-
-export const zPostV1UsersOauthProviderVerifyData = z.object({
-    body: z.optional(z.object({
-        code: z.string(),
-        scope: z.array(z.string()),
-        state: z.string()
-    })),
-    path: z.object({
-        provider: z.enum([
-            'google',
-            'microsoft'
-        ])
-    }),
-    query: z.optional(z.object({
-        redirectUrl: z.optional(z.url())
-    }))
 });
 
 export const zGetV1UsersUserIdOauthProviderTokenData = z.object({

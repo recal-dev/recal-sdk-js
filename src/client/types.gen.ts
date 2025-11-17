@@ -68,16 +68,15 @@ export type Calendar = {
 };
 
 /**
+ * Recal Normalized Attendee
+ */
+export type Attendee = Attendee;
+
+/**
  * Recal Normalized Event
  */
 export type Event = {
-    attendees: Array<{
-        email: string;
-        responseStatus: 'accepted' | 'declined' | 'needsAction' | 'tentative' | unknown;
-    } | {
-        email: string;
-        self: true;
-    }>;
+    attendees: Array<Attendee>;
     calendarId: string;
     id: string;
     original: unknown;
@@ -90,9 +89,28 @@ export type Event = {
 };
 
 /**
- * Recal Normalized Create Event
+ * Recal Normalized Meta Event Attendee
  */
-export type CreateEventAcrossCalendars = {
+export type MetaEventAttendee = MetaEventAttendee;
+
+/**
+ * Recal Normalized Meta Event
+ */
+export type MetaEvent = {
+    attendees: Array<MetaEventAttendee>;
+    originals: Array<unknown>;
+    description?: string;
+    end?: Date;
+    location?: string;
+    metaId?: string;
+    start?: Date;
+    subject?: string;
+};
+
+/**
+ * Recal Normalized Create Meta Event
+ */
+export type CreateMetaEvent = {
     attendees?: Array<{
         email: string;
     }>;
@@ -109,9 +127,28 @@ export type CreateEventAcrossCalendars = {
 };
 
 /**
- * Recal Normalized Update Event
+ * Recal Normalized Update Meta Event
  */
-export type UpdateEvent = {
+export type UpdateMetaEvent = {
+    attendees?: Array<{
+        email: string;
+    }>;
+    description?: string;
+    end?: string;
+    location?: string;
+    meeting?: {
+        url: string;
+    } | boolean;
+    metaId?: string;
+    sendNotificationsFor?: Array<'google' | 'microsoft'>;
+    start?: string;
+    subject?: string;
+};
+
+/**
+ * Recal Normalized Create Event
+ */
+export type CreateEvent = {
     attendees?: Array<{
         email: string;
     }>;
@@ -129,10 +166,10 @@ export type UpdateEvent = {
 };
 
 /**
- * Recal Normalized Create Event
+ * Recal Normalized Update Event
  */
-export type CreateEvent = {
-    attendees: Array<{
+export type UpdateEvent = {
+    attendees?: Array<{
         email: string;
     }>;
     description?: string;
@@ -913,7 +950,7 @@ export type GetV1UsersUserIdCalendarEventsResponses = {
 export type GetV1UsersUserIdCalendarEventsResponse = GetV1UsersUserIdCalendarEventsResponses[keyof GetV1UsersUserIdCalendarEventsResponses];
 
 export type PostV1UsersUserIdCalendarEventsMetaData = {
-    body?: CreateEventAcrossCalendars;
+    body?: CreateMetaEvent;
     path: {
         userId: string;
     };
@@ -944,10 +981,10 @@ export type PostV1UsersUserIdCalendarEventsMetaError = PostV1UsersUserIdCalendar
 
 export type PostV1UsersUserIdCalendarEventsMetaResponses = {
     /**
-     * Event created
+     * Meta event created
      */
     200: {
-        data: Event;
+        data: MetaEvent;
     };
 };
 
@@ -986,14 +1023,10 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdError = DeleteV1UsersUser
 
 export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     /**
-     * Event deleted
+     * Meta event deleted
      */
-    200: {
-        data: Event;
-    };
+    200: unknown;
 };
-
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses];
 
 export type GetV1UsersUserIdCalendarEventsMetaMetaIdData = {
     body?: never;
@@ -1031,14 +1064,14 @@ export type GetV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
      * Event
      */
     200: {
-        data: Event;
+        data: MetaEvent;
     };
 };
 
 export type GetV1UsersUserIdCalendarEventsMetaMetaIdResponse = GetV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof GetV1UsersUserIdCalendarEventsMetaMetaIdResponses];
 
 export type PutV1UsersUserIdCalendarEventsMetaMetaIdData = {
-    body?: UpdateEvent;
+    body?: UpdateMetaEvent;
     path: {
         metaId: string;
         userId: string;
@@ -1070,10 +1103,10 @@ export type PutV1UsersUserIdCalendarEventsMetaMetaIdError = PutV1UsersUserIdCale
 
 export type PutV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     /**
-     * Event updated
+     * Meta event updated
      */
     200: {
-        data: Event;
+        data: MetaEvent;
     };
 };
 
@@ -1283,6 +1316,163 @@ export type GetV1UsersUserIdOauthResponses = {
 
 export type GetV1UsersUserIdOauthResponse = GetV1UsersUserIdOauthResponses[keyof GetV1UsersUserIdOauthResponses];
 
+export type GetV1UsersUserIdOauthLinksData = {
+    body?: never;
+    path: {
+        userId: string;
+    };
+    query: {
+        /**
+         * Access type of the oauth connection
+         */
+        accessType: 'offline' | 'online';
+        /**
+         * Scope of the oauth connection
+         */
+        scope: Array<string> | 'edit' | 'free-busy';
+        provider?: Array<'google' | 'microsoft'>;
+    };
+    url: '/v1/users/{userId}/oauth/links';
+};
+
+export type GetV1UsersUserIdOauthLinksErrors = {
+    /**
+     * Invalid request
+     */
+    400: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found
+     */
+    404: {
+        data: null;
+        error: string;
+    };
+};
+
+export type GetV1UsersUserIdOauthLinksError = GetV1UsersUserIdOauthLinksErrors[keyof GetV1UsersUserIdOauthLinksErrors];
+
+export type GetV1UsersUserIdOauthLinksResponses = {
+    /**
+     * Auth urls for the oauth providers
+     */
+    200: {
+        data: Array<{
+            /**
+             * Auth url for the user to connect to the oauth provider
+             */
+            link: string;
+            provider: 'google' | 'microsoft';
+        }>;
+    };
+};
+
+export type GetV1UsersUserIdOauthLinksResponse = GetV1UsersUserIdOauthLinksResponses[keyof GetV1UsersUserIdOauthLinksResponses];
+
+export type GetV1UsersUserIdOauthProviderLinkData = {
+    body?: never;
+    path: {
+        provider: 'google' | 'microsoft';
+        userId: string;
+    };
+    query: {
+        /**
+         * Access type of the oauth connection
+         */
+        accessType: 'offline' | 'online';
+        /**
+         * Scope of the oauth connection
+         */
+        scope: Array<string> | 'edit' | 'free-busy';
+        /**
+         * Redirect url for the oauth provider
+         */
+        redirectUrl?: string;
+    };
+    url: '/v1/users/{userId}/oauth/{provider}/link';
+};
+
+export type GetV1UsersUserIdOauthProviderLinkErrors = {
+    /**
+     * Invalid request
+     */
+    400: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found
+     */
+    404: {
+        data: null;
+        error: string;
+    };
+};
+
+export type GetV1UsersUserIdOauthProviderLinkError = GetV1UsersUserIdOauthProviderLinkErrors[keyof GetV1UsersUserIdOauthProviderLinkErrors];
+
+export type GetV1UsersUserIdOauthProviderLinkResponses = {
+    /**
+     * Auth url for the oauth provider
+     */
+    200: {
+        data: {
+            /**
+             * Auth url for the user to connect to the oauth provider
+             */
+            link: string;
+        };
+    };
+};
+
+export type GetV1UsersUserIdOauthProviderLinkResponse = GetV1UsersUserIdOauthProviderLinkResponses[keyof GetV1UsersUserIdOauthProviderLinkResponses];
+
+export type PostV1UsersOauthProviderVerifyData = {
+    body?: {
+        code: string;
+        scope: Array<string>;
+        state: string;
+    };
+    path: {
+        provider: 'google' | 'microsoft';
+    };
+    query?: {
+        /**
+         * Redirect url for the oauth provider
+         */
+        redirectUrl?: string;
+    };
+    url: '/v1/users/oauth/{provider}/verify';
+};
+
+export type PostV1UsersOauthProviderVerifyErrors = {
+    /**
+     * Invalid request
+     */
+    400: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found
+     */
+    404: {
+        data: null;
+        error: string;
+    };
+};
+
+export type PostV1UsersOauthProviderVerifyError = PostV1UsersOauthProviderVerifyErrors[keyof PostV1UsersOauthProviderVerifyErrors];
+
+export type PostV1UsersOauthProviderVerifyResponses = {
+    /**
+     * OAuth code verified successfully
+     */
+    200: unknown;
+};
+
 export type DeleteV1UsersUserIdOauthProviderData = {
     body?: never;
     path: {
@@ -1395,155 +1585,6 @@ export type PostV1UsersUserIdOauthProviderResponses = {
 };
 
 export type PostV1UsersUserIdOauthProviderResponse = PostV1UsersUserIdOauthProviderResponses[keyof PostV1UsersUserIdOauthProviderResponses];
-
-export type GetV1UsersUserIdOauthLinksData = {
-    body?: never;
-    path: {
-        userId: string;
-    };
-    query: {
-        /**
-         * Access type of the oauth connection
-         */
-        accessType: 'offline' | 'online';
-        /**
-         * Scope of the oauth connection
-         */
-        scope: Array<string> | 'edit' | 'free-busy';
-        provider?: Array<'google' | 'microsoft'>;
-    };
-    url: '/v1/users/{userId}/oauth/links';
-};
-
-export type GetV1UsersUserIdOauthLinksErrors = {
-    /**
-     * Invalid request
-     */
-    400: {
-        data: null;
-        error: string;
-    };
-    /**
-     * User not found
-     */
-    404: {
-        data: null;
-        error: string;
-    };
-};
-
-export type GetV1UsersUserIdOauthLinksError = GetV1UsersUserIdOauthLinksErrors[keyof GetV1UsersUserIdOauthLinksErrors];
-
-export type GetV1UsersUserIdOauthLinksResponses = {
-    /**
-     * Auth urls for the oauth providers
-     */
-    200: {
-        data: AuthConnection;
-    };
-};
-
-export type GetV1UsersUserIdOauthLinksResponse = GetV1UsersUserIdOauthLinksResponses[keyof GetV1UsersUserIdOauthLinksResponses];
-
-export type GetV1UsersUserIdOauthProviderLinkData = {
-    body?: never;
-    path: {
-        provider: 'google' | 'microsoft';
-        userId: string;
-    };
-    query: {
-        /**
-         * Access type of the oauth connection
-         */
-        accessType: 'offline' | 'online';
-        /**
-         * Scope of the oauth connection
-         */
-        scope: Array<string> | 'edit' | 'free-busy';
-        /**
-         * Redirect url for the oauth provider
-         */
-        redirectUrl?: string;
-    };
-    url: '/v1/users/{userId}/oauth/{provider}/link';
-};
-
-export type GetV1UsersUserIdOauthProviderLinkErrors = {
-    /**
-     * Invalid request
-     */
-    400: {
-        data: null;
-        error: string;
-    };
-    /**
-     * User not found
-     */
-    404: {
-        data: null;
-        error: string;
-    };
-};
-
-export type GetV1UsersUserIdOauthProviderLinkError = GetV1UsersUserIdOauthProviderLinkErrors[keyof GetV1UsersUserIdOauthProviderLinkErrors];
-
-export type GetV1UsersUserIdOauthProviderLinkResponses = {
-    /**
-     * Auth url for the oauth provider
-     */
-    200: {
-        /**
-         * Auth url for the user to connect to the oauth provider
-         */
-        data: string;
-    };
-};
-
-export type GetV1UsersUserIdOauthProviderLinkResponse = GetV1UsersUserIdOauthProviderLinkResponses[keyof GetV1UsersUserIdOauthProviderLinkResponses];
-
-export type PostV1UsersOauthProviderVerifyData = {
-    body?: {
-        code: string;
-        scope: Array<string>;
-        state: string;
-    };
-    path: {
-        provider: 'google' | 'microsoft';
-    };
-    query?: {
-        /**
-         * Redirect url for the oauth provider
-         */
-        redirectUrl?: string;
-    };
-    url: '/v1/users/oauth/{provider}/verify';
-};
-
-export type PostV1UsersOauthProviderVerifyErrors = {
-    /**
-     * Invalid request
-     */
-    400: {
-        data: null;
-        error: string;
-    };
-    /**
-     * User not found
-     */
-    404: {
-        data: null;
-        error: string;
-    };
-};
-
-export type PostV1UsersOauthProviderVerifyError = PostV1UsersOauthProviderVerifyErrors[keyof PostV1UsersOauthProviderVerifyErrors];
-
-export type PostV1UsersOauthProviderVerifyResponses = {
-    /**
-     * OAuth code verified successfully
-     */
-    200: unknown;
-};
 
 export type GetV1UsersUserIdOauthProviderTokenData = {
     body?: never;
