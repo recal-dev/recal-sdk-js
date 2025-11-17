@@ -94,18 +94,17 @@ export const zEvent = z.object({
         z.object({
             email: z.string(),
             original: z.unknown(),
-            responseStatus: z.union([
-                z.literal('accepted'),
-                z.literal('declined'),
-                z.literal('needsAction'),
-                z.literal('tentative'),
-                z.unknown()
-            ])
+            self: z.literal(true)
         }),
         z.object({
             email: z.string(),
             original: z.unknown(),
-            self: z.literal(true)
+            responseStatus: z.optional(z.enum([
+                'accepted',
+                'declined',
+                'needsAction',
+                'tentative'
+            ]))
         })
     ])),
     calendarId: z.string(),
@@ -131,18 +130,17 @@ export const zMetaEvent = z.object({
         z.object({
             email: z.string(),
             originals: z.array(z.unknown()),
-            responseStatus: z.union([
-                z.literal('accepted'),
-                z.literal('declined'),
-                z.literal('needsAction'),
-                z.literal('tentative'),
-                z.unknown()
-            ])
+            self: z.literal(true)
         }),
         z.object({
             email: z.string(),
             originals: z.array(z.unknown()),
-            self: z.literal(true)
+            responseStatus: z.optional(z.enum([
+                'accepted',
+                'declined',
+                'needsAction',
+                'tentative'
+            ]))
         })
     ])),
     originals: z.array(z.unknown()),

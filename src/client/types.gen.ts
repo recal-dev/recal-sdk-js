@@ -77,11 +77,11 @@ export type Event = {
     attendees: Array<{
         email: string;
         original: unknown;
-        responseStatus: 'accepted' | 'declined' | 'needsAction' | 'tentative' | unknown;
+        self: true;
     } | {
         email: string;
         original: unknown;
-        self: true;
+        responseStatus?: 'accepted' | 'declined' | 'needsAction' | 'tentative';
     }>;
     calendarId: string;
     id: string;
@@ -104,11 +104,11 @@ export type MetaEvent = {
     attendees: Array<{
         email: string;
         originals: Array<unknown>;
-        responseStatus: 'accepted' | 'declined' | 'needsAction' | 'tentative' | unknown;
+        self: true;
     } | {
         email: string;
         originals: Array<unknown>;
-        self: true;
+        responseStatus?: 'accepted' | 'declined' | 'needsAction' | 'tentative';
     }>;
     originals: Array<unknown>;
     description?: string;
