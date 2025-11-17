@@ -75,6 +75,9 @@ const timeRangeSchemaResponseTransformer = (data: any) => {
     return data;
 };
 
+// Manual: HeyAPI couldn't generate transformer for Calendar schema
+const calendarSchemaResponseTransformer = (data: any) => data;
+
 export const getV1OrganizationsOrgSlugCalendarBusyResponseTransformer = async (data: any): Promise<GetV1OrganizationsOrgSlugCalendarBusyResponse> => {
     data.data = data.data.map((item: any) => {
         return timeRangeSchemaResponseTransformer(item);
