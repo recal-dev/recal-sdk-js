@@ -34,7 +34,7 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(15, 0, 0, 0)
 
-        const event = await testClient.client.events.create(
+        const event = await testClient.client.events.createMetaEvent(
             testUserId,
             {
                 subject: 'Test Meeting',
@@ -47,11 +47,11 @@ describe('Events Integration Tests', () => {
         )
 
         expect(event).toBeDefined()
-        expect(Array.isArray(event)).toBe(true)
+        expect(typeof event).toBe('object')
 
         // Track the event for cleanup
-        if (event.length > 0 && event[0].metaId) {
-            testClient.trackEventMetaId(testUserId, event[0].metaId)
+        if (event.metaId) {
+            testClient.trackEventMetaId(testUserId, event.metaId)
         }
     })
 
@@ -68,7 +68,7 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(11, 0, 0, 0)
 
-        const created = await testClient.client.events.create(
+        const created = await testClient.client.events.createMetaEvent(
             testUserId,
             {
                 subject: 'Get Test Event',
@@ -78,15 +78,15 @@ describe('Events Integration Tests', () => {
             { provider: ['google'] }
         )
 
-        if (created.length > 0 && created[0].metaId) {
-            const metaId = created[0].metaId
+        if (created.metaId) {
+            const metaId = created.metaId
             testClient.trackEventMetaId(testUserId, metaId)
 
-            const event = await testClient.client.events.get(testUserId, metaId)
+            const event = await testClient.client.events.getMetaEvent(testUserId, metaId)
 
             expect(event).toBeDefined()
-            expect(Array.isArray(event)).toBe(true)
-            expect(event.length).toBeGreaterThan(0)
+            expect(typeof event).toBe('object')
+            expect(event.metaId).toBe(metaId)
         }
     })
 
@@ -103,7 +103,7 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(17, 0, 0, 0)
 
-        const created = await testClient.client.events.create(
+        const created = await testClient.client.events.createMetaEvent(
             testUserId,
             {
                 subject: 'Original Subject',
@@ -113,17 +113,18 @@ describe('Events Integration Tests', () => {
             { provider: ['google'] }
         )
 
-        if (created.length > 0 && created[0].metaId) {
-            const metaId = created[0].metaId
+        if (created.metaId) {
+            const metaId = created.metaId
             testClient.trackEventMetaId(testUserId, metaId)
 
-            const updated = await testClient.client.events.update(testUserId, metaId, {
+            const updated = await testClient.client.events.updateMetaEvent(testUserId, metaId, {
                 subject: 'Updated Subject',
                 sendNotifications: false,
             })
 
             expect(updated).toBeDefined()
-            expect(Array.isArray(updated)).toBe(true)
+            expect(typeof updated).toBe('object')
+            expect(updated.subject).toBe('Updated Subject')
         }
     })
 
@@ -140,7 +141,7 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(10, 0, 0, 0)
 
-        const created = await testClient.client.events.create(
+        const created = await testClient.client.events.createMetaEvent(
             testUserId,
             {
                 subject: 'Event to Delete',
@@ -150,10 +151,10 @@ describe('Events Integration Tests', () => {
             { provider: ['google'] }
         )
 
-        if (created.length > 0 && created[0].metaId) {
-            const metaId = created[0].metaId
+        if (created.metaId) {
+            const metaId = created.metaId
 
-            const deleted = await testClient.client.events.delete(testUserId, metaId)
+            const deleted = await testClient.client.events.deleteMetaEvent(testUserId, metaId)
 
             expect(deleted).toBeDefined()
             // Event is deleted, so don't track it for cleanup
@@ -172,7 +173,7 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(12, 0, 0, 0)
 
-        const event = await testClient.client.events.createForCalendar(testUserId, 'google', 'primary', {
+        const event = await testClient.client.events.createEvent(testUserId, 'google', 'primary', {
             subject: 'Calendar Specific Event',
             start: tomorrow.toISOString(),
             end: endTime.toISOString(),
@@ -200,14 +201,15 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(14, 0, 0, 0)
 
-        const created = await testClient.client.events.createForCalendar(testUserId, 'google', 'primary', {
+        const created = await testClient.client.events.createEvent(testUserId, 'google', 'primary', {
             subject: 'Event to Retrieve',
             start: tomorrow.toISOString(),
             end: endTime.toISOString(),
+            attendees: [],
         })
 
         if (created.id) {
-            const event = await testClient.client.events.getFromCalendar(testUserId, 'google', 'primary', created.id)
+            const event = await testClient.client.events.getEvent(testUserId, 'google', 'primary', created.id)
 
             expect(event).toBeDefined()
             expect(event.id).toBe(created.id)
@@ -231,14 +233,14 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(16, 0, 0, 0)
 
-        const created = await testClient.client.events.createForCalendar(testUserId, 'google', 'primary', {
+        const created = await testClient.client.events.createEvent(testUserId, 'google', 'primary', {
             subject: 'Event to Update',
             start: tomorrow.toISOString(),
             end: endTime.toISOString(),
         })
 
         if (created.id) {
-            const updated = await testClient.client.events.updateForCalendar(
+            const updated = await testClient.client.events.updateEvent(
                 testUserId,
                 'google',
                 'primary',
@@ -271,14 +273,14 @@ describe('Events Integration Tests', () => {
         const endTime = new Date(tomorrow)
         endTime.setHours(18, 0, 0, 0)
 
-        const created = await testClient.client.events.createForCalendar(testUserId, 'google', 'primary', {
+        const created = await testClient.client.events.createEvent(testUserId, 'google', 'primary', {
             subject: 'Event to Delete from Calendar',
             start: tomorrow.toISOString(),
             end: endTime.toISOString(),
         })
 
         if (created.id) {
-            const deleted = await testClient.client.events.deleteFromCalendar(
+            const deleted = await testClient.client.events.deleteEvent(
                 testUserId,
                 'google',
                 'primary',

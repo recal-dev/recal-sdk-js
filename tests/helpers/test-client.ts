@@ -83,7 +83,7 @@ export class TestClient {
         for (const [userId, metaIds] of this.createdEventMetaIds.entries()) {
             for (const metaId of metaIds) {
                 try {
-                    await this.sdk.events.delete(userId, metaId)
+                    await this.sdk.events.deleteMetaEvent(userId, metaId)
                 } catch (err) {
                     if (testConfig.ignoreCleanupErrors) {
                         console.warn(`Failed to delete event ${metaId}:`, err)

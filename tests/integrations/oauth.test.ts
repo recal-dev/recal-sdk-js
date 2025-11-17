@@ -79,28 +79,30 @@ describe('OAuth Integration Tests', () => {
     })
 
     test('should get authorization link for a single provider', async () => {
-        const link = await testClient.client.oauth.getAuthLink(testUserId, 'google', {
+        const response = await testClient.client.oauth.getAuthLink(testUserId, 'google', {
             accessType: 'offline',
             scope: 'edit',
         })
 
-        expect(link).toBeDefined()
-        expect(typeof link).toBe('string')
-        expect(link.length).toBeGreaterThan(0)
-        expect(link).toContain('http') // Should be a URL
+        expect(response).toBeDefined()
+        expect(typeof response).toBe('object')
+        expect(response.link).toBeDefined()
+        expect(typeof response.link).toBe('string')
+        expect(response.link).toContain('http') // Should be a URL
     })
 
     test('should get authorization link with redirect URL', async () => {
-        const link = await testClient.client.oauth.getAuthLink(testUserId, 'microsoft', {
+        const response = await testClient.client.oauth.getAuthLink(testUserId, 'microsoft', {
             accessType: 'offline',
             scope: 'edit',
             redirectUrl: 'https://example.com/oauth/callback',
         })
 
-        expect(link).toBeDefined()
-        expect(typeof link).toBe('string')
-        expect(link.length).toBeGreaterThan(0)
-        expect(link).toContain('http')
+        expect(response).toBeDefined()
+        expect(typeof response).toBe('object')
+        expect(response.link).toBeDefined()
+        expect(typeof response.link).toBe('string')
+        expect(response.link).toContain('http')
     })
 
     test('should handle expired access token gracefully', async () => {
