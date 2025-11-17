@@ -68,15 +68,21 @@ export type Calendar = {
 };
 
 /**
- * Recal Normalized Attendee
- */
-export type Attendee = Attendee;
-
-/**
  * Recal Normalized Event
  */
 export type Event = {
-    attendees: Array<Attendee>;
+    /**
+     * Recal Normalized Attendee
+     */
+    attendees: Array<{
+        email: string;
+        original: unknown;
+        responseStatus: 'accepted' | 'declined' | 'needsAction' | 'tentative' | unknown;
+    } | {
+        email: string;
+        original: unknown;
+        self: true;
+    }>;
     calendarId: string;
     id: string;
     original: unknown;
@@ -89,15 +95,21 @@ export type Event = {
 };
 
 /**
- * Recal Normalized Meta Event Attendee
- */
-export type MetaEventAttendee = MetaEventAttendee;
-
-/**
  * Recal Normalized Meta Event
  */
 export type MetaEvent = {
-    attendees: Array<MetaEventAttendee>;
+    /**
+     * Recal Normalized Meta Event Attendee
+     */
+    attendees: Array<{
+        email: string;
+        originals: Array<unknown>;
+        responseStatus: 'accepted' | 'declined' | 'needsAction' | 'tentative' | unknown;
+    } | {
+        email: string;
+        originals: Array<unknown>;
+        self: true;
+    }>;
     originals: Array<unknown>;
     description?: string;
     end?: Date;
@@ -1642,7 +1654,6 @@ export type GetV1UsersUserIdSchedulingData = {
          * Padding in minutes to add before and after busy times
          */
         padding: string | unknown;
-        provider: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
         /**
          * Duration of each slot in minutes
          */
@@ -1663,6 +1674,7 @@ export type GetV1UsersUserIdSchedulingData = {
          * An integer >= 0 (default: 0)
          */
         maxOverlaps?: string | unknown;
+        provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
     };
     url: '/v1/users/{userId}/scheduling';
 };

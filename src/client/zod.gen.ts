@@ -87,17 +87,27 @@ export const zCalendar = z.object({
 });
 
 /**
- * Recal Normalized Attendee
- */
-export const zAttendee = z.lazy((): any => {
-    return zAttendee;
-});
-
-/**
  * Recal Normalized Event
  */
 export const zEvent = z.object({
-    attendees: z.array(zAttendee),
+    attendees: z.array(z.union([
+        z.object({
+            email: z.string(),
+            original: z.unknown(),
+            responseStatus: z.union([
+                z.literal('accepted'),
+                z.literal('declined'),
+                z.literal('needsAction'),
+                z.literal('tentative'),
+                z.unknown()
+            ])
+        }),
+        z.object({
+            email: z.string(),
+            original: z.unknown(),
+            self: z.literal(true)
+        })
+    ])),
     calendarId: z.string(),
     id: z.string(),
     original: z.unknown(),
@@ -114,17 +124,27 @@ export const zEvent = z.object({
 });
 
 /**
- * Recal Normalized Meta Event Attendee
- */
-export const zMetaEventAttendee = z.lazy((): any => {
-    return zMetaEventAttendee;
-});
-
-/**
  * Recal Normalized Meta Event
  */
 export const zMetaEvent = z.object({
-    attendees: z.array(zMetaEventAttendee),
+    attendees: z.array(z.union([
+        z.object({
+            email: z.string(),
+            originals: z.array(z.unknown()),
+            responseStatus: z.union([
+                z.literal('accepted'),
+                z.literal('declined'),
+                z.literal('needsAction'),
+                z.literal('tentative'),
+                z.unknown()
+            ])
+        }),
+        z.object({
+            email: z.string(),
+            originals: z.array(z.unknown()),
+            self: z.literal(true)
+        })
+    ])),
     originals: z.array(z.unknown()),
     description: z.optional(z.string()),
     end: z.optional(z.iso.datetime({
@@ -1068,14 +1088,6 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
             z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
             z.unknown()
         ]),
-        provider: z.union([
-            z.array(z.enum([
-                'google',
-                'microsoft'
-            ])),
-            z.literal('google'),
-            z.literal('microsoft')
-        ]),
         slotDuration: z.union([
             z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
             z.unknown()
@@ -1086,6 +1098,14 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
         maxOverlaps: z.optional(z.union([
             z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
             z.unknown()
+        ])),
+        provider: z.optional(z.union([
+            z.array(z.enum([
+                'google',
+                'microsoft'
+            ])),
+            z.literal('google'),
+            z.literal('microsoft')
         ]))
     })
 });
