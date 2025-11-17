@@ -1896,10 +1896,7 @@ export type PostV1UsersSchedulingResponses = {
      * Available time slots for each user
      */
     200: {
-        data: {
-            error: string;
-            userId: string;
-        } | Array<{
+        data: Array<{
             availableSlots: Array<TimeRange>;
             options: {
                 /**
@@ -1944,6 +1941,9 @@ export type PostV1UsersSchedulingResponses = {
                  */
                 start: string;
             }>;
+        } | {
+            error: string;
+            userId: string;
         }>;
     };
 };

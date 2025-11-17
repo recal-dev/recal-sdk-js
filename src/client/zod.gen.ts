@@ -1248,12 +1248,8 @@ export const zPostV1UsersSchedulingData = z.object({
  * Available time slots for each user
  */
 export const zPostV1UsersSchedulingResponse = z.object({
-    data: z.union([
+    data: z.array(z.union([
         z.object({
-            error: z.string(),
-            userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
-        }),
-        z.array(z.object({
             availableSlots: z.array(zTimeRange),
             options: z.object({
                 end: z.iso.datetime({
@@ -1283,6 +1279,10 @@ export const zPostV1UsersSchedulingResponse = z.object({
                 end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
                 start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
             })))
-        }))
-    ])
+        }),
+        z.object({
+            error: z.string(),
+            userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        })
+    ]))
 });
