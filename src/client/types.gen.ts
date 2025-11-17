@@ -1037,8 +1037,14 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     /**
      * Meta event deleted
      */
-    200: unknown;
+    200: {
+        data: {
+            success: true;
+        };
+    };
 };
+
+export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses];
 
 export type GetV1UsersUserIdCalendarEventsMetaMetaIdData = {
     body?: never;
@@ -1201,7 +1207,9 @@ export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses 
      * Event deleted
      */
     200: {
-        data: Event;
+        data: {
+            success: true;
+        };
     };
 };
 

@@ -747,6 +747,15 @@ export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     }))
 });
 
+/**
+ * Meta event deleted
+ */
+export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = z.object({
+    data: z.object({
+        success: z.literal(true)
+    })
+});
+
 export const zGetV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
@@ -835,7 +844,9 @@ export const zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z
  * Event deleted
  */
 export const zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = z.object({
-    data: zEvent
+    data: z.object({
+        success: z.literal(true)
+    })
 });
 
 export const zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.object({
