@@ -21,11 +21,11 @@ export type {
     /**
      * Create event across calendars payload
      */
-    CreateEventAcrossCalendars,
+    CreateMetaEvent,
     DeleteV1OrganizationsOrgSlugData,
     DeleteV1OrganizationsOrgSlugResponse,
     DeleteV1UsersUserIdCalendarEventsMetaMetaIdData,
-    DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse,
+    DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses,
     DeleteV1UsersUserIdData,
     DeleteV1UsersUserIdResponse,
     /**

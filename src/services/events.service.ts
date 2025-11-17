@@ -2,7 +2,7 @@ import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
     CreateEvent,
-    CreateEventAcrossCalendars,
+    CreateMetaEvent,
     PostV1UsersUserIdCalendarEventsMetaData,
     UpdateEvent,
 } from '../client/types.gen'
@@ -25,7 +25,7 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const event = await recal.events.create('user-123', {
+     * const event = await recal.events.createMetaEvent('user-123', {
      *   subject: 'Team Meeting',
      *   start: '2024-01-15T10:00:00Z',
      *   end: '2024-01-15T11:00:00Z',
@@ -34,9 +34,9 @@ export class EventsService {
      * }, { provider: ['google'] })
      * ```
      */
-    async create(
+    async createMetaEvent(
         userId: string,
-        event: CreateEventAcrossCalendars,
+        event: CreateMetaEvent,
         options?: PostV1UsersUserIdCalendarEventsMetaData['query']
     ) {
         const response = await sdk.postV1UsersUserIdCalendarEventsMeta({
@@ -57,10 +57,10 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const event = await recal.events.get('user-123', 'meta-456')
+     * const event = await recal.events.getMetaEvent('user-123', 'meta-456')
      * ```
      */
-    async get(
+    async getMetaEvent(
         userId: string,
         metaId: string,
         options?: { provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft' }
@@ -83,13 +83,13 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const updated = await recal.events.update('user-123', 'meta-456', {
+     * const updated = await recal.events.updateMetaEvent('user-123', 'meta-456', {
      *   subject: 'Updated Meeting',
      *   sendNotifications: true
      * })
      * ```
      */
-    async update(
+    async updateMetaEvent(
         userId: string,
         metaId: string,
         event: UpdateEvent,
@@ -113,10 +113,10 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * await recal.events.delete('user-123', 'meta-456')
+     * await recal.events.deleteMetaEvent('user-123', 'meta-456')
      * ```
      */
-    async delete(
+    async deleteMetaEvent(
         userId: string,
         metaId: string,
         options?: { provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft' }
@@ -130,7 +130,7 @@ export class EventsService {
     }
 
     /**
-     * Create an event for a specific calendar and provider
+     * Create an event in a specific calendar
      *
      * @param userId - The user ID
      * @param provider - The calendar provider
@@ -139,7 +139,7 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const event = await recal.events.createForCalendar(
+     * const event = await recal.events.createEvent(
      *   'user-123',
      *   'google',
      *   'primary',
@@ -152,7 +152,7 @@ export class EventsService {
      * )
      * ```
      */
-    async createForCalendar(userId: string, provider: 'google' | 'microsoft', calendarId: string, event: CreateEvent) {
+    async createEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, event: CreateEvent) {
         const response = await sdk.postV1UsersUserIdCalendarEventsProviderCalendarId({
             path: { userId, provider, calendarId },
             body: event,
@@ -171,7 +171,7 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const event = await recal.events.getFromCalendar(
+     * const event = await recal.events.getEvent(
      *   'user-123',
      *   'google',
      *   'primary',
@@ -179,7 +179,7 @@ export class EventsService {
      * )
      * ```
      */
-    async getFromCalendar(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
+    async getEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
         const response = await sdk.getV1UsersUserIdCalendarEventsProviderCalendarIdEventId({
             path: { userId, provider, calendarId, eventId },
             client: this.client,
@@ -198,7 +198,7 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * const updated = await recal.events.updateForCalendar(
+     * const updated = await recal.events.updateEvent(
      *   'user-123',
      *   'google',
      *   'primary',
@@ -207,7 +207,7 @@ export class EventsService {
      * )
      * ```
      */
-    async updateForCalendar(
+    async updateEvent(
         userId: string,
         provider: 'google' | 'microsoft',
         calendarId: string,
@@ -232,7 +232,7 @@ export class EventsService {
      *
      * @example
      * ```typescript
-     * await recal.events.deleteFromCalendar(
+     * await recal.events.deleteEvent(
      *   'user-123',
      *   'google',
      *   'primary',
@@ -240,7 +240,7 @@ export class EventsService {
      * )
      * ```
      */
-    async deleteFromCalendar(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
+    async deleteEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
         const response = await sdk.deleteV1UsersUserIdCalendarEventsProviderCalendarIdEventId({
             path: { userId, provider, calendarId, eventId },
             client: this.client,
