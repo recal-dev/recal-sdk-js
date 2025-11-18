@@ -112,7 +112,7 @@ describe('Organization Integration Tests', () => {
         const result = await testClient.client.organizations.addMembers(memberOrgSlug, [userId])
 
         expect(result).toBeDefined()
-        expect(Array.isArray(result)).toBe(true)
+        expect(result).toStartWith('1 users added successfully to')
     })
 
     test('should remove members from an organization', async () => {
@@ -127,7 +127,7 @@ describe('Organization Integration Tests', () => {
         const result = await testClient.client.organizations.removeMembers(memberOrgSlug, [userId])
 
         expect(result).toBeDefined()
-        expect(Array.isArray(result)).toBe(true)
+        expect(result).toStartWith('Users removed successfully from')
     })
 
     test('should get busy times for an organization', async () => {
@@ -158,27 +158,38 @@ describe('Organization Integration Tests', () => {
     })
 
     test('should get scheduling slots for an organization', async () => {
+        // Create a user with OAuth for scheduling to work
+        const schedulingUserId = testClient.generateTestId('org', 'scheduling-user')
+        await testClient.client.users.create(schedulingUserId, [primaryOrgSlug])
+        await testClient.setupOAuthForUser(schedulingUserId)
+
         const now = new Date()
         const startDate = new Date(now.getTime() + 24 * 60 * 60 * 1000) // Tomorrow
         const endDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
 
-        const slots = await testClient.client.organizations.getScheduling(primaryOrgSlug, {
+        const result = await testClient.client.organizations.getScheduling(primaryOrgSlug, {
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             slotDuration: '30',
             padding: '15',
         })
 
-        expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(result).toBeDefined()
+        expect(result.availableSlots).toBeDefined()
+        expect(Array.isArray(result.availableSlots)).toBe(true)
     })
 
     test('should get scheduling slots with provider filter', async () => {
+        // Create a user with OAuth for scheduling to work
+        const schedulingUserId = testClient.generateTestId('org', 'scheduling-user-provider')
+        await testClient.client.users.create(schedulingUserId, [primaryOrgSlug])
+        await testClient.setupOAuthForUser(schedulingUserId)
+
         const now = new Date()
         const startDate = new Date(now.getTime() + 24 * 60 * 60 * 1000)
         const endDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
 
-        const slots = await testClient.client.organizations.getScheduling(primaryOrgSlug, {
+        const result = await testClient.client.organizations.getScheduling(primaryOrgSlug, {
             start: startDate.toISOString(),
             end: endDate.toISOString(),
             slotDuration: '60',
@@ -186,7 +197,8 @@ describe('Organization Integration Tests', () => {
             provider: 'google',
         })
 
-        expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(result).toBeDefined()
+        expect(result.availableSlots).toBeDefined()
+        expect(Array.isArray(result.availableSlots)).toBe(true)
     })
 })

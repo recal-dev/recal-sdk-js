@@ -5,7 +5,6 @@ describe('Calendar Integration Tests', () => {
     const testClient = new TestClient()
 
     let testUserId: string
-    let hasOAuth = false
 
     beforeAll(async () => {
         await testClient.setup()
@@ -15,7 +14,7 @@ describe('Calendar Integration Tests', () => {
         await testClient.client.users.create(testUserId)
 
         // Set up OAuth connection using refresh token from environment
-        hasOAuth = await testClient.setupOAuthForUser(testUserId, 'google')
+        await testClient.setupOAuthForUser(testUserId, 'google')
     })
 
     afterAll(async () => {
@@ -23,10 +22,6 @@ describe('Calendar Integration Tests', () => {
     })
 
     test('should list calendars for a user', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured')
-            return
-        }
         const calendars = await testClient.client.calendar.list(testUserId)
 
         expect(calendars).toBeDefined()
@@ -35,10 +30,6 @@ describe('Calendar Integration Tests', () => {
     })
 
     test('should get busy times for a user', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured')
-            return
-        }
         const now = new Date()
         const endDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
 
@@ -52,10 +43,6 @@ describe('Calendar Integration Tests', () => {
     })
 
     test('should list events for a user', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured')
-            return
-        }
         const now = new Date()
         const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
 

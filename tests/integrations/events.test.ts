@@ -5,7 +5,6 @@ describe('Events Integration Tests', () => {
     const testClient = new TestClient()
 
     let testUserId: string
-    let hasOAuth = false
 
     beforeAll(async () => {
         await testClient.setup()
@@ -15,7 +14,7 @@ describe('Events Integration Tests', () => {
         await testClient.client.users.create(testUserId)
 
         // Set up OAuth connection using refresh token from environment
-        hasOAuth = await testClient.setupOAuthForUser(testUserId, 'google')
+        await testClient.setupOAuthForUser(testUserId, 'google')
     })
 
     afterAll(async () => {
@@ -23,10 +22,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should create an event across calendars', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured')
-            return
-        }
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 1)
         tomorrow.setHours(14, 0, 0, 0)
@@ -56,10 +51,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should get an event by metaId', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 2)
@@ -91,10 +82,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should update an event by metaId', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 3)
@@ -129,10 +116,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should delete an event by metaId', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 4)
@@ -162,10 +145,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should create an event for a specific calendar', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 5)
         tomorrow.setHours(11, 0, 0, 0)
@@ -189,10 +168,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should get an event from a specific calendar', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 6)
@@ -221,10 +196,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should update an event in a specific calendar', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 7)
@@ -261,10 +232,6 @@ describe('Events Integration Tests', () => {
     })
 
     test('should delete an event from a specific calendar', async () => {
-        if (!hasOAuth) {
-            console.log('Skipping: OAuth not configured');
-            return;
-        }
         // Create an event first
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 8)
