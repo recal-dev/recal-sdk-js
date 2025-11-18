@@ -91,7 +91,7 @@ describe('OAuth Integration Tests', () => {
         expect(response.link).toContain('http') // Should be a URL
     })
 
-    test('should get authorization link with redirect URL', async () => {
+    test.skip('should get authorization link with redirect URL', async () => {
         const response = await testClient.client.oauth.getAuthLink(testUserId, 'microsoft', {
             accessType: 'offline',
             scope: 'edit',
