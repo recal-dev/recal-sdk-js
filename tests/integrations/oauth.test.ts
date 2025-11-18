@@ -35,19 +35,24 @@ describe('OAuth Integration Tests', () => {
         expect(Array.isArray(connections)).toBe(true)
     })
 
-    test('should get a specific OAuth connection', async () => {
-        const connection = await testClient.client.oauth.get(testUserId, 'google')
+    test('should create and retrieve an OAuth connection', async () => {
+        // First create the connection
+        const hasOAuth = await testClient.setupOAuthForUser(testUserId, 'google')
+        expect(hasOAuth).toBe(true)
 
-        // With OAuth credentials, should return the connection or null
-        expect(connection !== undefined).toBe(true)
+        // Then verify we can retrieve it
+        const connection = await testClient.client.oauth.get(testUserId, 'google')
+        expect(connection).toBeDefined()
     })
 
-    test('should get OAuth connection with showToken option', async () => {
+    test('should retrieve OAuth connection with showToken option', async () => {
+        // Connection already created in previous test, just retrieve with showToken
         const connection = await testClient.client.oauth.get(testUserId, 'google', {
             showToken: 'true',
         })
 
-        expect(connection !== undefined).toBe(true)
+        expect(connection).toBeDefined()
+        // When showToken is true, we should get token information
     })
 
     test('should get authorization links for all providers', async () => {
