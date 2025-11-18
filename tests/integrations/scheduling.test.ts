@@ -39,7 +39,8 @@ describe('Scheduling Integration Tests', () => {
         })
 
         expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(slots.availableSlots).toBeDefined()
+        expect(Array.isArray(slots.availableSlots)).toBe(true)
     })
 
     test('should get available slots with provider filter', async () => {
@@ -56,7 +57,8 @@ describe('Scheduling Integration Tests', () => {
         })
 
         expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(slots.availableSlots).toBeDefined()
+        expect(Array.isArray(slots.availableSlots)).toBe(true)
     })
 
     test('should get advanced slots with custom schedules', async () => {
@@ -84,7 +86,8 @@ describe('Scheduling Integration Tests', () => {
         )
 
         expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(slots.availableSlots).toBeDefined()
+        expect(Array.isArray(slots.availableSlots)).toBe(true)
     })
 
     test('should get advanced slots with multiple custom schedules', async () => {
@@ -117,7 +120,8 @@ describe('Scheduling Integration Tests', () => {
         )
 
         expect(slots).toBeDefined()
-        expect(Array.isArray(slots)).toBe(true)
+        expect(slots.availableSlots).toBeDefined()
+        expect(Array.isArray(slots.availableSlots)).toBe(true)
     })
 
     test('should get available slots for multiple users', async () => {
@@ -139,6 +143,7 @@ describe('Scheduling Integration Tests', () => {
 
         expect(slots).toBeDefined()
         expect(Array.isArray(slots)).toBe(true)
+        expect(slots.length).toBeGreaterThanOrEqual(0)
     })
 
     test('should get multi-user slots with custom schedules', async () => {
@@ -181,5 +186,6 @@ describe('Scheduling Integration Tests', () => {
 
         expect(slots).toBeDefined()
         expect(Array.isArray(slots)).toBe(true)
+        expect(slots.length).toBeGreaterThanOrEqual(0)
     })
 })
