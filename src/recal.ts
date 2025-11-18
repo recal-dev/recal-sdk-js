@@ -90,6 +90,7 @@ export class Recal {
                 baseUrl,
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    'x-sdk': 'js',
                 },
             })
         )
