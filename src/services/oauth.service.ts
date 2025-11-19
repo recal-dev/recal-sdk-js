@@ -1,230 +1,218 @@
-import { Type as T } from '@sinclair/typebox'
-import { OAuthConnectionNotFoundError, ProviderCredentialsNotSetError, UserNotFoundError } from '@/errors.js'
-import { oauthConnectionSchema, oauthLinkSchema } from '@/typebox/oauth.tb.js'
-import type { Provider } from '@/types/calendar.types.js'
-import type { OAuthConnection, OAuthLink, SetOAuthConnection } from '@/types/oauth.types.js'
-import { errorHandler, type FetchHelper } from '@/utils/fetch.helper.js'
+import type { Client } from '../client/client'
+import * as sdk from '../client/sdk.gen'
+import type {
+    GetV1UsersUserIdOauthData,
+    GetV1UsersUserIdOauthLinksData,
+    GetV1UsersUserIdOauthProviderData,
+    GetV1UsersUserIdOauthProviderLinkData,
+    PostV1UsersOauthProviderVerifyData,
+    PostV1UsersUserIdOauthProviderData,
+} from '../client/types.gen'
+import { unwrapResponse } from '../utils/response'
 
+/**
+ * OAuth Service
+ *
+ * Provides methods for managing OAuth connections
+ */
 export class OAuthService {
-    constructor(private fetchHelper: FetchHelper) {}
+    constructor(private client: Client) {}
 
     /**
      * Get all OAuth connections for a user
-     * @param userId The ID of the user
-     * @param redacted Whether to redact the OAuth connections
-     * @returns An array of OAuth connections
+     *
+     * @param userId - The user ID
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * const connections = await recal.oauth.list('user-123', {
+     *   showToken: 'true'
+     * })
+     * ```
      */
-    public async getAllConnections(userId: string, redacted = true): Promise<OAuthConnection[]> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/oauth`, {
-                schema: T.Array(oauthConnectionSchema),
-                searchParams: { redacted },
-            })
-            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+    async list(userId: string, options?: GetV1UsersUserIdOauthData['query']) {
+        const response = await sdk.getV1UsersUserIdOauth({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 
     /**
-     * Get OAuth connection for a specific provider
-     * @param userId The ID of the user
-     * @param provider The provider of the OAuth connection
-     * @param redacted Whether to redact the OAuth connection
-     * @returns The OAuth connection
+     * Get a specific OAuth connection
+     *
+     * @param userId - The user ID
+     * @param provider - The OAuth provider
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * const connection = await recal.oauth.get('user-123', 'google')
+     * ```
      */
-    public async getConnection(userId: string, provider: Provider, redacted = true): Promise<OAuthConnection> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/oauth/${provider}`, {
-                schema: oauthConnectionSchema,
-                searchParams: { redacted },
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        errorInclFilter: 'OAuth connection not found',
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
+    async get(userId: string, provider: 'google' | 'microsoft', options?: GetV1UsersUserIdOauthProviderData['query']) {
+        const response = await sdk.getV1UsersUserIdOauthProvider({
+            path: { userId, provider },
+            query: options,
+            client: this.client,
+        })
+        return unwrapResponse(response)
+    }
+
+    /**
+     * Create a new OAuth connection
+     *
+     * @param userId - The user ID
+     * @param provider - The OAuth provider
+     * @param data - OAuth connection data
+     *
+     * @example
+     * ```typescript
+     * const connection = await recal.oauth.create('user-123', 'google', {
+     *   accessToken: 'token',
+     *   refreshToken: 'refresh',
+     *   email: 'user@gmail.com',
+     *   expiresAt: '2024-12-31T23:59:59Z',
+     *   scope: ['calendar.readonly']
+     * })
+     * ```
+     */
+    async create(
+        userId: string,
+        provider: 'google' | 'microsoft',
+        data: NonNullable<PostV1UsersUserIdOauthProviderData['body']>
+    ) {
+        const response = await sdk.postV1UsersUserIdOauthProvider({
+            path: { userId, provider },
+            body: data,
+            client: this.client,
+        })
+        return unwrapResponse(response)
+    }
+
+    /**
+     * Delete an OAuth connection
+     *
+     * @param userId - The user ID
+     * @param provider - The OAuth provider
+     *
+     * @example
+     * ```typescript
+     * await recal.oauth.delete('user-123', 'google')
+     * ```
+     */
+    async delete(userId: string, provider: 'google' | 'microsoft') {
+        const response = await sdk.deleteV1UsersUserIdOauthProvider({
+            path: { userId, provider },
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 
     /**
      * Get OAuth authorization URLs for all providers
-     * @param userId The ID of the user
-     * @param options Options for the OAuth authorization URLs
-     * @returns An array of OAuth authorization URLs
+     *
+     * @param userId - The user ID
+     * @param options - OAuth options
+     *
+     * @example
+     * ```typescript
+     * const links = await recal.oauth.getAuthLinks('user-123', {
+     *   provider: 'google',
+     *   accessType: 'offline',
+     *   scope: 'edit'
+     * })
+     * ```
      */
-    public async getBulkLinks(
-        userId: string,
-        options?: {
-            provider?: Provider | Provider[]
-            scope?: ('edit' | 'free-busy')[]
-            accessType?: 'offline' | 'online'
-        }
-    ): Promise<OAuthLink[]> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/oauth/links`, {
-                schema: T.Array(oauthLinkSchema),
-                searchParams: {
-                    provider: options?.provider,
-                    scope: options?.scope,
-                    accessType: options?.accessType,
-                },
-            })
-            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+    async getAuthLinks(userId: string, options: GetV1UsersUserIdOauthLinksData['query']) {
+        const response = await sdk.getV1UsersUserIdOauthLinks({
+            path: { userId },
+            query: options,
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 
     /**
      * Get OAuth authorization URL for a specific provider
-     * @param userId The ID of the user
-     * @param provider The provider of the OAuth connection
-     * @param options Options for the OAuth authorization URL
-     * @returns The OAuth authorization URL
+     *
+     * @param userId - The user ID
+     * @param provider - The OAuth provider
+     * @param options - OAuth options
+     *
+     * @example
+     * ```typescript
+     * const link = await recal.oauth.getAuthLink('user-123', 'google', {
+     *   provider: 'google',
+     *   accessType: 'offline',
+     *   scope: 'edit',
+     *   redirectUrl: 'https://app.com/callback'
+     * })
+     * ```
      */
-    public async getLink(
+    async getAuthLink(
         userId: string,
-        provider: Provider,
-        options?: {
-            scope?: ('edit' | 'free-busy')[]
-            accessType?: 'offline' | 'online'
-            redirectUrl?: string
-        }
-    ): Promise<OAuthLink> {
-        const response = await this.fetchHelper
-            .get(`/v1/users/${userId}/oauth/${provider}/link`, {
-                schema: T.Object({ url: T.String() }),
-                searchParams: {
-                    scope: options?.scope,
-                    accessType: options?.accessType,
-                    redirectUrl: options?.redirectUrl,
-                },
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        errorInclFilter: 'OAuth credentials not found',
-                        error: new ProviderCredentialsNotSetError(provider),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-        return { provider, url: response.url }
+        provider: 'google' | 'microsoft',
+        options: GetV1UsersUserIdOauthProviderLinkData['query']
+    ) {
+        const response = await sdk.getV1UsersUserIdOauthProviderLink({
+            path: { userId, provider },
+            query: options,
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 
     /**
-     * Set OAuth tokens for a provider
-     * @param userId The ID of the user
-     * @param provider The provider of the OAuth connection
-     * @param connection The OAuth connection to set
-     * @returns The OAuth connection
+     * Verify an OAuth authorization code
+     *
+     * @param provider - The OAuth provider
+     * @param data - Verification data
+     * @param options - Query options
+     *
+     * @example
+     * ```typescript
+     * await recal.oauth.verifyCode('google', {
+     *   code: 'auth-code',
+     *   state: 'state-token',
+     *   scope: ['calendar.edit']
+     * }, {
+     *   redirectUrl: 'https://app.com/callback'
+     * })
+     * ```
      */
-    public async setConnection(
-        userId: string,
-        provider: Provider,
-        connection: SetOAuthConnection
-    ): Promise<OAuthConnection> {
-        return this.fetchHelper
-            .post(`/v1/users/${userId}/oauth/${provider}`, {
-                schema: oauthConnectionSchema,
-                body: connection,
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        errorInclFilter: 'OAuth connection not found',
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
+    async verifyCode(
+        provider: 'google' | 'microsoft',
+        data: NonNullable<PostV1UsersOauthProviderVerifyData['body']>,
+        options?: PostV1UsersOauthProviderVerifyData['query']
+    ) {
+        const response = await sdk.postV1UsersOauthProviderVerify({
+            path: { provider },
+            body: data,
+            query: options,
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 
     /**
-     * Delete OAuth connection for a provider
-     * @param userId The ID of the user
-     * @param provider The provider of the OAuth connection
-     * @returns Promise that resolves when the connection is deleted
+     * Get a fresh access token for a user
+     *
+     * @param userId - The user ID
+     * @param provider - The OAuth provider
+     *
+     * @example
+     * ```typescript
+     * const token = await recal.oauth.getFreshAccessToken('user-123', 'google')
+     * ```
      */
-    public async disconnect(userId: string, provider: Provider): Promise<void> {
-        await this.fetchHelper
-            .delete(`/v1/users/${userId}/oauth/${provider}`, {
-                schema: T.Object({ success: T.Boolean() }),
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        errorInclFilter: 'OAuth connection not found',
-                        error: new OAuthConnectionNotFoundError(userId, provider),
-                    },
-                    { code: 404, error: new UserNotFoundError(userId) },
-                ])
-            )
-    }
-
-    /**
-     * Verify OAuth code (used in OAuth callback flow)
-     * @param provider The provider of the OAuth connection
-     * @param code The OAuth code
-     * @param scope The OAuth scope (free-busy or edit)
-     * @param state The OAuth state
-     * @param redirectUrl The redirect URL
-     * @returns The OAuth verification result
-     */
-    public async verify({
-        provider,
-        code,
-        scope,
-        state,
-        redirectUrl,
-    }: {
-        provider: Provider
-        code: string
-        scope: ('edit' | 'free-busy')[]
-        state: string
-        redirectUrl?: string
-    }): Promise<{ success: boolean }> {
-        return this.fetchHelper
-            .post(`/v1/users/oauth/${provider}/verify`, {
-                body: { code, scope, state },
-                schema: T.Object({ success: T.Boolean() }),
-                searchParams: { redirectUrl },
-            })
-            .catch(
-                errorHandler([
-                    {
-                        code: 404,
-                        errorInclFilter: 'OAuth authorization provider not found',
-                        error: new ProviderCredentialsNotSetError(provider),
-                    },
-                    { code: 404, error: new UserNotFoundError('User not found in state parameter') },
-                    {
-                        code: 400,
-                        errorInclFilter: 'OAuth credentials not configured',
-                        error: new ProviderCredentialsNotSetError(provider),
-                    },
-                    {
-                        code: 400,
-                        error: new Error('Invalid OAuth verification request'),
-                    },
-                ])
-            )
-    }
-
-    /**
-     * Get a fresh access token for a provider
-     * @param userId The ID of the user
-     * @param provider The provider of the OAuth connection
-     * @returns The fresh access token
-     */
-
-    public async getFreshAccessToken(userId: string, provider: Provider): Promise<{ accessToken: string }> {
-        return this.fetchHelper
-            .get(`/v1/users/${userId}/oauth/${provider}/token`, {
-                schema: T.Object({ accessToken: T.String() }),
-            })
-            .catch(errorHandler([{ code: 404, error: new UserNotFoundError(userId) }]))
+    async getFreshAccessToken(userId: string, provider: 'google' | 'microsoft') {
+        const response = await sdk.getV1UsersUserIdOauthProviderToken({
+            path: { userId, provider },
+            client: this.client,
+        })
+        return unwrapResponse(response)
     }
 }

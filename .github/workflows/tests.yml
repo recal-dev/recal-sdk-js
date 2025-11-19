@@ -31,6 +31,8 @@ jobs:
               env:
                 RECAL_TOKEN: ${{ secrets.RECAL_TOKEN }}
                 RECAL_URL: ${{ secrets.RECAL_URL }}
+                GOOGLE_ACCESS_TOKEN: ${{ secrets.TEST_GOOGLE_ACCESS_TOKEN }}
+                GOOGLE_REFRESH_TOKEN: ${{ secrets.TEST_GOOGLE_REFRESH_TOKEN }}
 
             - name: Run type check
               run: bun run typecheck

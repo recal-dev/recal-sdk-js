@@ -30,10 +30,7 @@ describe('User Integration Tests', () => {
     })
 
     test('should retrieve a user by ID', async () => {
-        const user = await testClient.client.users.get(primaryUserId, {
-            includeOrgs: false,
-            includeOAuth: false,
-        })
+        const user = await testClient.client.users.get(primaryUserId)
 
         expect(user).toBeDefined()
         expect(user?.id).toBe(primaryUserId)
@@ -54,8 +51,7 @@ describe('User Integration Tests', () => {
         await testClient.client.users.create(userWithOrgsId, [testOrgSlug])
 
         const user = await testClient.client.users.get(userWithOrgsId, {
-            includeOrgs: true,
-            includeOAuth: false,
+            include: ['organizations'],
         })
 
         expect(user).toBeDefined()
@@ -69,8 +65,7 @@ describe('User Integration Tests', () => {
 
     test('should retrieve a user with OAuth connections included', async () => {
         const user = await testClient.client.users.get(primaryUserId, {
-            includeOrgs: false,
-            includeOAuth: true,
+            include: ['oauthConnections'],
         })
 
         expect(user).toBeDefined()
@@ -87,9 +82,7 @@ describe('User Integration Tests', () => {
 
         const updatedUserId = testClient.generateTestId('user', 'updated-user')
 
-        const updatedUser = await testClient.client.users.update(user.id, {
-            id: updatedUserId,
-        })
+        const updatedUser = await testClient.client.users.update(user.id, updatedUserId)
 
         expect(updatedUser).toBeDefined()
         expect(updatedUser?.id).toBe(updatedUserId)
@@ -97,7 +90,7 @@ describe('User Integration Tests', () => {
     })
 
     test('should list all users', async () => {
-        const users = await testClient.client.users.listAll()
+        const users = await testClient.client.users.list()
 
         expect(users).toBeDefined()
         expect(Array.isArray(users)).toBe(true)
@@ -124,5 +117,19 @@ describe('User Integration Tests', () => {
         expect(deletedUser).toBeDefined()
         expect(deletedUser.id).toBe(tempUserId)
         expect(deletedUser.createdAt).toBeInstanceOf(Date)
+    })
+
+    test('should get organizations for a user', async () => {
+        const userId = testClient.generateTestId('user', 'org-user')
+        await testClient.client.users.create(userId, [testOrgSlug])
+
+        const orgs = await testClient.client.users.getOrganizations(userId)
+
+        expect(orgs).toBeDefined()
+        expect(Array.isArray(orgs)).toBe(true)
+        expect(orgs.length).toBeGreaterThan(0)
+
+        const orgSlugs = orgs.map((org) => org.slug)
+        expect(orgSlugs).toContain(testOrgSlug)
     })
 })
