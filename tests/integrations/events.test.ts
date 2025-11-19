@@ -214,16 +214,10 @@ describe('Events Integration Tests', () => {
         })
 
         if (created.id) {
-            const updated = await testClient.client.events.updateEvent(
-                testUserId,
-                'google',
-                'primary',
-                created.id,
-                {
-                    subject: 'Updated Calendar Event',
-                    sendNotifications: false,
-                }
-            )
+            const updated = await testClient.client.events.updateEvent(testUserId, 'google', 'primary', created.id, {
+                subject: 'Updated Calendar Event',
+                sendNotifications: false,
+            })
 
             expect(updated).toBeDefined()
             expect(updated.id).toBe(created.id)
@@ -250,12 +244,7 @@ describe('Events Integration Tests', () => {
         })
 
         if (created.id) {
-            const deleted = await testClient.client.events.deleteEvent(
-                testUserId,
-                'google',
-                'primary',
-                created.id
-            )
+            const deleted = await testClient.client.events.deleteEvent(testUserId, 'google', 'primary', created.id)
 
             expect(deleted).toBeDefined()
             // Event is deleted, so don't track for cleanup

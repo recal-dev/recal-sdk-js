@@ -5,7 +5,6 @@ import type {
     GetV1UsersUserIdOauthLinksData,
     GetV1UsersUserIdOauthProviderData,
     GetV1UsersUserIdOauthProviderLinkData,
-    GetV1UsersUserIdOauthProviderTokenData,
     PostV1UsersOauthProviderVerifyData,
     PostV1UsersUserIdOauthProviderData,
 } from '../client/types.gen'

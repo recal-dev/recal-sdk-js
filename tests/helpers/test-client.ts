@@ -28,10 +28,7 @@ export class TestClient {
      *
      * @returns true if OAuth was set up successfully, false otherwise
      */
-    async setupOAuthForUser(
-        userId: string,
-        provider: 'google' | 'microsoft' = 'google'
-    ): Promise<boolean> {
+    async setupOAuthForUser(userId: string, provider: 'google' | 'microsoft' = 'google'): Promise<boolean> {
         if (!process.env.GOOGLE_REFRESH_TOKEN) {
             console.warn('OAuth tokens not found in environment, skipping OAuth setup')
             return false
