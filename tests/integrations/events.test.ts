@@ -1,5 +1,8 @@
-import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { afterAll, beforeAll, describe, expect, setDefaultTimeout, test } from 'bun:test'
 import { TestClient } from '../helpers/test-client'
+
+// Set a longer timeout for cleanup operations
+setDefaultTimeout(30000)
 
 describe('Events Integration Tests', () => {
     const testClient = new TestClient()
