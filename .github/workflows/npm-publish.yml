@@ -13,6 +13,8 @@ permissions:
 
 jobs:
   test:
+    permissions:
+      contents: read
     uses: ./.github/workflows/tests.yml
     secrets:
       RECAL_TOKEN: ${{ secrets.RECAL_TOKEN }}
