@@ -124,3 +124,9 @@ First stable release with production-ready architecture, comprehensive testing, 
 - Minimum Node.js version is now 18+
 - ESM-only package (no CommonJS support)
 - Internal architecture completely refactored (external API remains compatible)
+
+## 🎉 v1.0.1 — (2025-11-22)
+
+### 🆕 Added
+- Update id validators and provider types
+- Update README
