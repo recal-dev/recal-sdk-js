@@ -80,3 +80,47 @@ A type-safe SDK for interacting with the Recal calendar platform, focused on bui
 
 ### 🆕 Added
 - getFreshAccessToken to oauth service
+
+---
+
+## 🎉 v1.0.0 — Stable Release (2025-11-19)
+
+### 🧭 Overview
+First stable release with production-ready architecture, comprehensive testing, and improved CI/CD workflows.
+
+### ✨ Major Changes
+- 🔄 **Architecture Refactor**: Migrated to HeyAPI-powered code generation from OpenAPI specification
+- 🔐 **Validation**: Switched from TypeBox to Zod for runtime schema validation
+- 🏗️ **Type Generation**: All types, schemas, and SDK functions auto-generated from OpenAPI spec
+- 🧪 **Testing**: Enhanced test suite with OAuth integration support and concurrency control
+- 🚀 **CI/CD**: Improved GitHub Actions workflows for testing and publishing
+
+### 🆕 Added
+- Auto-generated client code using `@hey-api/openapi-ts`
+- Comprehensive integration tests for all services
+- Reusable test workflow with concurrency management
+- Environment variable configuration for testing (RECAL_TOKEN, RECAL_URL, OAuth tokens)
+- Detailed USAGE.md with code examples for all services
+
+### 🔄 Changed
+- SDK now exports `Recal` class (with `RecalClient` as backward-compatible alias)
+- Service wrappers around auto-generated SDK functions
+- Build process uses TypeScript compiler with tsc-alias
+- Package is now ESM-only with Node.js 18+ requirement
+
+### 🛠️ Infrastructure
+- Updated GitHub Actions workflows with proper test ordering
+- Added workflow concurrency control for tests
+- Improved npm publish workflow with pre-publish validation
+- Added test status badge to README
+
+### 📚 Documentation
+- Updated README with accurate architecture description
+- Added code generation documentation
+- Improved testing documentation with environment variable requirements
+- Fixed API reference URLs and added USAGE.md reference
+
+### ⚠️ Breaking Changes
+- Minimum Node.js version is now 18+
+- ESM-only package (no CommonJS support)
+- Internal architecture completely refactored (external API remains compatible)
