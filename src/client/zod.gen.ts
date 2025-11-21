@@ -337,7 +337,7 @@ export const zPutV1OrganizationsOrgSlugResponse = z.object({
 
 export const zDeleteV1OrganizationsOrgSlugMembersData = z.object({
     body: z.optional(z.object({
-        userIds: z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/))
+        userIds: z.array(z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/))
     })),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -382,7 +382,7 @@ export const zGetV1OrganizationsOrgSlugMembersResponse = z.object({
 
 export const zPostV1OrganizationsOrgSlugMembersData = z.object({
     body: z.optional(z.object({
-        userIds: z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/))
+        userIds: z.array(z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/))
     })),
     path: z.object({
         orgSlug: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
@@ -474,7 +474,7 @@ export const zGetV1OrganizationsOrgSlugSchedulingResponse = z.object({
             start: z.iso.datetime({
                 offset: true
             }).regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-            userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+            userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
         })),
         options: z.object({
             end: z.iso.datetime({
@@ -514,7 +514,7 @@ export const zGetV1UsersResponse = z.object({
 
 export const zPostV1UsersData = z.object({
     body: z.optional(z.object({
-        id: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/),
+        id: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
         organizationSlugs: z.optional(z.array(z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)))
     })),
     path: z.optional(z.never()),
@@ -538,7 +538,7 @@ export const zPostV1UsersResponse = z.object({
 export const zDeleteV1UsersUserIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -560,7 +560,7 @@ export const zDeleteV1UsersUserIdResponse = z.object({
 export const zGetV1UsersUserIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         include: z.optional(z.union([
@@ -590,10 +590,10 @@ export const zGetV1UsersUserIdResponse = z.object({
 
 export const zPutV1UsersUserIdData = z.object({
     body: z.optional(z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     })),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -615,7 +615,7 @@ export const zPutV1UsersUserIdResponse = z.object({
 export const zGetV1UsersUserIdOrganizationsData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -630,7 +630,7 @@ export const zGetV1UsersUserIdOrganizationsResponse = z.object({
 export const zGetV1UsersUserIdCalendarData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         provider: z.optional(z.union([
@@ -654,7 +654,7 @@ export const zGetV1UsersUserIdCalendarResponse = z.object({
 export const zGetV1UsersUserIdCalendarBusyData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
@@ -681,7 +681,7 @@ export const zGetV1UsersUserIdCalendarBusyResponse = z.object({
 export const zGetV1UsersUserIdCalendarEventsData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
@@ -708,7 +708,7 @@ export const zGetV1UsersUserIdCalendarEventsResponse = z.object({
 export const zPostV1UsersUserIdCalendarEventsMetaData = z.object({
     body: z.optional(zCreateMetaEvent),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         provider: z.optional(z.union([
@@ -733,7 +733,7 @@ export const zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         metaId: z.string(),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         provider: z.optional(z.union([
@@ -760,7 +760,7 @@ export const zGetV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         metaId: z.string(),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         provider: z.optional(z.union([
@@ -785,7 +785,7 @@ export const zPutV1UsersUserIdCalendarEventsMetaMetaIdData = z.object({
     body: z.optional(zUpdateMetaEvent),
     path: z.object({
         metaId: z.string(),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         provider: z.optional(z.union([
@@ -814,7 +814,7 @@ export const zPostV1UsersUserIdCalendarEventsProviderCalendarIdData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -835,7 +835,7 @@ export const zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -858,7 +858,7 @@ export const zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.ob
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -879,7 +879,7 @@ export const zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = z.ob
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -894,7 +894,7 @@ export const zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = 
 export const zGetV1UsersUserIdOauthData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         showToken: z.optional(z.union([
@@ -914,7 +914,7 @@ export const zGetV1UsersUserIdOauthResponse = z.object({
 export const zGetV1UsersUserIdOauthLinksData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         accessType: z.union([
@@ -926,10 +926,14 @@ export const zGetV1UsersUserIdOauthLinksData = z.object({
             z.literal('edit'),
             z.literal('free-busy')
         ]),
-        provider: z.optional(z.array(z.enum([
-            'google',
-            'microsoft'
-        ])))
+        provider: z.optional(z.union([
+            z.array(z.enum([
+                'google',
+                'microsoft'
+            ])),
+            z.literal('google'),
+            z.literal('microsoft')
+        ]))
     })
 });
 
@@ -953,7 +957,7 @@ export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         accessType: z.union([
@@ -1002,7 +1006,7 @@ export const zDeleteV1UsersUserIdOauthProviderData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -1014,7 +1018,7 @@ export const zGetV1UsersUserIdOauthProviderData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.object({
         showToken: z.optional(z.union([
@@ -1053,7 +1057,7 @@ export const zPostV1UsersUserIdOauthProviderData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -1072,7 +1076,7 @@ export const zGetV1UsersUserIdOauthProviderTokenData = z.object({
             'google',
             'microsoft'
         ]),
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.optional(z.never())
 });
@@ -1089,7 +1093,7 @@ export const zGetV1UsersUserIdOauthProviderTokenResponse = z.object({
 export const zGetV1UsersUserIdSchedulingData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
@@ -1158,7 +1162,7 @@ export const zPostV1UsersUserIdSchedulingData = z.object({
         }))
     })),
     path: z.object({
-        userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+        userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
@@ -1211,7 +1215,7 @@ export const zPostV1UsersUserIdSchedulingResponse = z.object({
 export const zPostV1UsersSchedulingData = z.object({
     body: z.optional(z.object({
         users: z.array(z.object({
-            id: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/),
+            id: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
             calendarIds: z.optional(z.array(z.string())),
             schedules: z.optional(z.array(z.object({
                 days: z.array(z.enum([
@@ -1275,7 +1279,7 @@ export const zPostV1UsersSchedulingResponse = z.object({
                 earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
                 latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/))
             }),
-            userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/),
+            userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
             calendarIds: z.optional(z.array(z.string())),
             schedules: z.optional(z.array(z.object({
                 days: z.array(z.enum([
@@ -1293,7 +1297,7 @@ export const zPostV1UsersSchedulingResponse = z.object({
         }),
         z.object({
             error: z.string(),
-            userId: z.string().regex(/^[a-z0-9][a-z0-9_-]{2,127}$/)
+            userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
         })
     ]))
 });

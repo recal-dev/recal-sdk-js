@@ -1350,7 +1350,7 @@ export type GetV1UsersUserIdOauthLinksData = {
          * Scope of the oauth connection
          */
         scope: Array<string> | 'edit' | 'free-busy';
-        provider?: Array<'google' | 'microsoft'>;
+        provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
     };
     url: '/v1/users/{userId}/oauth/links';
 };
