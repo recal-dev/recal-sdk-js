@@ -436,21 +436,11 @@ export const zGetV1OrganizationsOrgSlugSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
         latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -458,7 +448,8 @@ export const zGetV1OrganizationsOrgSlugSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(30)
     })
 });
 
@@ -1097,21 +1088,11 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
         latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1119,7 +1100,8 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(30)
     })
 });
 
@@ -1166,19 +1148,9 @@ export const zPostV1UsersUserIdSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1186,7 +1158,8 @@ export const zPostV1UsersUserIdSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(30)
     })
 });
 
@@ -1235,19 +1208,9 @@ export const zPostV1UsersSchedulingData = z.object({
     path: z.optional(z.never()),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(0),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1255,7 +1218,8 @@ export const zPostV1UsersSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default(30)
     })
 });
 

@@ -62,7 +62,7 @@ export type Calendar = {
     selected?: boolean;
     subject?: string;
     /**
-     * A valid IANA timezone identifier
+     * a valid IANA timezone identifier
      */
     timeZone?: string;
 };
@@ -508,14 +508,6 @@ export type GetV1OrganizationsOrgSlugSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
@@ -528,10 +520,18 @@ export type GetV1OrganizationsOrgSlugSchedulingData = {
          */
         latestTimeEachDay?: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0  (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/organizations/{orgSlug}/scheduling';
 };
@@ -1659,14 +1659,6 @@ export type GetV1UsersUserIdSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
@@ -1679,10 +1671,18 @@ export type GetV1UsersUserIdSchedulingData = {
          */
         latestTimeEachDay?: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0  (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/{userId}/scheduling';
 };
@@ -1772,22 +1772,22 @@ export type PostV1UsersUserIdSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0  (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/{userId}/scheduling';
 };
@@ -1879,22 +1879,22 @@ export type PostV1UsersSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0  (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/scheduling';
 };
