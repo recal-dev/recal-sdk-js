@@ -28,11 +28,10 @@ export const createQuerySerializer = <T = unknown>({
         const options = parameters[name] || args;
 
         if (Array.isArray(value)) {
-          const arrayParamName = `${name}[]`;
           const serializedArray = serializeArrayParam({
             allowReserved: options.allowReserved,
             explode: true,
-            name: arrayParamName,
+            name,
             style: 'form',
             value,
             ...options.array,
