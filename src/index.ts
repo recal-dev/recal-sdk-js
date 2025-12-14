@@ -4,7 +4,7 @@
 export { createClient, createConfig } from './client/client'
 // Advanced: Re-export all SDK functions for direct usage without client wrapper
 export * as RecalSDK from './client/sdk.gen'
-export { Recal, RecalClient, type RecalOptions } from './recal'
+export { Recal, RecalClient, type RecalOptions } from './client'
 // Re-export commonly used types for better DX
 export type * from './types'
 // Re-export error class
