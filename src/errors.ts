@@ -73,6 +73,7 @@ export const RecalConflictError = createErrorClass('[Recal Conflict Error]', 'CO
 export const RecalValidationError = createErrorClass('[Recal Validation Error]', 'VALIDATION_ERROR')
 export const RecalRateLimitError = createErrorClass('[Recal Rate Limit Error]', 'RATE_LIMITED')
 export const RecalServerError = createErrorClass('[Recal Server Error]', 'SERVER_ERROR')
+export const RecalNetworkError = createErrorClass('[Recal Network Error]', 'NETWORK_ERROR')
 export const RecalUnknownError = createErrorClass('[Recal Unknown Error]', 'UNKNOWN')
 
 // Type exports for instanceof checks
@@ -85,6 +86,7 @@ export type RecalConflictError = InstanceType<typeof RecalConflictError>
 export type RecalValidationError = InstanceType<typeof RecalValidationError>
 export type RecalRateLimitError = InstanceType<typeof RecalRateLimitError>
 export type RecalServerError = InstanceType<typeof RecalServerError>
+export type RecalNetworkError = InstanceType<typeof RecalNetworkError>
 export type RecalUnknownError = InstanceType<typeof RecalUnknownError>
 
 /**
@@ -110,6 +112,8 @@ export function createRecalError(options: RecalErrorOptions): RecalError {
             return new RecalRateLimitError(options)
         case 'SERVER_ERROR':
             return new RecalServerError(options)
+        case 'NETWORK_ERROR':
+            return new RecalNetworkError(options)
         default:
             return new RecalUnknownError(options)
     }

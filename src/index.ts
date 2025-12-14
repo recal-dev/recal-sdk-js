@@ -1,5 +1,6 @@
 // Main SDK export
 
+export { Recal, RecalClient, type RecalOptions } from './client'
 // Advanced: Re-export client utilities for custom client creation
 export { createClient, createConfig } from './client/client'
 // Advanced: Re-export all SDK functions for direct usage without client wrapper
@@ -13,6 +14,7 @@ export {
     type RecalErrorCode,
     type RecalErrorOptions,
     RecalForbiddenError,
+    RecalNetworkError,
     RecalNotFoundError,
     RecalRateLimitError,
     RecalServerError,
@@ -21,6 +23,5 @@ export {
     RecalUnknownError,
     RecalValidationError,
 } from './errors'
-export { Recal, RecalClient, type RecalOptions } from './client'
 // Re-export commonly used types for better DX
 export type * from './types'
