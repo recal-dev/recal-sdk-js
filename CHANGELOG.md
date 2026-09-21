@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## 🐛 v1.1.0 — Multi-user scheduling no longer throws (2026-09-21)
+
+### 🩹 Fixed
+- **`scheduling.getMultiUserSlots()` crashed the whole batch when any user was unresolved.**
+  The API answers 200 with a per-user result, but the generated response transformer
+  dereferenced `availableSlots` unconditionally. One user without a connected calendar
+  raised a `TypeError` that discarded *every* other user's slots and destroyed the API's
+  own error message with them. Slots now survive, and each failed user reports its reason.
+- `bun run generate` produced a client that did not compile, so the SDK could not be
+  regenerated at all. Two causes: a transformer HeyAPI references but never defines, and
+  numeric defaults emitted onto string-typed query params.
+
+### ✨ Added
+- Per-user entries carry `status: 'ok' | 'error'`, so results can be narrowed safely
+  instead of by guessing which keys are present.
+- `calendarIds` accepts a single string as well as an array.
+- `read` and `write` join `edit` and `free-busy` as OAuth scope values.
+- OAuth connections expose `type`.
+- `401` and `502` are documented on the calendar endpoints.
+- `RECAL_OPENAPI_URL` overrides the schema source when generating the client.
+
+### ⚠️ Upgrading
+No breaking changes — every addition is additive and existing calls keep working.
+`getMultiUserSlots()` callers should narrow on `status` before reading `availableSlots`;
+an entry never reports an empty `availableSlots` to signal failure, so `[]` now
+unambiguously means "no availability".
+
 ## 🚀 v0.2.3 — Initial public release (2025-09-12)
 
 ### 🧭 Overview

@@ -49,6 +49,56 @@ const recal = new RecalClient({
 
 > **Security Note**: This SDK is designed for server-side use. Never expose your API token in client-side code.
 
+## Calendar Connection Flow
+
+Connecting a user's Google or Microsoft calendar is a **three-step flow**. All three steps are required — the connection is not persisted until step 3 completes.
+
+> **Important**: `recal.oauth.list(userId)` returns `[]` until step 3 succeeds. An empty array after the user finishes the Google/Microsoft consent screen almost always means step 3 was skipped or failed.
+
+### 1. Generate the auth URL
+
+```typescript
+const { link } = await recal.oauth.getAuthLink(userId, 'google', {
+    scope: 'edit',
+    accessType: 'offline',
+    redirectUrl: 'https://yourapp.com/oauth/callback',
+})
+
+// Redirect the user to `link`
+```
+
+### 2. User consents at Google/Microsoft
+
+The provider redirects back to your `redirectUrl` with `?code=...&state=...` query parameters.
+
+### 3. Verify the code (required)
+
+From your redirect handler, forward `code` and `state` **unchanged** to Recal:
+
+```typescript
+// In your /oauth/callback handler
+const url = new URL(request.url)
+const code = url.searchParams.get('code')!
+const state = url.searchParams.get('state')!
+
+await recal.oauth.verifyCode(
+    'google',
+    { code, state, scope: ['edit'] },
+    { redirectUrl: 'https://yourapp.com/oauth/callback' },
+)
+```
+
+`state` is a base64url-encoded JSON blob Recal issues in step 1 — pass it through verbatim. The `redirectUrl` must match the one used in step 1.
+
+### Confirming it worked
+
+```typescript
+const connections = await recal.oauth.list(userId)
+// => [{ provider: 'google', email: '...', ... }]
+```
+
+If you still get `[]` here, the verify call either wasn't made or returned a non-200 — check its response.
+
 ## Core Concepts
 
 ### Services
