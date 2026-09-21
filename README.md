@@ -59,7 +59,7 @@ Connecting a user's Google or Microsoft calendar is a **three-step flow**. All t
 
 ```typescript
 const { link } = await recal.oauth.getAuthLink(userId, 'google', {
-    scope: 'edit',
+    scope: 'write',
     accessType: 'offline',
     redirectUrl: 'https://yourapp.com/oauth/callback',
 })
@@ -83,7 +83,7 @@ const state = url.searchParams.get('state')!
 
 await recal.oauth.verifyCode(
     'google',
-    { code, state, scope: ['edit'] },
+    { code, state, scope: ['write'] },
     { redirectUrl: 'https://yourapp.com/oauth/callback' },
 )
 ```

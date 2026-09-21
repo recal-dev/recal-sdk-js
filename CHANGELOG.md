@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
 - Per-user entries carry `status: 'ok' | 'error'`, so results can be narrowed safely
   instead of by guessing which keys are present.
 - `calendarIds` accepts a single string as well as an array.
-- `read` and `write` join `edit` and `free-busy` as OAuth scope values.
+- `read` and `write` join `free-busy` as OAuth scope values. `edit` is now deprecated —
+  still accepted as a synonym for `write`, and no longer the default.
 - OAuth connections expose `type`.
 - `401` and `502` are documented on the calendar endpoints.
 - `RECAL_OPENAPI_URL` overrides the schema source when generating the client.
