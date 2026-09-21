@@ -31,6 +31,7 @@ export type AuthConnection = {
     expiresAt: Date | null;
     provider: 'google' | 'microsoft';
     scope: Array<string>;
+    type: string;
     accessToken?: unknown;
     refreshToken?: unknown;
 };
@@ -59,10 +60,11 @@ export type Calendar = {
     accessRole?: 'freeBusyReader' | 'owner' | 'reader' | 'writer';
     backgroundColor?: string;
     foregroundColor?: string;
+    primary?: boolean;
     selected?: boolean;
     subject?: string;
     /**
-     * A valid IANA timezone identifier
+     * a valid IANA timezone identifier
      */
     timeZone?: string;
 };
@@ -476,9 +478,23 @@ export type GetV1OrganizationsOrgSlugCalendarBusyData = {
 
 export type GetV1OrganizationsOrgSlugCalendarBusyErrors = {
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * Organization not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -508,14 +524,6 @@ export type GetV1OrganizationsOrgSlugSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
@@ -528,10 +536,18 @@ export type GetV1OrganizationsOrgSlugSchedulingData = {
          */
         latestTimeEachDay?: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0 (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/organizations/{orgSlug}/scheduling';
 };
@@ -840,9 +856,23 @@ export type GetV1UsersUserIdCalendarErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -875,7 +905,7 @@ export type GetV1UsersUserIdCalendarBusyData = {
          * Start time of the time range in ISO format
          */
         start: string;
-        calendarIds?: Array<string>;
+        calendarIds?: string | Array<string>;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
     };
     url: '/v1/users/{userId}/calendar/busy';
@@ -890,9 +920,23 @@ export type GetV1UsersUserIdCalendarBusyErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -925,7 +969,7 @@ export type GetV1UsersUserIdCalendarEventsData = {
          * Start time of the time range in ISO format
          */
         start: string;
-        calendarIds?: Array<string>;
+        calendarIds?: string | Array<string>;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
     };
     url: '/v1/users/{userId}/calendar/events';
@@ -940,9 +984,23 @@ export type GetV1UsersUserIdCalendarEventsErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -981,9 +1039,23 @@ export type PostV1UsersUserIdCalendarEventsMetaErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1023,9 +1095,23 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1067,9 +1153,23 @@ export type GetV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1109,9 +1209,23 @@ export type PutV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1150,9 +1264,23 @@ export type PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1192,9 +1320,23 @@ export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1236,9 +1378,23 @@ export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1278,9 +1434,23 @@ export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
         error: string;
     };
     /**
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1349,7 +1519,7 @@ export type GetV1UsersUserIdOauthLinksData = {
         /**
          * Scope of the oauth connection
          */
-        scope: Array<string> | 'edit' | 'free-busy';
+        scope: Array<string> | 'edit' | 'free-busy' | 'read' | 'write';
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
     };
     url: '/v1/users/{userId}/oauth/links';
@@ -1405,7 +1575,7 @@ export type GetV1UsersUserIdOauthProviderLinkData = {
         /**
          * Scope of the oauth connection
          */
-        scope: Array<string> | 'edit' | 'free-busy';
+        scope: Array<string> | 'edit' | 'free-busy' | 'read' | 'write';
         /**
          * Redirect url for the oauth provider
          */
@@ -1508,6 +1678,13 @@ export type DeleteV1UsersUserIdOauthProviderErrors = {
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
         data: null;
         error: string;
     };
@@ -1659,14 +1836,6 @@ export type GetV1UsersUserIdSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
@@ -1679,10 +1848,18 @@ export type GetV1UsersUserIdSchedulingData = {
          */
         latestTimeEachDay?: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0 (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/{userId}/scheduling';
 };
@@ -1696,9 +1873,23 @@ export type GetV1UsersUserIdSchedulingErrors = {
         error: string;
     };
     /**
-     * User not found
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found, or the user has no connected calendars
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1772,38 +1963,52 @@ export type PostV1UsersUserIdSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0 (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/{userId}/scheduling';
 };
 
 export type PostV1UsersUserIdSchedulingErrors = {
     /**
-     * User has no connected calendars
+     * Bad request
      */
     400: {
         data: null;
         error: string;
     };
     /**
-     * User not found
+     * Calendar provider rejected the stored access token
+     */
+    401: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found, or the user has no connected calendars
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider unreachable or returned an unreadable response
+     */
+    502: {
         data: null;
         error: string;
     };
@@ -1855,8 +2060,21 @@ export type PostV1UsersSchedulingData = {
     body?: {
         users: Array<{
             id: string;
-            calendarIds?: Array<string>;
-            schedules?: Array<{
+            calendarIds?: string | Array<string>;
+            schedules?: {
+                /**
+                 * The days to apply this scheduling element to
+                 */
+                days: Array<'friday' | 'monday' | 'saturday' | 'sunday' | 'thursday' | 'tuesday' | 'wednesday'>;
+                /**
+                 * End time
+                 */
+                end: string;
+                /**
+                 * Start time
+                 */
+                start: string;
+            } | Array<{
                 /**
                  * The days to apply this scheduling element to
                  */
@@ -1879,22 +2097,22 @@ export type PostV1UsersSchedulingData = {
          */
         end: string;
         /**
-         * Padding in minutes to add before and after busy times
-         */
-        padding: string | unknown;
-        /**
-         * Duration of each slot in minutes
-         */
-        slotDuration: string | unknown;
-        /**
          * Start time of the time range in ISO format
          */
         start: string;
         /**
-         * An integer >= 0 (default: 0)
+         * an integer >= 0 (default: 0)
          */
-        maxOverlaps?: string | unknown;
+        maxOverlaps?: string;
+        /**
+         * Padding in minutes to add before and after busy times
+         */
+        padding?: string;
         provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft';
+        /**
+         * Duration of each slot in minutes
+         */
+        slotDuration?: string;
     };
     url: '/v1/users/scheduling';
 };
@@ -1933,9 +2151,23 @@ export type PostV1UsersSchedulingResponses = {
                  */
                 latestTimeEachDay?: string;
             };
+            status: 'ok';
             userId: string;
-            calendarIds?: Array<string>;
-            schedules?: Array<{
+            calendarIds?: string | Array<string>;
+            schedules?: {
+                /**
+                 * The days to apply this scheduling element to
+                 */
+                days: Array<'friday' | 'monday' | 'saturday' | 'sunday' | 'thursday' | 'tuesday' | 'wednesday'>;
+                /**
+                 * End time
+                 */
+                end: string;
+                /**
+                 * Start time
+                 */
+                start: string;
+            } | Array<{
                 /**
                  * The days to apply this scheduling element to
                  */
@@ -1951,6 +2183,7 @@ export type PostV1UsersSchedulingResponses = {
             }>;
         } | {
             error: string;
+            status: 'error';
             userId: string;
         }>;
     };
