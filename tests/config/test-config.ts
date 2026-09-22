@@ -1,15 +1,11 @@
 export interface TestConfig {
     url: string
     ignoreCleanupErrors: boolean
-    maxRetryAttempts: number
-    timeout: number
 }
 
 export const testConfig: TestConfig = {
     url: process.env.RECAL_URL || '',
     ignoreCleanupErrors: true,
-    maxRetryAttempts: 3,
-    timeout: 30000,
 }
 
 export const validateTestConfig = (): void => {

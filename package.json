@@ -17,7 +17,7 @@
     "files": ["dist"],
     "scripts": {
         "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-        "test": "bun test tests",
+        "test": "bun test tests --timeout 30000",
         "generate": "bun run openapi-ts.ts && biome check --write src/client",
         "typecheck": "tsc --noEmit",
         "format": "biome format --fix",
