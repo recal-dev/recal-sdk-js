@@ -7,6 +7,38 @@ import type {
 } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
 
+type MultiUserSlotsItem = { availableSlots?: unknown[]; options?: { start?: unknown; end?: unknown } }
+
+/**
+ * Coerces date strings on a multi-user slots response, skipping per-user error entries.
+ *
+ * `POST /v1/users/scheduling` answers 200 with one entry per user, discriminated by
+ * `status`: slots when `'ok'`, `{ error }` when `'error'`. HeyAPI flattens that union
+ * and generates a transformer that dereferences `availableSlots` unconditionally, so an
+ * error entry crashes it before the caller can read the message. Overrides the generated
+ * transformer, which `sdk.gen.ts` spreads `options` over.
+ *
+ * Keys off the presence of `availableSlots` rather than `status`, so it behaves correctly
+ * against API versions from either side of the `status` rollout.
+ */
+const multiUserSlotsResponseTransformer = async (data: unknown): Promise<unknown> => {
+    const payload = data as { data?: MultiUserSlotsItem[] }
+    if (!Array.isArray(payload?.data)) return data
+
+    for (const item of payload.data) {
+        if (!Array.isArray(item?.availableSlots)) continue
+        item.availableSlots = item.availableSlots.map((slot) => {
+            const range = slot as { start?: unknown; end?: unknown }
+            return { ...range, start: new Date(range.start as string), end: new Date(range.end as string) }
+        })
+        if (item.options) {
+            item.options.start = new Date(item.options.start as string)
+            item.options.end = new Date(item.options.end as string)
+        }
+    }
+    return data
+}
+
 /**
  * Scheduling Service
  *
@@ -116,6 +148,7 @@ export class SchedulingService {
             query: options,
             body,
             client: this.client,
+            responseTransformer: multiUserSlotsResponseTransformer,
         })
         return unwrapResponse(response)
     }

@@ -47,6 +47,7 @@ export const zAuthConnection = z.object({
         'microsoft'
     ]),
     scope: z.array(z.string()),
+    type: z.string(),
     accessToken: z.optional(z.unknown()),
     refreshToken: z.optional(z.unknown())
 });
@@ -81,6 +82,7 @@ export const zCalendar = z.object({
     ])),
     backgroundColor: z.optional(z.string()),
     foregroundColor: z.optional(z.string()),
+    primary: z.optional(z.boolean()),
     selected: z.optional(z.boolean()),
     subject: z.optional(z.string()),
     timeZone: z.optional(z.string().regex(/^([A-Za-z_]+(?:\/[A-Za-z_]+){1,2}|UTC)$/))
@@ -436,21 +438,11 @@ export const zGetV1OrganizationsOrgSlugSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
         latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -458,7 +450,8 @@ export const zGetV1OrganizationsOrgSlugSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('30')
     })
 });
 
@@ -659,7 +652,10 @@ export const zGetV1UsersUserIdCalendarBusyData = z.object({
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        calendarIds: z.optional(z.array(z.string())),
+        calendarIds: z.optional(z.union([
+            z.string(),
+            z.array(z.string())
+        ])),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -686,7 +682,10 @@ export const zGetV1UsersUserIdCalendarEventsData = z.object({
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        calendarIds: z.optional(z.array(z.string())),
+        calendarIds: z.optional(z.union([
+            z.string(),
+            z.array(z.string())
+        ])),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -924,7 +923,9 @@ export const zGetV1UsersUserIdOauthLinksData = z.object({
         scope: z.union([
             z.array(z.string()),
             z.literal('edit'),
-            z.literal('free-busy')
+            z.literal('free-busy'),
+            z.literal('read'),
+            z.literal('write')
         ]),
         provider: z.optional(z.union([
             z.array(z.enum([
@@ -967,7 +968,9 @@ export const zGetV1UsersUserIdOauthProviderLinkData = z.object({
         scope: z.union([
             z.array(z.string()),
             z.literal('edit'),
-            z.literal('free-busy')
+            z.literal('free-busy'),
+            z.literal('read'),
+            z.literal('write')
         ]),
         redirectUrl: z.optional(z.url())
     })
@@ -1097,21 +1100,11 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
         earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
         latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1119,7 +1112,8 @@ export const zGetV1UsersUserIdSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('30')
     })
 });
 
@@ -1166,19 +1160,9 @@ export const zPostV1UsersUserIdSchedulingData = z.object({
     }),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1186,7 +1170,8 @@ export const zPostV1UsersUserIdSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('30')
     })
 });
 
@@ -1216,38 +1201,46 @@ export const zPostV1UsersSchedulingData = z.object({
     body: z.optional(z.object({
         users: z.array(z.object({
             id: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
-            calendarIds: z.optional(z.array(z.string())),
-            schedules: z.optional(z.array(z.object({
-                days: z.array(z.enum([
-                    'friday',
-                    'monday',
-                    'saturday',
-                    'sunday',
-                    'thursday',
-                    'tuesday',
-                    'wednesday'
-                ])),
-                end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
-                start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
-            })))
+            calendarIds: z.optional(z.union([
+                z.string(),
+                z.array(z.string())
+            ])),
+            schedules: z.optional(z.union([
+                z.object({
+                    days: z.array(z.enum([
+                        'friday',
+                        'monday',
+                        'saturday',
+                        'sunday',
+                        'thursday',
+                        'tuesday',
+                        'wednesday'
+                    ])),
+                    end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
+                    start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+                }),
+                z.array(z.object({
+                    days: z.array(z.enum([
+                        'friday',
+                        'monday',
+                        'saturday',
+                        'sunday',
+                        'thursday',
+                        'tuesday',
+                        'wednesday'
+                    ])),
+                    end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
+                    start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+                }))
+            ]))
         }))
     })),
     path: z.optional(z.never()),
     query: z.object({
         end: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        padding: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
-        slotDuration: z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ]),
         start: z.string().regex(/^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-3])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))(T((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([,.]\d+(?!:))?)?(\17[0-5]\d([,.]\d+)?)?([Zz]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/),
-        maxOverlaps: z.optional(z.union([
-            z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/),
-            z.unknown()
-        ])),
+        maxOverlaps: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
+        padding: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('0'),
         provider: z.optional(z.union([
             z.array(z.enum([
                 'google',
@@ -1255,7 +1248,8 @@ export const zPostV1UsersSchedulingData = z.object({
             ])),
             z.literal('google'),
             z.literal('microsoft')
-        ]))
+        ])),
+        slotDuration: z.optional(z.string().regex(/^(?:(?!^-0$)-?(?:(?:0|[1-9]\d*)))$/)).default('30')
     })
 });
 
@@ -1279,24 +1273,44 @@ export const zPostV1UsersSchedulingResponse = z.object({
                 earliestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)),
                 latestTimeEachDay: z.optional(z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/))
             }),
+            status: z.literal('ok'),
             userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
-            calendarIds: z.optional(z.array(z.string())),
-            schedules: z.optional(z.array(z.object({
-                days: z.array(z.enum([
-                    'friday',
-                    'monday',
-                    'saturday',
-                    'sunday',
-                    'thursday',
-                    'tuesday',
-                    'wednesday'
-                ])),
-                end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
-                start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
-            })))
+            calendarIds: z.optional(z.union([
+                z.string(),
+                z.array(z.string())
+            ])),
+            schedules: z.optional(z.union([
+                z.object({
+                    days: z.array(z.enum([
+                        'friday',
+                        'monday',
+                        'saturday',
+                        'sunday',
+                        'thursday',
+                        'tuesday',
+                        'wednesday'
+                    ])),
+                    end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
+                    start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+                }),
+                z.array(z.object({
+                    days: z.array(z.enum([
+                        'friday',
+                        'monday',
+                        'saturday',
+                        'sunday',
+                        'thursday',
+                        'tuesday',
+                        'wednesday'
+                    ])),
+                    end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
+                    start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+                }))
+            ]))
         }),
         z.object({
             error: z.string(),
+            status: z.literal('error'),
             userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
         })
     ]))
