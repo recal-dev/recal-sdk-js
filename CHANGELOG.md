@@ -36,8 +36,16 @@ No other method changed shape.
 so `GetV1UsersUserIdSchedulingData` is now `GetV1UsersByUserIdSchedulingData`, and likewise
 for all 33 parameterised operations. This affects only the generated `GetV1…` / `PostV1…` /
 `PutV1…` / `DeleteV1…` names; the domain types (`Calendar`, `Event`, `User`, `TimeRange`,
-`Provider`, …) are untouched, and no method name, argument, or URL changed. The operation
-ids these names derive from are now pinned in the API, so they will not move again.
+`Provider`, …) are untouched. For `recal.*` service methods, no method name, argument, or
+URL changed — only these type names. The operation ids these names derive from are now
+pinned in the API, so they will not move again.
+
+Callers going through `RecalSDK.*` — the raw generated functions, re-exported from the
+package root for direct use without the `Recal` wrapper — see more than the rename: the
+same 33 functions are renamed on the function name itself, and 12 of them (beyond the two
+scheduling functions covered in (3) below) had an optional `body` argument become required.
+`recal.*` service methods are unaffected by that second part; each already supplied its
+body unconditionally.
 
 **3. `scheduling.getAdvancedSlots()` and `scheduling.getMultiUserSlots()` now require their
 `body` argument.** Both took `body?`, but the API validates a required field on each of
