@@ -105,7 +105,7 @@ export class SchedulingService {
     async getAdvancedSlots(
         userId: string,
         options: PostV1UsersByUserIdSchedulingData['query'],
-        body?: PostV1UsersByUserIdSchedulingData['body']
+        body: PostV1UsersByUserIdSchedulingData['body']
     ) {
         const response = await sdk.postV1UsersByUserIdScheduling({
             path: { userId },
@@ -143,7 +143,7 @@ export class SchedulingService {
      * )
      * ```
      */
-    async getMultiUserSlots(options: PostV1UsersSchedulingData['query'], body?: PostV1UsersSchedulingData['body']) {
+    async getMultiUserSlots(options: PostV1UsersSchedulingData['query'], body: PostV1UsersSchedulingData['body']) {
         const response = await sdk.postV1UsersScheduling({
             query: options,
             body,

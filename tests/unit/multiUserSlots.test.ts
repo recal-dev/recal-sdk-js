@@ -32,7 +32,7 @@ async function callWith(entries: unknown[]) {
             data: await opts.responseTransformer?.({ data: entries }),
         }),
     }
-    return (await new SchedulingService(client as never).getMultiUserSlots({} as never)) as Array<
+    return (await new SchedulingService(client as never).getMultiUserSlots({} as never, { users: [] })) as Array<
         Record<string, unknown>
     >
 }
