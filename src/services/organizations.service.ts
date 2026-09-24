@@ -1,9 +1,9 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetV1OrganizationsOrgSlugCalendarBusyData,
-    GetV1OrganizationsOrgSlugMembersData,
-    GetV1OrganizationsOrgSlugSchedulingData,
+    GetV1OrganizationsByOrgSlugCalendarBusyData,
+    GetV1OrganizationsByOrgSlugMembersData,
+    GetV1OrganizationsByOrgSlugSchedulingData,
 } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
 
@@ -39,7 +39,7 @@ export class OrganizationsService {
      * ```
      */
     async get(slug: string) {
-        const response = await sdk.getV1OrganizationsOrgSlug({
+        const response = await sdk.getV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
@@ -80,7 +80,7 @@ export class OrganizationsService {
      * ```
      */
     async update(slug: string, data: { slug: string; name: string | null }) {
-        const response = await sdk.putV1OrganizationsOrgSlug({
+        const response = await sdk.putV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             body: data,
             client: this.client,
@@ -99,7 +99,7 @@ export class OrganizationsService {
      * ```
      */
     async delete(slug: string) {
-        const response = await sdk.deleteV1OrganizationsOrgSlug({
+        const response = await sdk.deleteV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
@@ -119,8 +119,8 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getMembers(slug: string, options?: GetV1OrganizationsOrgSlugMembersData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugMembers({
+    async getMembers(slug: string, options?: GetV1OrganizationsByOrgSlugMembersData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
@@ -140,7 +140,7 @@ export class OrganizationsService {
      * ```
      */
     async addMembers(slug: string, userIds: string[]) {
-        const response = await sdk.postV1OrganizationsOrgSlugMembers({
+        const response = await sdk.postV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
@@ -160,7 +160,7 @@ export class OrganizationsService {
      * ```
      */
     async removeMembers(slug: string, userIds: string[]) {
-        const response = await sdk.deleteV1OrganizationsOrgSlugMembers({
+        const response = await sdk.deleteV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
@@ -183,8 +183,8 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getBusyTimes(slug: string, options: GetV1OrganizationsOrgSlugCalendarBusyData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugCalendarBusy({
+    async getBusyTimes(slug: string, options: GetV1OrganizationsByOrgSlugCalendarBusyData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugCalendarBusy({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
@@ -208,8 +208,8 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getScheduling(slug: string, options: GetV1OrganizationsOrgSlugSchedulingData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugScheduling({
+    async getScheduling(slug: string, options: GetV1OrganizationsByOrgSlugSchedulingData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugScheduling({
             path: { orgSlug: slug },
             query: options,
             client: this.client,

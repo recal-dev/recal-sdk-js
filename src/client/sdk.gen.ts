@@ -2,9 +2,9 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import { deleteV1OrganizationsOrgSlugResponseTransformer, deleteV1UsersUserIdResponseTransformer, getV1OrganizationsOrgSlugCalendarBusyResponseTransformer, getV1OrganizationsOrgSlugMembersResponseTransformer, getV1OrganizationsOrgSlugResponseTransformer, getV1OrganizationsOrgSlugSchedulingResponseTransformer, getV1OrganizationsResponseTransformer, getV1UsersResponseTransformer, getV1UsersUserIdCalendarBusyResponseTransformer, getV1UsersUserIdCalendarEventsMetaMetaIdResponseTransformer, getV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponseTransformer, getV1UsersUserIdCalendarEventsResponseTransformer, getV1UsersUserIdCalendarResponseTransformer, getV1UsersUserIdOauthProviderResponseTransformer, getV1UsersUserIdOauthResponseTransformer, getV1UsersUserIdOrganizationsResponseTransformer, getV1UsersUserIdResponseTransformer, getV1UsersUserIdSchedulingResponseTransformer, postV1OrganizationsResponseTransformer, postV1UsersResponseTransformer, postV1UsersSchedulingResponseTransformer, postV1UsersUserIdCalendarEventsMetaResponseTransformer, postV1UsersUserIdCalendarEventsProviderCalendarIdResponseTransformer, postV1UsersUserIdOauthProviderResponseTransformer, postV1UsersUserIdSchedulingResponseTransformer, putV1OrganizationsOrgSlugResponseTransformer, putV1UsersUserIdCalendarEventsMetaMetaIdResponseTransformer, putV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponseTransformer, putV1UsersUserIdResponseTransformer } from './transformers.gen';
-import type { DeleteV1OrganizationsOrgSlugData, DeleteV1OrganizationsOrgSlugErrors, DeleteV1OrganizationsOrgSlugMembersData, DeleteV1OrganizationsOrgSlugMembersErrors, DeleteV1OrganizationsOrgSlugMembersResponses, DeleteV1OrganizationsOrgSlugResponses, DeleteV1UsersUserIdCalendarEventsMetaMetaIdData, DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors, DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses, DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, DeleteV1UsersUserIdData, DeleteV1UsersUserIdErrors, DeleteV1UsersUserIdOauthProviderData, DeleteV1UsersUserIdOauthProviderErrors, DeleteV1UsersUserIdOauthProviderResponses, DeleteV1UsersUserIdResponses, GetV1OrganizationsData, GetV1OrganizationsOrgSlugCalendarBusyData, GetV1OrganizationsOrgSlugCalendarBusyErrors, GetV1OrganizationsOrgSlugCalendarBusyResponses, GetV1OrganizationsOrgSlugData, GetV1OrganizationsOrgSlugErrors, GetV1OrganizationsOrgSlugMembersData, GetV1OrganizationsOrgSlugMembersErrors, GetV1OrganizationsOrgSlugMembersResponses, GetV1OrganizationsOrgSlugResponses, GetV1OrganizationsOrgSlugSchedulingData, GetV1OrganizationsOrgSlugSchedulingErrors, GetV1OrganizationsOrgSlugSchedulingResponses, GetV1OrganizationsResponses, GetV1UsersData, GetV1UsersResponses, GetV1UsersUserIdCalendarBusyData, GetV1UsersUserIdCalendarBusyErrors, GetV1UsersUserIdCalendarBusyResponses, GetV1UsersUserIdCalendarData, GetV1UsersUserIdCalendarErrors, GetV1UsersUserIdCalendarEventsData, GetV1UsersUserIdCalendarEventsErrors, GetV1UsersUserIdCalendarEventsMetaMetaIdData, GetV1UsersUserIdCalendarEventsMetaMetaIdErrors, GetV1UsersUserIdCalendarEventsMetaMetaIdResponses, GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, GetV1UsersUserIdCalendarEventsResponses, GetV1UsersUserIdCalendarResponses, GetV1UsersUserIdData, GetV1UsersUserIdErrors, GetV1UsersUserIdOauthData, GetV1UsersUserIdOauthErrors, GetV1UsersUserIdOauthLinksData, GetV1UsersUserIdOauthLinksErrors, GetV1UsersUserIdOauthLinksResponses, GetV1UsersUserIdOauthProviderData, GetV1UsersUserIdOauthProviderErrors, GetV1UsersUserIdOauthProviderLinkData, GetV1UsersUserIdOauthProviderLinkErrors, GetV1UsersUserIdOauthProviderLinkResponses, GetV1UsersUserIdOauthProviderResponses, GetV1UsersUserIdOauthProviderTokenData, GetV1UsersUserIdOauthProviderTokenErrors, GetV1UsersUserIdOauthProviderTokenResponses, GetV1UsersUserIdOauthResponses, GetV1UsersUserIdOrganizationsData, GetV1UsersUserIdOrganizationsErrors, GetV1UsersUserIdOrganizationsResponses, GetV1UsersUserIdResponses, GetV1UsersUserIdSchedulingData, GetV1UsersUserIdSchedulingErrors, GetV1UsersUserIdSchedulingResponses, PostV1OrganizationsData, PostV1OrganizationsErrors, PostV1OrganizationsOrgSlugMembersData, PostV1OrganizationsOrgSlugMembersErrors, PostV1OrganizationsOrgSlugMembersResponses, PostV1OrganizationsResponses, PostV1UsersData, PostV1UsersErrors, PostV1UsersOauthProviderVerifyData, PostV1UsersOauthProviderVerifyErrors, PostV1UsersOauthProviderVerifyResponses, PostV1UsersResponses, PostV1UsersSchedulingData, PostV1UsersSchedulingResponses, PostV1UsersUserIdCalendarEventsMetaData, PostV1UsersUserIdCalendarEventsMetaErrors, PostV1UsersUserIdCalendarEventsMetaResponses, PostV1UsersUserIdCalendarEventsProviderCalendarIdData, PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors, PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses, PostV1UsersUserIdOauthProviderData, PostV1UsersUserIdOauthProviderErrors, PostV1UsersUserIdOauthProviderResponses, PostV1UsersUserIdSchedulingData, PostV1UsersUserIdSchedulingErrors, PostV1UsersUserIdSchedulingResponses, PutV1OrganizationsOrgSlugData, PutV1OrganizationsOrgSlugErrors, PutV1OrganizationsOrgSlugResponses, PutV1UsersUserIdCalendarEventsMetaMetaIdData, PutV1UsersUserIdCalendarEventsMetaMetaIdErrors, PutV1UsersUserIdCalendarEventsMetaMetaIdResponses, PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, PutV1UsersUserIdData, PutV1UsersUserIdErrors, PutV1UsersUserIdResponses } from './types.gen';
-import { zDeleteV1OrganizationsOrgSlugData, zDeleteV1OrganizationsOrgSlugMembersData, zDeleteV1OrganizationsOrgSlugMembersResponse, zDeleteV1OrganizationsOrgSlugResponse, zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData, zDeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse, zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse, zDeleteV1UsersUserIdData, zDeleteV1UsersUserIdOauthProviderData, zDeleteV1UsersUserIdResponse, zGetV1OrganizationsData, zGetV1OrganizationsOrgSlugCalendarBusyData, zGetV1OrganizationsOrgSlugCalendarBusyResponse, zGetV1OrganizationsOrgSlugData, zGetV1OrganizationsOrgSlugMembersData, zGetV1OrganizationsOrgSlugMembersResponse, zGetV1OrganizationsOrgSlugResponse, zGetV1OrganizationsOrgSlugSchedulingData, zGetV1OrganizationsOrgSlugSchedulingResponse, zGetV1OrganizationsResponse, zGetV1UsersData, zGetV1UsersResponse, zGetV1UsersUserIdCalendarBusyData, zGetV1UsersUserIdCalendarBusyResponse, zGetV1UsersUserIdCalendarData, zGetV1UsersUserIdCalendarEventsData, zGetV1UsersUserIdCalendarEventsMetaMetaIdData, zGetV1UsersUserIdCalendarEventsMetaMetaIdResponse, zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse, zGetV1UsersUserIdCalendarEventsResponse, zGetV1UsersUserIdCalendarResponse, zGetV1UsersUserIdData, zGetV1UsersUserIdOauthData, zGetV1UsersUserIdOauthLinksData, zGetV1UsersUserIdOauthLinksResponse, zGetV1UsersUserIdOauthProviderData, zGetV1UsersUserIdOauthProviderLinkData, zGetV1UsersUserIdOauthProviderLinkResponse, zGetV1UsersUserIdOauthProviderResponse, zGetV1UsersUserIdOauthProviderTokenData, zGetV1UsersUserIdOauthProviderTokenResponse, zGetV1UsersUserIdOauthResponse, zGetV1UsersUserIdOrganizationsData, zGetV1UsersUserIdOrganizationsResponse, zGetV1UsersUserIdResponse, zGetV1UsersUserIdSchedulingData, zGetV1UsersUserIdSchedulingResponse, zPostV1OrganizationsData, zPostV1OrganizationsOrgSlugMembersData, zPostV1OrganizationsOrgSlugMembersResponse, zPostV1OrganizationsResponse, zPostV1UsersData, zPostV1UsersOauthProviderVerifyData, zPostV1UsersResponse, zPostV1UsersSchedulingData, zPostV1UsersSchedulingResponse, zPostV1UsersUserIdCalendarEventsMetaData, zPostV1UsersUserIdCalendarEventsMetaResponse, zPostV1UsersUserIdCalendarEventsProviderCalendarIdData, zPostV1UsersUserIdCalendarEventsProviderCalendarIdResponse, zPostV1UsersUserIdOauthProviderData, zPostV1UsersUserIdOauthProviderResponse, zPostV1UsersUserIdSchedulingData, zPostV1UsersUserIdSchedulingResponse, zPutV1OrganizationsOrgSlugData, zPutV1OrganizationsOrgSlugResponse, zPutV1UsersUserIdCalendarEventsMetaMetaIdData, zPutV1UsersUserIdCalendarEventsMetaMetaIdResponse, zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse, zPutV1UsersUserIdData, zPutV1UsersUserIdResponse } from './zod.gen';
+import { deleteV1OrganizationsByOrgSlugResponseTransformer, deleteV1UsersByUserIdResponseTransformer, getV1OrganizationsByOrgSlugCalendarBusyResponseTransformer, getV1OrganizationsByOrgSlugMembersResponseTransformer, getV1OrganizationsByOrgSlugResponseTransformer, getV1OrganizationsByOrgSlugSchedulingResponseTransformer, getV1OrganizationsResponseTransformer, getV1UsersByUserIdCalendarBusyResponseTransformer, getV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponseTransformer, getV1UsersByUserIdCalendarEventsMetaByMetaIdResponseTransformer, getV1UsersByUserIdCalendarEventsResponseTransformer, getV1UsersByUserIdCalendarResponseTransformer, getV1UsersByUserIdOauthByProviderResponseTransformer, getV1UsersByUserIdOauthResponseTransformer, getV1UsersByUserIdOrganizationsResponseTransformer, getV1UsersByUserIdResponseTransformer, getV1UsersByUserIdSchedulingResponseTransformer, getV1UsersResponseTransformer, postV1OrganizationsResponseTransformer, postV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponseTransformer, postV1UsersByUserIdCalendarEventsMetaResponseTransformer, postV1UsersByUserIdOauthByProviderResponseTransformer, postV1UsersByUserIdSchedulingResponseTransformer, postV1UsersResponseTransformer, postV1UsersSchedulingResponseTransformer, putV1OrganizationsByOrgSlugResponseTransformer, putV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponseTransformer, putV1UsersByUserIdCalendarEventsMetaByMetaIdResponseTransformer, putV1UsersByUserIdResponseTransformer } from './transformers.gen';
+import type { DeleteV1OrganizationsByOrgSlugData, DeleteV1OrganizationsByOrgSlugErrors, DeleteV1OrganizationsByOrgSlugMembersData, DeleteV1OrganizationsByOrgSlugMembersErrors, DeleteV1OrganizationsByOrgSlugMembersResponses, DeleteV1OrganizationsByOrgSlugResponses, DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData, DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, DeleteV1UsersByUserIdData, DeleteV1UsersByUserIdErrors, DeleteV1UsersByUserIdOauthByProviderData, DeleteV1UsersByUserIdOauthByProviderErrors, DeleteV1UsersByUserIdOauthByProviderResponses, DeleteV1UsersByUserIdResponses, GetV1OrganizationsByOrgSlugCalendarBusyData, GetV1OrganizationsByOrgSlugCalendarBusyErrors, GetV1OrganizationsByOrgSlugCalendarBusyResponses, GetV1OrganizationsByOrgSlugData, GetV1OrganizationsByOrgSlugErrors, GetV1OrganizationsByOrgSlugMembersData, GetV1OrganizationsByOrgSlugMembersErrors, GetV1OrganizationsByOrgSlugMembersResponses, GetV1OrganizationsByOrgSlugResponses, GetV1OrganizationsByOrgSlugSchedulingData, GetV1OrganizationsByOrgSlugSchedulingErrors, GetV1OrganizationsByOrgSlugSchedulingResponses, GetV1OrganizationsData, GetV1OrganizationsResponses, GetV1UsersByUserIdCalendarBusyData, GetV1UsersByUserIdCalendarBusyErrors, GetV1UsersByUserIdCalendarBusyResponses, GetV1UsersByUserIdCalendarData, GetV1UsersByUserIdCalendarErrors, GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, GetV1UsersByUserIdCalendarEventsData, GetV1UsersByUserIdCalendarEventsErrors, GetV1UsersByUserIdCalendarEventsMetaByMetaIdData, GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, GetV1UsersByUserIdCalendarEventsResponses, GetV1UsersByUserIdCalendarResponses, GetV1UsersByUserIdData, GetV1UsersByUserIdErrors, GetV1UsersByUserIdOauthByProviderData, GetV1UsersByUserIdOauthByProviderErrors, GetV1UsersByUserIdOauthByProviderLinkData, GetV1UsersByUserIdOauthByProviderLinkErrors, GetV1UsersByUserIdOauthByProviderLinkResponses, GetV1UsersByUserIdOauthByProviderResponses, GetV1UsersByUserIdOauthByProviderTokenData, GetV1UsersByUserIdOauthByProviderTokenErrors, GetV1UsersByUserIdOauthByProviderTokenResponses, GetV1UsersByUserIdOauthData, GetV1UsersByUserIdOauthErrors, GetV1UsersByUserIdOauthLinksData, GetV1UsersByUserIdOauthLinksErrors, GetV1UsersByUserIdOauthLinksResponses, GetV1UsersByUserIdOauthResponses, GetV1UsersByUserIdOrganizationsData, GetV1UsersByUserIdOrganizationsErrors, GetV1UsersByUserIdOrganizationsResponses, GetV1UsersByUserIdResponses, GetV1UsersByUserIdSchedulingData, GetV1UsersByUserIdSchedulingErrors, GetV1UsersByUserIdSchedulingResponses, GetV1UsersData, GetV1UsersResponses, PostV1OrganizationsByOrgSlugMembersData, PostV1OrganizationsByOrgSlugMembersErrors, PostV1OrganizationsByOrgSlugMembersResponses, PostV1OrganizationsData, PostV1OrganizationsErrors, PostV1OrganizationsResponses, PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdData, PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors, PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponses, PostV1UsersByUserIdCalendarEventsMetaData, PostV1UsersByUserIdCalendarEventsMetaErrors, PostV1UsersByUserIdCalendarEventsMetaResponses, PostV1UsersByUserIdOauthByProviderData, PostV1UsersByUserIdOauthByProviderErrors, PostV1UsersByUserIdOauthByProviderResponses, PostV1UsersByUserIdSchedulingData, PostV1UsersByUserIdSchedulingErrors, PostV1UsersByUserIdSchedulingResponses, PostV1UsersData, PostV1UsersErrors, PostV1UsersOauthByProviderVerifyData, PostV1UsersOauthByProviderVerifyErrors, PostV1UsersOauthByProviderVerifyResponses, PostV1UsersResponses, PostV1UsersSchedulingData, PostV1UsersSchedulingErrors, PostV1UsersSchedulingResponses, PutV1OrganizationsByOrgSlugData, PutV1OrganizationsByOrgSlugErrors, PutV1OrganizationsByOrgSlugResponses, PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, PutV1UsersByUserIdCalendarEventsMetaByMetaIdData, PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, PutV1UsersByUserIdData, PutV1UsersByUserIdErrors, PutV1UsersByUserIdResponses } from './types.gen';
+import { zDeleteV1OrganizationsByOrgSlugData, zDeleteV1OrganizationsByOrgSlugMembersData, zDeleteV1OrganizationsByOrgSlugMembersResponse, zDeleteV1OrganizationsByOrgSlugResponse, zDeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, zDeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse, zDeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData, zDeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponse, zDeleteV1UsersByUserIdData, zDeleteV1UsersByUserIdOauthByProviderData, zDeleteV1UsersByUserIdResponse, zGetV1OrganizationsByOrgSlugCalendarBusyData, zGetV1OrganizationsByOrgSlugCalendarBusyResponse, zGetV1OrganizationsByOrgSlugData, zGetV1OrganizationsByOrgSlugMembersData, zGetV1OrganizationsByOrgSlugMembersResponse, zGetV1OrganizationsByOrgSlugResponse, zGetV1OrganizationsByOrgSlugSchedulingData, zGetV1OrganizationsByOrgSlugSchedulingResponse, zGetV1OrganizationsData, zGetV1OrganizationsResponse, zGetV1UsersByUserIdCalendarBusyData, zGetV1UsersByUserIdCalendarBusyResponse, zGetV1UsersByUserIdCalendarData, zGetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, zGetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse, zGetV1UsersByUserIdCalendarEventsData, zGetV1UsersByUserIdCalendarEventsMetaByMetaIdData, zGetV1UsersByUserIdCalendarEventsMetaByMetaIdResponse, zGetV1UsersByUserIdCalendarEventsResponse, zGetV1UsersByUserIdCalendarResponse, zGetV1UsersByUserIdData, zGetV1UsersByUserIdOauthByProviderData, zGetV1UsersByUserIdOauthByProviderLinkData, zGetV1UsersByUserIdOauthByProviderLinkResponse, zGetV1UsersByUserIdOauthByProviderResponse, zGetV1UsersByUserIdOauthByProviderTokenData, zGetV1UsersByUserIdOauthByProviderTokenResponse, zGetV1UsersByUserIdOauthData, zGetV1UsersByUserIdOauthLinksData, zGetV1UsersByUserIdOauthLinksResponse, zGetV1UsersByUserIdOauthResponse, zGetV1UsersByUserIdOrganizationsData, zGetV1UsersByUserIdOrganizationsResponse, zGetV1UsersByUserIdResponse, zGetV1UsersByUserIdSchedulingData, zGetV1UsersByUserIdSchedulingResponse, zGetV1UsersData, zGetV1UsersResponse, zPostV1OrganizationsByOrgSlugMembersData, zPostV1OrganizationsByOrgSlugMembersResponse, zPostV1OrganizationsData, zPostV1OrganizationsResponse, zPostV1UsersByUserIdCalendarEventsByProviderByCalendarIdData, zPostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponse, zPostV1UsersByUserIdCalendarEventsMetaData, zPostV1UsersByUserIdCalendarEventsMetaResponse, zPostV1UsersByUserIdOauthByProviderData, zPostV1UsersByUserIdOauthByProviderResponse, zPostV1UsersByUserIdSchedulingData, zPostV1UsersByUserIdSchedulingResponse, zPostV1UsersData, zPostV1UsersOauthByProviderVerifyData, zPostV1UsersResponse, zPostV1UsersSchedulingData, zPostV1UsersSchedulingResponse, zPutV1OrganizationsByOrgSlugData, zPutV1OrganizationsByOrgSlugResponse, zPutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, zPutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse, zPutV1UsersByUserIdCalendarEventsMetaByMetaIdData, zPutV1UsersByUserIdCalendarEventsMetaByMetaIdResponse, zPutV1UsersByUserIdData, zPutV1UsersByUserIdResponse } from './zod.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -46,8 +46,8 @@ export const getV1Organizations = <ThrowOnError extends boolean = false>(options
 /**
  * Create a new organization
  */
-export const postV1Organizations = <ThrowOnError extends boolean = false>(options?: Options<PostV1OrganizationsData, ThrowOnError>) => {
-    return (options?.client ?? client).post<PostV1OrganizationsResponses, PostV1OrganizationsErrors, ThrowOnError>({
+export const postV1Organizations = <ThrowOnError extends boolean = false>(options: Options<PostV1OrganizationsData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1OrganizationsResponses, PostV1OrganizationsErrors, ThrowOnError>({
         requestValidator: async (data) => {
             return await zPostV1OrganizationsData.parseAsync(data);
         },
@@ -65,7 +65,7 @@ export const postV1Organizations = <ThrowOnError extends boolean = false>(option
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            ...options?.headers
+            ...options.headers
         }
     });
 };
@@ -73,14 +73,14 @@ export const postV1Organizations = <ThrowOnError extends boolean = false>(option
 /**
  * Delete organization
  */
-export const deleteV1OrganizationsOrgSlug = <ThrowOnError extends boolean = false>(options: Options<DeleteV1OrganizationsOrgSlugData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1OrganizationsOrgSlugResponses, DeleteV1OrganizationsOrgSlugErrors, ThrowOnError>({
+export const deleteV1OrganizationsByOrgSlug = <ThrowOnError extends boolean = false>(options: Options<DeleteV1OrganizationsByOrgSlugData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1OrganizationsByOrgSlugResponses, DeleteV1OrganizationsByOrgSlugErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1OrganizationsOrgSlugData.parseAsync(data);
+            return await zDeleteV1OrganizationsByOrgSlugData.parseAsync(data);
         },
-        responseTransformer: deleteV1OrganizationsOrgSlugResponseTransformer,
+        responseTransformer: deleteV1OrganizationsByOrgSlugResponseTransformer,
         responseValidator: async (data) => {
-            return await zDeleteV1OrganizationsOrgSlugResponse.parseAsync(data);
+            return await zDeleteV1OrganizationsByOrgSlugResponse.parseAsync(data);
         },
         security: [
             {
@@ -96,14 +96,14 @@ export const deleteV1OrganizationsOrgSlug = <ThrowOnError extends boolean = fals
 /**
  * Get organization
  */
-export const getV1OrganizationsOrgSlug = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsOrgSlugData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1OrganizationsOrgSlugResponses, GetV1OrganizationsOrgSlugErrors, ThrowOnError>({
+export const getV1OrganizationsByOrgSlug = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsByOrgSlugData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1OrganizationsByOrgSlugResponses, GetV1OrganizationsByOrgSlugErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugData.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugData.parseAsync(data);
         },
-        responseTransformer: getV1OrganizationsOrgSlugResponseTransformer,
+        responseTransformer: getV1OrganizationsByOrgSlugResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugResponse.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugResponse.parseAsync(data);
         },
         security: [
             {
@@ -119,14 +119,14 @@ export const getV1OrganizationsOrgSlug = <ThrowOnError extends boolean = false>(
 /**
  * Update organization
  */
-export const putV1OrganizationsOrgSlug = <ThrowOnError extends boolean = false>(options: Options<PutV1OrganizationsOrgSlugData, ThrowOnError>) => {
-    return (options.client ?? client).put<PutV1OrganizationsOrgSlugResponses, PutV1OrganizationsOrgSlugErrors, ThrowOnError>({
+export const putV1OrganizationsByOrgSlug = <ThrowOnError extends boolean = false>(options: Options<PutV1OrganizationsByOrgSlugData, ThrowOnError>) => {
+    return (options.client ?? client).put<PutV1OrganizationsByOrgSlugResponses, PutV1OrganizationsByOrgSlugErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPutV1OrganizationsOrgSlugData.parseAsync(data);
+            return await zPutV1OrganizationsByOrgSlugData.parseAsync(data);
         },
-        responseTransformer: putV1OrganizationsOrgSlugResponseTransformer,
+        responseTransformer: putV1OrganizationsByOrgSlugResponseTransformer,
         responseValidator: async (data) => {
-            return await zPutV1OrganizationsOrgSlugResponse.parseAsync(data);
+            return await zPutV1OrganizationsByOrgSlugResponse.parseAsync(data);
         },
         security: [
             {
@@ -146,13 +146,13 @@ export const putV1OrganizationsOrgSlug = <ThrowOnError extends boolean = false>(
 /**
  * Remove users from an organization
  */
-export const deleteV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<DeleteV1OrganizationsOrgSlugMembersData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1OrganizationsOrgSlugMembersResponses, DeleteV1OrganizationsOrgSlugMembersErrors, ThrowOnError>({
+export const deleteV1OrganizationsByOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<DeleteV1OrganizationsByOrgSlugMembersData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1OrganizationsByOrgSlugMembersResponses, DeleteV1OrganizationsByOrgSlugMembersErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1OrganizationsOrgSlugMembersData.parseAsync(data);
+            return await zDeleteV1OrganizationsByOrgSlugMembersData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zDeleteV1OrganizationsOrgSlugMembersResponse.parseAsync(data);
+            return await zDeleteV1OrganizationsByOrgSlugMembersResponse.parseAsync(data);
         },
         security: [
             {
@@ -172,14 +172,14 @@ export const deleteV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean
 /**
  * Get all members of an organization
  */
-export const getV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsOrgSlugMembersData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1OrganizationsOrgSlugMembersResponses, GetV1OrganizationsOrgSlugMembersErrors, ThrowOnError>({
+export const getV1OrganizationsByOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsByOrgSlugMembersData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1OrganizationsByOrgSlugMembersResponses, GetV1OrganizationsByOrgSlugMembersErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugMembersData.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugMembersData.parseAsync(data);
         },
-        responseTransformer: getV1OrganizationsOrgSlugMembersResponseTransformer,
+        responseTransformer: getV1OrganizationsByOrgSlugMembersResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugMembersResponse.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugMembersResponse.parseAsync(data);
         },
         security: [
             {
@@ -195,13 +195,13 @@ export const getV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean = 
 /**
  * Add users to an organization
  */
-export const postV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<PostV1OrganizationsOrgSlugMembersData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1OrganizationsOrgSlugMembersResponses, PostV1OrganizationsOrgSlugMembersErrors, ThrowOnError>({
+export const postV1OrganizationsByOrgSlugMembers = <ThrowOnError extends boolean = false>(options: Options<PostV1OrganizationsByOrgSlugMembersData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1OrganizationsByOrgSlugMembersResponses, PostV1OrganizationsByOrgSlugMembersErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1OrganizationsOrgSlugMembersData.parseAsync(data);
+            return await zPostV1OrganizationsByOrgSlugMembersData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zPostV1OrganizationsOrgSlugMembersResponse.parseAsync(data);
+            return await zPostV1OrganizationsByOrgSlugMembersResponse.parseAsync(data);
         },
         security: [
             {
@@ -219,16 +219,16 @@ export const postV1OrganizationsOrgSlugMembers = <ThrowOnError extends boolean =
 };
 
 /**
- * Get the consolidated busy times of all users of an organization
+ * Get the consolidated busy times of all users of an organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no busy time, so a non-empty `failedUsers` means `data` is a partial answer rather than a complete one.
  */
-export const getV1OrganizationsOrgSlugCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsOrgSlugCalendarBusyData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1OrganizationsOrgSlugCalendarBusyResponses, GetV1OrganizationsOrgSlugCalendarBusyErrors, ThrowOnError>({
+export const getV1OrganizationsByOrgSlugCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsByOrgSlugCalendarBusyData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1OrganizationsByOrgSlugCalendarBusyResponses, GetV1OrganizationsByOrgSlugCalendarBusyErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugCalendarBusyData.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugCalendarBusyData.parseAsync(data);
         },
-        responseTransformer: getV1OrganizationsOrgSlugCalendarBusyResponseTransformer,
+        responseTransformer: getV1OrganizationsByOrgSlugCalendarBusyResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugCalendarBusyResponse.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugCalendarBusyResponse.parseAsync(data);
         },
         security: [
             {
@@ -242,18 +242,18 @@ export const getV1OrganizationsOrgSlugCalendarBusy = <ThrowOnError extends boole
 };
 
 /**
- * Get available time slots for all users in a sub-organization
+ * Get available time slots for all users in a sub-organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no slots, so a non-empty `failedUsers` means the availability is a partial answer rather than a complete one.
  *
  * Tip: Use the `x-timezone` header to specify the timezone of the times provided in the request
  */
-export const getV1OrganizationsOrgSlugScheduling = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsOrgSlugSchedulingData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1OrganizationsOrgSlugSchedulingResponses, GetV1OrganizationsOrgSlugSchedulingErrors, ThrowOnError>({
+export const getV1OrganizationsByOrgSlugScheduling = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsByOrgSlugSchedulingData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1OrganizationsByOrgSlugSchedulingResponses, GetV1OrganizationsByOrgSlugSchedulingErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugSchedulingData.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugSchedulingData.parseAsync(data);
         },
-        responseTransformer: getV1OrganizationsOrgSlugSchedulingResponseTransformer,
+        responseTransformer: getV1OrganizationsByOrgSlugSchedulingResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1OrganizationsOrgSlugSchedulingResponse.parseAsync(data);
+            return await zGetV1OrganizationsByOrgSlugSchedulingResponse.parseAsync(data);
         },
         security: [
             {
@@ -292,8 +292,8 @@ export const getV1Users = <ThrowOnError extends boolean = false>(options?: Optio
 /**
  * Create a user and optionally connect to organizations directly
  */
-export const postV1Users = <ThrowOnError extends boolean = false>(options?: Options<PostV1UsersData, ThrowOnError>) => {
-    return (options?.client ?? client).post<PostV1UsersResponses, PostV1UsersErrors, ThrowOnError>({
+export const postV1Users = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersResponses, PostV1UsersErrors, ThrowOnError>({
         requestValidator: async (data) => {
             return await zPostV1UsersData.parseAsync(data);
         },
@@ -311,7 +311,7 @@ export const postV1Users = <ThrowOnError extends boolean = false>(options?: Opti
         ...options,
         headers: {
             'Content-Type': 'application/json',
-            ...options?.headers
+            ...options.headers
         }
     });
 };
@@ -319,14 +319,14 @@ export const postV1Users = <ThrowOnError extends boolean = false>(options?: Opti
 /**
  * Delete a user
  */
-export const deleteV1UsersUserId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersUserIdData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1UsersUserIdResponses, DeleteV1UsersUserIdErrors, ThrowOnError>({
+export const deleteV1UsersByUserId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersByUserIdData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1UsersByUserIdResponses, DeleteV1UsersByUserIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1UsersUserIdData.parseAsync(data);
+            return await zDeleteV1UsersByUserIdData.parseAsync(data);
         },
-        responseTransformer: deleteV1UsersUserIdResponseTransformer,
+        responseTransformer: deleteV1UsersByUserIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zDeleteV1UsersUserIdResponse.parseAsync(data);
+            return await zDeleteV1UsersByUserIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -342,14 +342,14 @@ export const deleteV1UsersUserId = <ThrowOnError extends boolean = false>(option
 /**
  * Get a user
  */
-export const getV1UsersUserId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdResponses, GetV1UsersUserIdErrors, ThrowOnError>({
+export const getV1UsersByUserId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdResponses, GetV1UsersByUserIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdData.parseAsync(data);
+            return await zGetV1UsersByUserIdData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdResponseTransformer,
+        responseTransformer: getV1UsersByUserIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -365,14 +365,14 @@ export const getV1UsersUserId = <ThrowOnError extends boolean = false>(options: 
 /**
  * Update a user
  */
-export const putV1UsersUserId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersUserIdData, ThrowOnError>) => {
-    return (options.client ?? client).put<PutV1UsersUserIdResponses, PutV1UsersUserIdErrors, ThrowOnError>({
+export const putV1UsersByUserId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersByUserIdData, ThrowOnError>) => {
+    return (options.client ?? client).put<PutV1UsersByUserIdResponses, PutV1UsersByUserIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPutV1UsersUserIdData.parseAsync(data);
+            return await zPutV1UsersByUserIdData.parseAsync(data);
         },
-        responseTransformer: putV1UsersUserIdResponseTransformer,
+        responseTransformer: putV1UsersByUserIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zPutV1UsersUserIdResponse.parseAsync(data);
+            return await zPutV1UsersByUserIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -392,14 +392,14 @@ export const putV1UsersUserId = <ThrowOnError extends boolean = false>(options: 
 /**
  * Get all organizations a user is connected to
  */
-export const getV1UsersUserIdOrganizations = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOrganizationsData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOrganizationsResponses, GetV1UsersUserIdOrganizationsErrors, ThrowOnError>({
+export const getV1UsersByUserIdOrganizations = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOrganizationsData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOrganizationsResponses, GetV1UsersByUserIdOrganizationsErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOrganizationsData.parseAsync(data);
+            return await zGetV1UsersByUserIdOrganizationsData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdOrganizationsResponseTransformer,
+        responseTransformer: getV1UsersByUserIdOrganizationsResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOrganizationsResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOrganizationsResponse.parseAsync(data);
         },
         security: [
             {
@@ -415,14 +415,14 @@ export const getV1UsersUserIdOrganizations = <ThrowOnError extends boolean = fal
 /**
  * List all Calendars of a user
  */
-export const getV1UsersUserIdCalendar = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdCalendarData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdCalendarResponses, GetV1UsersUserIdCalendarErrors, ThrowOnError>({
+export const getV1UsersByUserIdCalendar = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdCalendarResponses, GetV1UsersByUserIdCalendarErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarData.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdCalendarResponseTransformer,
+        responseTransformer: getV1UsersByUserIdCalendarResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarResponse.parseAsync(data);
         },
         security: [
             {
@@ -438,14 +438,14 @@ export const getV1UsersUserIdCalendar = <ThrowOnError extends boolean = false>(o
 /**
  * Get the busy times of a user across all their calendars
  */
-export const getV1UsersUserIdCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdCalendarBusyData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdCalendarBusyResponses, GetV1UsersUserIdCalendarBusyErrors, ThrowOnError>({
+export const getV1UsersByUserIdCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarBusyData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdCalendarBusyResponses, GetV1UsersByUserIdCalendarBusyErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarBusyData.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarBusyData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdCalendarBusyResponseTransformer,
+        responseTransformer: getV1UsersByUserIdCalendarBusyResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarBusyResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarBusyResponse.parseAsync(data);
         },
         security: [
             {
@@ -461,14 +461,14 @@ export const getV1UsersUserIdCalendarBusy = <ThrowOnError extends boolean = fals
 /**
  * List events of a user across all their calendars
  */
-export const getV1UsersUserIdCalendarEvents = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdCalendarEventsData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdCalendarEventsResponses, GetV1UsersUserIdCalendarEventsErrors, ThrowOnError>({
+export const getV1UsersByUserIdCalendarEvents = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarEventsData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdCalendarEventsResponses, GetV1UsersByUserIdCalendarEventsErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsData.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdCalendarEventsResponseTransformer,
+        responseTransformer: getV1UsersByUserIdCalendarEventsResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsResponse.parseAsync(data);
         },
         security: [
             {
@@ -484,14 +484,14 @@ export const getV1UsersUserIdCalendarEvents = <ThrowOnError extends boolean = fa
 /**
  * Create an event by metaId for a user across all their calendars
  */
-export const postV1UsersUserIdCalendarEventsMeta = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersUserIdCalendarEventsMetaData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersUserIdCalendarEventsMetaResponses, PostV1UsersUserIdCalendarEventsMetaErrors, ThrowOnError>({
+export const postV1UsersByUserIdCalendarEventsMeta = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersByUserIdCalendarEventsMetaData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersByUserIdCalendarEventsMetaResponses, PostV1UsersByUserIdCalendarEventsMetaErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1UsersUserIdCalendarEventsMetaData.parseAsync(data);
+            return await zPostV1UsersByUserIdCalendarEventsMetaData.parseAsync(data);
         },
-        responseTransformer: postV1UsersUserIdCalendarEventsMetaResponseTransformer,
+        responseTransformer: postV1UsersByUserIdCalendarEventsMetaResponseTransformer,
         responseValidator: async (data) => {
-            return await zPostV1UsersUserIdCalendarEventsMetaResponse.parseAsync(data);
+            return await zPostV1UsersByUserIdCalendarEventsMetaResponse.parseAsync(data);
         },
         security: [
             {
@@ -511,13 +511,13 @@ export const postV1UsersUserIdCalendarEventsMeta = <ThrowOnError extends boolean
 /**
  * Delete an event by metaId for a user across all their calendars
  */
-export const deleteV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersUserIdCalendarEventsMetaMetaIdData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses, DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors, ThrowOnError>({
+export const deleteV1UsersByUserIdCalendarEventsMetaByMetaId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1UsersUserIdCalendarEventsMetaMetaIdData.parseAsync(data);
+            return await zDeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zDeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse.parseAsync(data);
+            return await zDeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -533,14 +533,14 @@ export const deleteV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends
 /**
  * Get an event by metaId for a user across all their calendars
  */
-export const getV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdCalendarEventsMetaMetaIdData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdCalendarEventsMetaMetaIdResponses, GetV1UsersUserIdCalendarEventsMetaMetaIdErrors, ThrowOnError>({
+export const getV1UsersByUserIdCalendarEventsMetaByMetaId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarEventsMetaByMetaIdData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsMetaMetaIdData.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsMetaByMetaIdData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdCalendarEventsMetaMetaIdResponseTransformer,
+        responseTransformer: getV1UsersByUserIdCalendarEventsMetaByMetaIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsMetaMetaIdResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsMetaByMetaIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -556,14 +556,14 @@ export const getV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends bo
 /**
  * Update an event by metaId for a user across all their calendars
  */
-export const putV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersUserIdCalendarEventsMetaMetaIdData, ThrowOnError>) => {
-    return (options.client ?? client).put<PutV1UsersUserIdCalendarEventsMetaMetaIdResponses, PutV1UsersUserIdCalendarEventsMetaMetaIdErrors, ThrowOnError>({
+export const putV1UsersByUserIdCalendarEventsMetaByMetaId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersByUserIdCalendarEventsMetaByMetaIdData, ThrowOnError>) => {
+    return (options.client ?? client).put<PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponses, PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPutV1UsersUserIdCalendarEventsMetaMetaIdData.parseAsync(data);
+            return await zPutV1UsersByUserIdCalendarEventsMetaByMetaIdData.parseAsync(data);
         },
-        responseTransformer: putV1UsersUserIdCalendarEventsMetaMetaIdResponseTransformer,
+        responseTransformer: putV1UsersByUserIdCalendarEventsMetaByMetaIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zPutV1UsersUserIdCalendarEventsMetaMetaIdResponse.parseAsync(data);
+            return await zPutV1UsersByUserIdCalendarEventsMetaByMetaIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -583,14 +583,14 @@ export const putV1UsersUserIdCalendarEventsMetaMetaId = <ThrowOnError extends bo
 /**
  * Create an event for a user for a specific calendar and provider
  */
-export const postV1UsersUserIdCalendarEventsProviderCalendarId = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersUserIdCalendarEventsProviderCalendarIdData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses, PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors, ThrowOnError>({
+export const postV1UsersByUserIdCalendarEventsByProviderByCalendarId = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponses, PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1UsersUserIdCalendarEventsProviderCalendarIdData.parseAsync(data);
+            return await zPostV1UsersByUserIdCalendarEventsByProviderByCalendarIdData.parseAsync(data);
         },
-        responseTransformer: postV1UsersUserIdCalendarEventsProviderCalendarIdResponseTransformer,
+        responseTransformer: postV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zPostV1UsersUserIdCalendarEventsProviderCalendarIdResponse.parseAsync(data);
+            return await zPostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -610,13 +610,13 @@ export const postV1UsersUserIdCalendarEventsProviderCalendarId = <ThrowOnError e
 /**
  * Delete an event for a user for a specific calendar and provider
  */
-export const deleteV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, ThrowOnError>({
+export const deleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData.parseAsync(data);
+            return await zDeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zDeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse.parseAsync(data);
+            return await zDeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -632,14 +632,14 @@ export const deleteV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <Throw
 /**
  * Get an event for a user for a specific calendar and provider
  */
-export const getV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, ThrowOnError>({
+export const getV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponseTransformer,
+        responseTransformer: getV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -655,14 +655,14 @@ export const getV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <ThrowOnE
 /**
  * Update an event for a user for a specific calendar and provider
  */
-export const putV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData, ThrowOnError>) => {
-    return (options.client ?? client).put<PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses, PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors, ThrowOnError>({
+export const putV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId = <ThrowOnError extends boolean = false>(options: Options<PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData, ThrowOnError>) => {
+    return (options.client ?? client).put<PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses, PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData.parseAsync(data);
+            return await zPutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData.parseAsync(data);
         },
-        responseTransformer: putV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponseTransformer,
+        responseTransformer: putV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponseTransformer,
         responseValidator: async (data) => {
-            return await zPutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse.parseAsync(data);
+            return await zPutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse.parseAsync(data);
         },
         security: [
             {
@@ -682,14 +682,14 @@ export const putV1UsersUserIdCalendarEventsProviderCalendarIdEventId = <ThrowOnE
 /**
  * Get all oauth connections for a user
  */
-export const getV1UsersUserIdOauth = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOauthData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOauthResponses, GetV1UsersUserIdOauthErrors, ThrowOnError>({
+export const getV1UsersByUserIdOauth = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOauthData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOauthResponses, GetV1UsersByUserIdOauthErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthData.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdOauthResponseTransformer,
+        responseTransformer: getV1UsersByUserIdOauthResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthResponse.parseAsync(data);
         },
         security: [
             {
@@ -705,13 +705,13 @@ export const getV1UsersUserIdOauth = <ThrowOnError extends boolean = false>(opti
 /**
  * Get the auth urls for the oauth providers
  */
-export const getV1UsersUserIdOauthLinks = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOauthLinksData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOauthLinksResponses, GetV1UsersUserIdOauthLinksErrors, ThrowOnError>({
+export const getV1UsersByUserIdOauthLinks = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOauthLinksData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOauthLinksResponses, GetV1UsersByUserIdOauthLinksErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthLinksData.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthLinksData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthLinksResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthLinksResponse.parseAsync(data);
         },
         security: [
             {
@@ -727,13 +727,13 @@ export const getV1UsersUserIdOauthLinks = <ThrowOnError extends boolean = false>
 /**
  * Get the auth url for the oauth provider
  */
-export const getV1UsersUserIdOauthProviderLink = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOauthProviderLinkData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOauthProviderLinkResponses, GetV1UsersUserIdOauthProviderLinkErrors, ThrowOnError>({
+export const getV1UsersByUserIdOauthByProviderLink = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOauthByProviderLinkData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOauthByProviderLinkResponses, GetV1UsersByUserIdOauthByProviderLinkErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderLinkData.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderLinkData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderLinkResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderLinkResponse.parseAsync(data);
         },
         security: [
             {
@@ -749,10 +749,10 @@ export const getV1UsersUserIdOauthProviderLink = <ThrowOnError extends boolean =
 /**
  * Validate the oauth code
  */
-export const postV1UsersOauthProviderVerify = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersOauthProviderVerifyData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersOauthProviderVerifyResponses, PostV1UsersOauthProviderVerifyErrors, ThrowOnError>({
+export const postV1UsersOauthByProviderVerify = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersOauthByProviderVerifyData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersOauthByProviderVerifyResponses, PostV1UsersOauthByProviderVerifyErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1UsersOauthProviderVerifyData.parseAsync(data);
+            return await zPostV1UsersOauthByProviderVerifyData.parseAsync(data);
         },
         security: [
             {
@@ -772,10 +772,10 @@ export const postV1UsersOauthProviderVerify = <ThrowOnError extends boolean = fa
 /**
  * Delete an oauth connection for a user
  */
-export const deleteV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersUserIdOauthProviderData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteV1UsersUserIdOauthProviderResponses, DeleteV1UsersUserIdOauthProviderErrors, ThrowOnError>({
+export const deleteV1UsersByUserIdOauthByProvider = <ThrowOnError extends boolean = false>(options: Options<DeleteV1UsersByUserIdOauthByProviderData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DeleteV1UsersByUserIdOauthByProviderResponses, DeleteV1UsersByUserIdOauthByProviderErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zDeleteV1UsersUserIdOauthProviderData.parseAsync(data);
+            return await zDeleteV1UsersByUserIdOauthByProviderData.parseAsync(data);
         },
         security: [
             {
@@ -791,14 +791,14 @@ export const deleteV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = 
 /**
  * Get a specific oauth connection for a user
  */
-export const getV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOauthProviderData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOauthProviderResponses, GetV1UsersUserIdOauthProviderErrors, ThrowOnError>({
+export const getV1UsersByUserIdOauthByProvider = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOauthByProviderData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOauthByProviderResponses, GetV1UsersByUserIdOauthByProviderErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderData.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdOauthProviderResponseTransformer,
+        responseTransformer: getV1UsersByUserIdOauthByProviderResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderResponse.parseAsync(data);
         },
         security: [
             {
@@ -814,14 +814,14 @@ export const getV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = fal
 /**
  * Create a new oauth connection for a user
  */
-export const postV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersUserIdOauthProviderData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersUserIdOauthProviderResponses, PostV1UsersUserIdOauthProviderErrors, ThrowOnError>({
+export const postV1UsersByUserIdOauthByProvider = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersByUserIdOauthByProviderData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersByUserIdOauthByProviderResponses, PostV1UsersByUserIdOauthByProviderErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1UsersUserIdOauthProviderData.parseAsync(data);
+            return await zPostV1UsersByUserIdOauthByProviderData.parseAsync(data);
         },
-        responseTransformer: postV1UsersUserIdOauthProviderResponseTransformer,
+        responseTransformer: postV1UsersByUserIdOauthByProviderResponseTransformer,
         responseValidator: async (data) => {
-            return await zPostV1UsersUserIdOauthProviderResponse.parseAsync(data);
+            return await zPostV1UsersByUserIdOauthByProviderResponse.parseAsync(data);
         },
         security: [
             {
@@ -841,13 +841,13 @@ export const postV1UsersUserIdOauthProvider = <ThrowOnError extends boolean = fa
 /**
  * Get a fresh access token for a user for a provider
  */
-export const getV1UsersUserIdOauthProviderToken = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdOauthProviderTokenData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdOauthProviderTokenResponses, GetV1UsersUserIdOauthProviderTokenErrors, ThrowOnError>({
+export const getV1UsersByUserIdOauthByProviderToken = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdOauthByProviderTokenData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdOauthByProviderTokenResponses, GetV1UsersByUserIdOauthByProviderTokenErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderTokenData.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderTokenData.parseAsync(data);
         },
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdOauthProviderTokenResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdOauthByProviderTokenResponse.parseAsync(data);
         },
         security: [
             {
@@ -863,14 +863,14 @@ export const getV1UsersUserIdOauthProviderToken = <ThrowOnError extends boolean 
 /**
  * Get available time slots based on busy times in users primary calendars with basic parameters
  */
-export const getV1UsersUserIdScheduling = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersUserIdSchedulingData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetV1UsersUserIdSchedulingResponses, GetV1UsersUserIdSchedulingErrors, ThrowOnError>({
+export const getV1UsersByUserIdScheduling = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdSchedulingData, ThrowOnError>) => {
+    return (options.client ?? client).get<GetV1UsersByUserIdSchedulingResponses, GetV1UsersByUserIdSchedulingErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zGetV1UsersUserIdSchedulingData.parseAsync(data);
+            return await zGetV1UsersByUserIdSchedulingData.parseAsync(data);
         },
-        responseTransformer: getV1UsersUserIdSchedulingResponseTransformer,
+        responseTransformer: getV1UsersByUserIdSchedulingResponseTransformer,
         responseValidator: async (data) => {
-            return await zGetV1UsersUserIdSchedulingResponse.parseAsync(data);
+            return await zGetV1UsersByUserIdSchedulingResponse.parseAsync(data);
         },
         security: [
             {
@@ -886,14 +886,14 @@ export const getV1UsersUserIdScheduling = <ThrowOnError extends boolean = false>
 /**
  * Get available time slots based on busy times in users primary calendars with advanced parameters
  */
-export const postV1UsersUserIdScheduling = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersUserIdSchedulingData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersUserIdSchedulingResponses, PostV1UsersUserIdSchedulingErrors, ThrowOnError>({
+export const postV1UsersByUserIdScheduling = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersByUserIdSchedulingData, ThrowOnError>) => {
+    return (options.client ?? client).post<PostV1UsersByUserIdSchedulingResponses, PostV1UsersByUserIdSchedulingErrors, ThrowOnError>({
         requestValidator: async (data) => {
-            return await zPostV1UsersUserIdSchedulingData.parseAsync(data);
+            return await zPostV1UsersByUserIdSchedulingData.parseAsync(data);
         },
-        responseTransformer: postV1UsersUserIdSchedulingResponseTransformer,
+        responseTransformer: postV1UsersByUserIdSchedulingResponseTransformer,
         responseValidator: async (data) => {
-            return await zPostV1UsersUserIdSchedulingResponse.parseAsync(data);
+            return await zPostV1UsersByUserIdSchedulingResponse.parseAsync(data);
         },
         security: [
             {
@@ -914,7 +914,7 @@ export const postV1UsersUserIdScheduling = <ThrowOnError extends boolean = false
  * Get available time slots based on busy data with advanced parameters
  */
 export const postV1UsersScheduling = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersSchedulingData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostV1UsersSchedulingResponses, unknown, ThrowOnError>({
+    return (options.client ?? client).post<PostV1UsersSchedulingResponses, PostV1UsersSchedulingErrors, ThrowOnError>({
         requestValidator: async (data) => {
             return await zPostV1UsersSchedulingData.parseAsync(data);
         },

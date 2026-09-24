@@ -1,9 +1,9 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetV1UsersUserIdCalendarBusyData,
-    GetV1UsersUserIdCalendarData,
-    GetV1UsersUserIdCalendarEventsData,
+    GetV1UsersByUserIdCalendarBusyData,
+    GetV1UsersByUserIdCalendarData,
+    GetV1UsersByUserIdCalendarEventsData,
 } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
 
@@ -28,8 +28,8 @@ export class CalendarService {
      * })
      * ```
      */
-    async list(userId: string, options?: GetV1UsersUserIdCalendarData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendar({
+    async list(userId: string, options?: GetV1UsersByUserIdCalendarData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendar({
             path: { userId },
             query: options,
             client: this.client,
@@ -52,8 +52,8 @@ export class CalendarService {
      * })
      * ```
      */
-    async getBusyTimes(userId: string, options: GetV1UsersUserIdCalendarBusyData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendarBusy({
+    async getBusyTimes(userId: string, options: GetV1UsersByUserIdCalendarBusyData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendarBusy({
             path: { userId },
             query: options,
             client: this.client,
@@ -76,8 +76,8 @@ export class CalendarService {
      * })
      * ```
      */
-    async listEvents(userId: string, options: GetV1UsersUserIdCalendarEventsData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendarEvents({
+    async listEvents(userId: string, options: GetV1UsersByUserIdCalendarEventsData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendarEvents({
             path: { userId },
             query: options,
             client: this.client,

@@ -1,9 +1,9 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetV1UsersUserIdSchedulingData,
+    GetV1UsersByUserIdSchedulingData,
+    PostV1UsersByUserIdSchedulingData,
     PostV1UsersSchedulingData,
-    PostV1UsersUserIdSchedulingData,
 } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
 
@@ -64,8 +64,8 @@ export class SchedulingService {
      * })
      * ```
      */
-    async getSlots(userId: string, options: GetV1UsersUserIdSchedulingData['query']) {
-        const response = await sdk.getV1UsersUserIdScheduling({
+    async getSlots(userId: string, options: GetV1UsersByUserIdSchedulingData['query']) {
+        const response = await sdk.getV1UsersByUserIdScheduling({
             path: { userId },
             query: options,
             client: this.client,
@@ -104,10 +104,10 @@ export class SchedulingService {
      */
     async getAdvancedSlots(
         userId: string,
-        options: PostV1UsersUserIdSchedulingData['query'],
-        body?: PostV1UsersUserIdSchedulingData['body']
+        options: PostV1UsersByUserIdSchedulingData['query'],
+        body?: PostV1UsersByUserIdSchedulingData['body']
     ) {
-        const response = await sdk.postV1UsersUserIdScheduling({
+        const response = await sdk.postV1UsersByUserIdScheduling({
             path: { userId },
             query: options,
             body,

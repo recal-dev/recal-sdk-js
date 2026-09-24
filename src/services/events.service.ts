@@ -3,7 +3,7 @@ import * as sdk from '../client/sdk.gen'
 import type {
     CreateEvent,
     CreateMetaEvent,
-    PostV1UsersUserIdCalendarEventsMetaData,
+    PostV1UsersByUserIdCalendarEventsMetaData,
     UpdateEvent,
 } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
@@ -37,9 +37,9 @@ export class EventsService {
     async createMetaEvent(
         userId: string,
         event: CreateMetaEvent,
-        options?: PostV1UsersUserIdCalendarEventsMetaData['query']
+        options?: PostV1UsersByUserIdCalendarEventsMetaData['query']
     ) {
-        const response = await sdk.postV1UsersUserIdCalendarEventsMeta({
+        const response = await sdk.postV1UsersByUserIdCalendarEventsMeta({
             path: { userId },
             body: event,
             query: options,
@@ -65,7 +65,7 @@ export class EventsService {
         metaId: string,
         options?: { provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft' }
     ) {
-        const response = await sdk.getV1UsersUserIdCalendarEventsMetaMetaId({
+        const response = await sdk.getV1UsersByUserIdCalendarEventsMetaByMetaId({
             path: { userId, metaId },
             query: options,
             client: this.client,
@@ -95,7 +95,7 @@ export class EventsService {
         event: UpdateEvent,
         options?: { provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft' }
     ) {
-        const response = await sdk.putV1UsersUserIdCalendarEventsMetaMetaId({
+        const response = await sdk.putV1UsersByUserIdCalendarEventsMetaByMetaId({
             path: { userId, metaId },
             body: event,
             query: options,
@@ -121,7 +121,7 @@ export class EventsService {
         metaId: string,
         options?: { provider?: Array<'google' | 'microsoft'> | 'google' | 'microsoft' }
     ) {
-        const response = await sdk.deleteV1UsersUserIdCalendarEventsMetaMetaId({
+        const response = await sdk.deleteV1UsersByUserIdCalendarEventsMetaByMetaId({
             path: { userId, metaId },
             query: options,
             client: this.client,
@@ -153,7 +153,7 @@ export class EventsService {
      * ```
      */
     async createEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, event: CreateEvent) {
-        const response = await sdk.postV1UsersUserIdCalendarEventsProviderCalendarId({
+        const response = await sdk.postV1UsersByUserIdCalendarEventsByProviderByCalendarId({
             path: { userId, provider, calendarId },
             body: event,
             client: this.client,
@@ -180,7 +180,7 @@ export class EventsService {
      * ```
      */
     async getEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
-        const response = await sdk.getV1UsersUserIdCalendarEventsProviderCalendarIdEventId({
+        const response = await sdk.getV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId({
             path: { userId, provider, calendarId, eventId },
             client: this.client,
         })
@@ -214,7 +214,7 @@ export class EventsService {
         eventId: string,
         event: UpdateEvent
     ) {
-        const response = await sdk.putV1UsersUserIdCalendarEventsProviderCalendarIdEventId({
+        const response = await sdk.putV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId({
             path: { userId, provider, calendarId, eventId },
             body: event,
             client: this.client,
@@ -241,7 +241,7 @@ export class EventsService {
      * ```
      */
     async deleteEvent(userId: string, provider: 'google' | 'microsoft', calendarId: string, eventId: string) {
-        const response = await sdk.deleteV1UsersUserIdCalendarEventsProviderCalendarIdEventId({
+        const response = await sdk.deleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventId({
             path: { userId, provider, calendarId, eventId },
             client: this.client,
         })

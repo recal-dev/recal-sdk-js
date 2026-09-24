@@ -51,6 +51,20 @@ export type TimeRange = {
 };
 
 /**
+ * Failed Free/Busy User
+ */
+export type FailedFreeBusyUser = {
+    /**
+     * The caller-supplied identifier of the user whose busy times could not be read
+     */
+    customId: string;
+    /**
+     * Why the lookup failed for this user
+     */
+    reason: string;
+};
+
+/**
  * Recal Normalized Calendar
  */
 export type Calendar = {
@@ -218,7 +232,7 @@ export type GetV1OrganizationsResponses = {
 export type GetV1OrganizationsResponse = GetV1OrganizationsResponses[keyof GetV1OrganizationsResponses];
 
 export type PostV1OrganizationsData = {
-    body?: {
+    body: {
         name: string | null;
         slug: string;
     };
@@ -228,6 +242,13 @@ export type PostV1OrganizationsData = {
 };
 
 export type PostV1OrganizationsErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization with slug already exists
      */
@@ -250,7 +271,7 @@ export type PostV1OrganizationsResponses = {
 
 export type PostV1OrganizationsResponse = PostV1OrganizationsResponses[keyof PostV1OrganizationsResponses];
 
-export type DeleteV1OrganizationsOrgSlugData = {
+export type DeleteV1OrganizationsByOrgSlugData = {
     body?: never;
     path: {
         orgSlug: string;
@@ -259,7 +280,14 @@ export type DeleteV1OrganizationsOrgSlugData = {
     url: '/v1/organizations/{orgSlug}';
 };
 
-export type DeleteV1OrganizationsOrgSlugErrors = {
+export type DeleteV1OrganizationsByOrgSlugErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -269,9 +297,9 @@ export type DeleteV1OrganizationsOrgSlugErrors = {
     };
 };
 
-export type DeleteV1OrganizationsOrgSlugError = DeleteV1OrganizationsOrgSlugErrors[keyof DeleteV1OrganizationsOrgSlugErrors];
+export type DeleteV1OrganizationsByOrgSlugError = DeleteV1OrganizationsByOrgSlugErrors[keyof DeleteV1OrganizationsByOrgSlugErrors];
 
-export type DeleteV1OrganizationsOrgSlugResponses = {
+export type DeleteV1OrganizationsByOrgSlugResponses = {
     /**
      * Deleted organization
      */
@@ -280,9 +308,9 @@ export type DeleteV1OrganizationsOrgSlugResponses = {
     };
 };
 
-export type DeleteV1OrganizationsOrgSlugResponse = DeleteV1OrganizationsOrgSlugResponses[keyof DeleteV1OrganizationsOrgSlugResponses];
+export type DeleteV1OrganizationsByOrgSlugResponse = DeleteV1OrganizationsByOrgSlugResponses[keyof DeleteV1OrganizationsByOrgSlugResponses];
 
-export type GetV1OrganizationsOrgSlugData = {
+export type GetV1OrganizationsByOrgSlugData = {
     body?: never;
     path: {
         orgSlug: string;
@@ -291,7 +319,14 @@ export type GetV1OrganizationsOrgSlugData = {
     url: '/v1/organizations/{orgSlug}';
 };
 
-export type GetV1OrganizationsOrgSlugErrors = {
+export type GetV1OrganizationsByOrgSlugErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -301,9 +336,9 @@ export type GetV1OrganizationsOrgSlugErrors = {
     };
 };
 
-export type GetV1OrganizationsOrgSlugError = GetV1OrganizationsOrgSlugErrors[keyof GetV1OrganizationsOrgSlugErrors];
+export type GetV1OrganizationsByOrgSlugError = GetV1OrganizationsByOrgSlugErrors[keyof GetV1OrganizationsByOrgSlugErrors];
 
-export type GetV1OrganizationsOrgSlugResponses = {
+export type GetV1OrganizationsByOrgSlugResponses = {
     /**
      * Organization
      */
@@ -312,10 +347,10 @@ export type GetV1OrganizationsOrgSlugResponses = {
     };
 };
 
-export type GetV1OrganizationsOrgSlugResponse = GetV1OrganizationsOrgSlugResponses[keyof GetV1OrganizationsOrgSlugResponses];
+export type GetV1OrganizationsByOrgSlugResponse = GetV1OrganizationsByOrgSlugResponses[keyof GetV1OrganizationsByOrgSlugResponses];
 
-export type PutV1OrganizationsOrgSlugData = {
-    body?: {
+export type PutV1OrganizationsByOrgSlugData = {
+    body: {
         name: string | null;
         slug: string;
     };
@@ -326,7 +361,14 @@ export type PutV1OrganizationsOrgSlugData = {
     url: '/v1/organizations/{orgSlug}';
 };
 
-export type PutV1OrganizationsOrgSlugErrors = {
+export type PutV1OrganizationsByOrgSlugErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -336,9 +378,9 @@ export type PutV1OrganizationsOrgSlugErrors = {
     };
 };
 
-export type PutV1OrganizationsOrgSlugError = PutV1OrganizationsOrgSlugErrors[keyof PutV1OrganizationsOrgSlugErrors];
+export type PutV1OrganizationsByOrgSlugError = PutV1OrganizationsByOrgSlugErrors[keyof PutV1OrganizationsByOrgSlugErrors];
 
-export type PutV1OrganizationsOrgSlugResponses = {
+export type PutV1OrganizationsByOrgSlugResponses = {
     /**
      * Updated organization
      */
@@ -347,10 +389,10 @@ export type PutV1OrganizationsOrgSlugResponses = {
     };
 };
 
-export type PutV1OrganizationsOrgSlugResponse = PutV1OrganizationsOrgSlugResponses[keyof PutV1OrganizationsOrgSlugResponses];
+export type PutV1OrganizationsByOrgSlugResponse = PutV1OrganizationsByOrgSlugResponses[keyof PutV1OrganizationsByOrgSlugResponses];
 
-export type DeleteV1OrganizationsOrgSlugMembersData = {
-    body?: {
+export type DeleteV1OrganizationsByOrgSlugMembersData = {
+    body: {
         userIds: Array<string>;
     };
     path: {
@@ -360,7 +402,14 @@ export type DeleteV1OrganizationsOrgSlugMembersData = {
     url: '/v1/organizations/{orgSlug}/members';
 };
 
-export type DeleteV1OrganizationsOrgSlugMembersErrors = {
+export type DeleteV1OrganizationsByOrgSlugMembersErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -370,17 +419,17 @@ export type DeleteV1OrganizationsOrgSlugMembersErrors = {
     };
 };
 
-export type DeleteV1OrganizationsOrgSlugMembersError = DeleteV1OrganizationsOrgSlugMembersErrors[keyof DeleteV1OrganizationsOrgSlugMembersErrors];
+export type DeleteV1OrganizationsByOrgSlugMembersError = DeleteV1OrganizationsByOrgSlugMembersErrors[keyof DeleteV1OrganizationsByOrgSlugMembersErrors];
 
-export type DeleteV1OrganizationsOrgSlugMembersResponses = {
+export type DeleteV1OrganizationsByOrgSlugMembersResponses = {
     200: {
         data: string;
     };
 };
 
-export type DeleteV1OrganizationsOrgSlugMembersResponse = DeleteV1OrganizationsOrgSlugMembersResponses[keyof DeleteV1OrganizationsOrgSlugMembersResponses];
+export type DeleteV1OrganizationsByOrgSlugMembersResponse = DeleteV1OrganizationsByOrgSlugMembersResponses[keyof DeleteV1OrganizationsByOrgSlugMembersResponses];
 
-export type GetV1OrganizationsOrgSlugMembersData = {
+export type GetV1OrganizationsByOrgSlugMembersData = {
     body?: never;
     path: {
         orgSlug: string;
@@ -391,7 +440,14 @@ export type GetV1OrganizationsOrgSlugMembersData = {
     url: '/v1/organizations/{orgSlug}/members';
 };
 
-export type GetV1OrganizationsOrgSlugMembersErrors = {
+export type GetV1OrganizationsByOrgSlugMembersErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -401,9 +457,9 @@ export type GetV1OrganizationsOrgSlugMembersErrors = {
     };
 };
 
-export type GetV1OrganizationsOrgSlugMembersError = GetV1OrganizationsOrgSlugMembersErrors[keyof GetV1OrganizationsOrgSlugMembersErrors];
+export type GetV1OrganizationsByOrgSlugMembersError = GetV1OrganizationsByOrgSlugMembersErrors[keyof GetV1OrganizationsByOrgSlugMembersErrors];
 
-export type GetV1OrganizationsOrgSlugMembersResponses = {
+export type GetV1OrganizationsByOrgSlugMembersResponses = {
     /**
      * All members of an organization
      */
@@ -417,10 +473,10 @@ export type GetV1OrganizationsOrgSlugMembersResponses = {
     };
 };
 
-export type GetV1OrganizationsOrgSlugMembersResponse = GetV1OrganizationsOrgSlugMembersResponses[keyof GetV1OrganizationsOrgSlugMembersResponses];
+export type GetV1OrganizationsByOrgSlugMembersResponse = GetV1OrganizationsByOrgSlugMembersResponses[keyof GetV1OrganizationsByOrgSlugMembersResponses];
 
-export type PostV1OrganizationsOrgSlugMembersData = {
-    body?: {
+export type PostV1OrganizationsByOrgSlugMembersData = {
+    body: {
         userIds: Array<string>;
     };
     path: {
@@ -430,7 +486,14 @@ export type PostV1OrganizationsOrgSlugMembersData = {
     url: '/v1/organizations/{orgSlug}/members';
 };
 
-export type PostV1OrganizationsOrgSlugMembersErrors = {
+export type PostV1OrganizationsByOrgSlugMembersErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -440,9 +503,9 @@ export type PostV1OrganizationsOrgSlugMembersErrors = {
     };
 };
 
-export type PostV1OrganizationsOrgSlugMembersError = PostV1OrganizationsOrgSlugMembersErrors[keyof PostV1OrganizationsOrgSlugMembersErrors];
+export type PostV1OrganizationsByOrgSlugMembersError = PostV1OrganizationsByOrgSlugMembersErrors[keyof PostV1OrganizationsByOrgSlugMembersErrors];
 
-export type PostV1OrganizationsOrgSlugMembersResponses = {
+export type PostV1OrganizationsByOrgSlugMembersResponses = {
     /**
      * All users are already members of the organization
      */
@@ -457,9 +520,9 @@ export type PostV1OrganizationsOrgSlugMembersResponses = {
     };
 };
 
-export type PostV1OrganizationsOrgSlugMembersResponse = PostV1OrganizationsOrgSlugMembersResponses[keyof PostV1OrganizationsOrgSlugMembersResponses];
+export type PostV1OrganizationsByOrgSlugMembersResponse = PostV1OrganizationsByOrgSlugMembersResponses[keyof PostV1OrganizationsByOrgSlugMembersResponses];
 
-export type GetV1OrganizationsOrgSlugCalendarBusyData = {
+export type GetV1OrganizationsByOrgSlugCalendarBusyData = {
     body?: never;
     path: {
         orgSlug: string;
@@ -476,13 +539,13 @@ export type GetV1OrganizationsOrgSlugCalendarBusyData = {
     url: '/v1/organizations/{orgSlug}/calendar/busy';
 };
 
-export type GetV1OrganizationsOrgSlugCalendarBusyErrors = {
+export type GetV1OrganizationsByOrgSlugCalendarBusyErrors = {
     /**
-     * Calendar provider rejected the stored access token
+     * Bad request
      */
-    401: {
-        data: null;
+    400: {
         error: string;
+        data: null;
     };
     /**
      * Organization not found
@@ -491,29 +554,23 @@ export type GetV1OrganizationsOrgSlugCalendarBusyErrors = {
         data: null;
         error: string;
     };
-    /**
-     * Calendar provider unreachable or returned an unreadable response
-     */
-    502: {
-        data: null;
-        error: string;
-    };
 };
 
-export type GetV1OrganizationsOrgSlugCalendarBusyError = GetV1OrganizationsOrgSlugCalendarBusyErrors[keyof GetV1OrganizationsOrgSlugCalendarBusyErrors];
+export type GetV1OrganizationsByOrgSlugCalendarBusyError = GetV1OrganizationsByOrgSlugCalendarBusyErrors[keyof GetV1OrganizationsByOrgSlugCalendarBusyErrors];
 
-export type GetV1OrganizationsOrgSlugCalendarBusyResponses = {
+export type GetV1OrganizationsByOrgSlugCalendarBusyResponses = {
     /**
-     * Busy times of all users of an organization
+     * Busy times of all users of an organization, plus the users that could not be read
      */
     200: {
         data: Array<TimeRange>;
+        failedUsers: Array<FailedFreeBusyUser>;
     };
 };
 
-export type GetV1OrganizationsOrgSlugCalendarBusyResponse = GetV1OrganizationsOrgSlugCalendarBusyResponses[keyof GetV1OrganizationsOrgSlugCalendarBusyResponses];
+export type GetV1OrganizationsByOrgSlugCalendarBusyResponse = GetV1OrganizationsByOrgSlugCalendarBusyResponses[keyof GetV1OrganizationsByOrgSlugCalendarBusyResponses];
 
-export type GetV1OrganizationsOrgSlugSchedulingData = {
+export type GetV1OrganizationsByOrgSlugSchedulingData = {
     body?: never;
     path: {
         orgSlug: string;
@@ -552,7 +609,14 @@ export type GetV1OrganizationsOrgSlugSchedulingData = {
     url: '/v1/organizations/{orgSlug}/scheduling';
 };
 
-export type GetV1OrganizationsOrgSlugSchedulingErrors = {
+export type GetV1OrganizationsByOrgSlugSchedulingErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -562,11 +626,11 @@ export type GetV1OrganizationsOrgSlugSchedulingErrors = {
     };
 };
 
-export type GetV1OrganizationsOrgSlugSchedulingError = GetV1OrganizationsOrgSlugSchedulingErrors[keyof GetV1OrganizationsOrgSlugSchedulingErrors];
+export type GetV1OrganizationsByOrgSlugSchedulingError = GetV1OrganizationsByOrgSlugSchedulingErrors[keyof GetV1OrganizationsByOrgSlugSchedulingErrors];
 
-export type GetV1OrganizationsOrgSlugSchedulingResponses = {
+export type GetV1OrganizationsByOrgSlugSchedulingResponses = {
     /**
-     * Available time slots
+     * Available time slots, plus the users that could not be read
      */
     200: {
         data: {
@@ -609,10 +673,11 @@ export type GetV1OrganizationsOrgSlugSchedulingResponses = {
                 latestTimeEachDay?: string;
             };
         };
+        failedUsers: Array<FailedFreeBusyUser>;
     };
 };
 
-export type GetV1OrganizationsOrgSlugSchedulingResponse = GetV1OrganizationsOrgSlugSchedulingResponses[keyof GetV1OrganizationsOrgSlugSchedulingResponses];
+export type GetV1OrganizationsByOrgSlugSchedulingResponse = GetV1OrganizationsByOrgSlugSchedulingResponses[keyof GetV1OrganizationsByOrgSlugSchedulingResponses];
 
 export type GetV1UsersData = {
     body?: never;
@@ -638,7 +703,7 @@ export type GetV1UsersResponses = {
 export type GetV1UsersResponse = GetV1UsersResponses[keyof GetV1UsersResponses];
 
 export type PostV1UsersData = {
-    body?: {
+    body: {
         id: string;
         organizationSlugs?: Array<string>;
     };
@@ -648,6 +713,13 @@ export type PostV1UsersData = {
 };
 
 export type PostV1UsersErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * Organization not found
      */
@@ -682,7 +754,7 @@ export type PostV1UsersResponses = {
 
 export type PostV1UsersResponse = PostV1UsersResponses[keyof PostV1UsersResponses];
 
-export type DeleteV1UsersUserIdData = {
+export type DeleteV1UsersByUserIdData = {
     body?: never;
     path: {
         userId: string;
@@ -691,7 +763,14 @@ export type DeleteV1UsersUserIdData = {
     url: '/v1/users/{userId}';
 };
 
-export type DeleteV1UsersUserIdErrors = {
+export type DeleteV1UsersByUserIdErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -701,9 +780,9 @@ export type DeleteV1UsersUserIdErrors = {
     };
 };
 
-export type DeleteV1UsersUserIdError = DeleteV1UsersUserIdErrors[keyof DeleteV1UsersUserIdErrors];
+export type DeleteV1UsersByUserIdError = DeleteV1UsersByUserIdErrors[keyof DeleteV1UsersByUserIdErrors];
 
-export type DeleteV1UsersUserIdResponses = {
+export type DeleteV1UsersByUserIdResponses = {
     /**
      * User
      */
@@ -717,9 +796,9 @@ export type DeleteV1UsersUserIdResponses = {
     };
 };
 
-export type DeleteV1UsersUserIdResponse = DeleteV1UsersUserIdResponses[keyof DeleteV1UsersUserIdResponses];
+export type DeleteV1UsersByUserIdResponse = DeleteV1UsersByUserIdResponses[keyof DeleteV1UsersByUserIdResponses];
 
-export type GetV1UsersUserIdData = {
+export type GetV1UsersByUserIdData = {
     body?: never;
     path: {
         userId: string;
@@ -730,7 +809,14 @@ export type GetV1UsersUserIdData = {
     url: '/v1/users/{userId}';
 };
 
-export type GetV1UsersUserIdErrors = {
+export type GetV1UsersByUserIdErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -740,9 +826,9 @@ export type GetV1UsersUserIdErrors = {
     };
 };
 
-export type GetV1UsersUserIdError = GetV1UsersUserIdErrors[keyof GetV1UsersUserIdErrors];
+export type GetV1UsersByUserIdError = GetV1UsersByUserIdErrors[keyof GetV1UsersByUserIdErrors];
 
-export type GetV1UsersUserIdResponses = {
+export type GetV1UsersByUserIdResponses = {
     /**
      * User
      */
@@ -756,10 +842,10 @@ export type GetV1UsersUserIdResponses = {
     };
 };
 
-export type GetV1UsersUserIdResponse = GetV1UsersUserIdResponses[keyof GetV1UsersUserIdResponses];
+export type GetV1UsersByUserIdResponse = GetV1UsersByUserIdResponses[keyof GetV1UsersByUserIdResponses];
 
-export type PutV1UsersUserIdData = {
-    body?: {
+export type PutV1UsersByUserIdData = {
+    body: {
         userId: string;
     };
     path: {
@@ -769,7 +855,14 @@ export type PutV1UsersUserIdData = {
     url: '/v1/users/{userId}';
 };
 
-export type PutV1UsersUserIdErrors = {
+export type PutV1UsersByUserIdErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -786,9 +879,9 @@ export type PutV1UsersUserIdErrors = {
     };
 };
 
-export type PutV1UsersUserIdError = PutV1UsersUserIdErrors[keyof PutV1UsersUserIdErrors];
+export type PutV1UsersByUserIdError = PutV1UsersByUserIdErrors[keyof PutV1UsersByUserIdErrors];
 
-export type PutV1UsersUserIdResponses = {
+export type PutV1UsersByUserIdResponses = {
     /**
      * User
      */
@@ -802,9 +895,9 @@ export type PutV1UsersUserIdResponses = {
     };
 };
 
-export type PutV1UsersUserIdResponse = PutV1UsersUserIdResponses[keyof PutV1UsersUserIdResponses];
+export type PutV1UsersByUserIdResponse = PutV1UsersByUserIdResponses[keyof PutV1UsersByUserIdResponses];
 
-export type GetV1UsersUserIdOrganizationsData = {
+export type GetV1UsersByUserIdOrganizationsData = {
     body?: never;
     path: {
         userId: string;
@@ -813,7 +906,14 @@ export type GetV1UsersUserIdOrganizationsData = {
     url: '/v1/users/{userId}/organizations';
 };
 
-export type GetV1UsersUserIdOrganizationsErrors = {
+export type GetV1UsersByUserIdOrganizationsErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -823,9 +923,9 @@ export type GetV1UsersUserIdOrganizationsErrors = {
     };
 };
 
-export type GetV1UsersUserIdOrganizationsError = GetV1UsersUserIdOrganizationsErrors[keyof GetV1UsersUserIdOrganizationsErrors];
+export type GetV1UsersByUserIdOrganizationsError = GetV1UsersByUserIdOrganizationsErrors[keyof GetV1UsersByUserIdOrganizationsErrors];
 
-export type GetV1UsersUserIdOrganizationsResponses = {
+export type GetV1UsersByUserIdOrganizationsResponses = {
     /**
      * List of organizations
      */
@@ -834,9 +934,9 @@ export type GetV1UsersUserIdOrganizationsResponses = {
     };
 };
 
-export type GetV1UsersUserIdOrganizationsResponse = GetV1UsersUserIdOrganizationsResponses[keyof GetV1UsersUserIdOrganizationsResponses];
+export type GetV1UsersByUserIdOrganizationsResponse = GetV1UsersByUserIdOrganizationsResponses[keyof GetV1UsersByUserIdOrganizationsResponses];
 
-export type GetV1UsersUserIdCalendarData = {
+export type GetV1UsersByUserIdCalendarData = {
     body?: never;
     path: {
         userId: string;
@@ -847,13 +947,13 @@ export type GetV1UsersUserIdCalendarData = {
     url: '/v1/users/{userId}/calendar';
 };
 
-export type GetV1UsersUserIdCalendarErrors = {
+export type GetV1UsersByUserIdCalendarErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -878,9 +978,9 @@ export type GetV1UsersUserIdCalendarErrors = {
     };
 };
 
-export type GetV1UsersUserIdCalendarError = GetV1UsersUserIdCalendarErrors[keyof GetV1UsersUserIdCalendarErrors];
+export type GetV1UsersByUserIdCalendarError = GetV1UsersByUserIdCalendarErrors[keyof GetV1UsersByUserIdCalendarErrors];
 
-export type GetV1UsersUserIdCalendarResponses = {
+export type GetV1UsersByUserIdCalendarResponses = {
     /**
      * List of calendars
      */
@@ -889,9 +989,9 @@ export type GetV1UsersUserIdCalendarResponses = {
     };
 };
 
-export type GetV1UsersUserIdCalendarResponse = GetV1UsersUserIdCalendarResponses[keyof GetV1UsersUserIdCalendarResponses];
+export type GetV1UsersByUserIdCalendarResponse = GetV1UsersByUserIdCalendarResponses[keyof GetV1UsersByUserIdCalendarResponses];
 
-export type GetV1UsersUserIdCalendarBusyData = {
+export type GetV1UsersByUserIdCalendarBusyData = {
     body?: never;
     path: {
         userId: string;
@@ -911,13 +1011,13 @@ export type GetV1UsersUserIdCalendarBusyData = {
     url: '/v1/users/{userId}/calendar/busy';
 };
 
-export type GetV1UsersUserIdCalendarBusyErrors = {
+export type GetV1UsersByUserIdCalendarBusyErrors = {
     /**
-     * Bad request
+     * Bad request, or more calendars requested than the limit allows
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -927,14 +1027,28 @@ export type GetV1UsersUserIdCalendarBusyErrors = {
         error: string;
     };
     /**
-     * User not found
+     * Calendar access was denied by the provider
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found, or a requested calendar does not exist
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider unreachable or returned an unreadable response
+     * The calendar provider throttled the request
+     */
+    429: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider could not be read
      */
     502: {
         data: null;
@@ -942,9 +1056,9 @@ export type GetV1UsersUserIdCalendarBusyErrors = {
     };
 };
 
-export type GetV1UsersUserIdCalendarBusyError = GetV1UsersUserIdCalendarBusyErrors[keyof GetV1UsersUserIdCalendarBusyErrors];
+export type GetV1UsersByUserIdCalendarBusyError = GetV1UsersByUserIdCalendarBusyErrors[keyof GetV1UsersByUserIdCalendarBusyErrors];
 
-export type GetV1UsersUserIdCalendarBusyResponses = {
+export type GetV1UsersByUserIdCalendarBusyResponses = {
     /**
      * List of busy intervals
      */
@@ -953,9 +1067,9 @@ export type GetV1UsersUserIdCalendarBusyResponses = {
     };
 };
 
-export type GetV1UsersUserIdCalendarBusyResponse = GetV1UsersUserIdCalendarBusyResponses[keyof GetV1UsersUserIdCalendarBusyResponses];
+export type GetV1UsersByUserIdCalendarBusyResponse = GetV1UsersByUserIdCalendarBusyResponses[keyof GetV1UsersByUserIdCalendarBusyResponses];
 
-export type GetV1UsersUserIdCalendarEventsData = {
+export type GetV1UsersByUserIdCalendarEventsData = {
     body?: never;
     path: {
         userId: string;
@@ -975,13 +1089,13 @@ export type GetV1UsersUserIdCalendarEventsData = {
     url: '/v1/users/{userId}/calendar/events';
 };
 
-export type GetV1UsersUserIdCalendarEventsErrors = {
+export type GetV1UsersByUserIdCalendarEventsErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1006,9 +1120,9 @@ export type GetV1UsersUserIdCalendarEventsErrors = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsError = GetV1UsersUserIdCalendarEventsErrors[keyof GetV1UsersUserIdCalendarEventsErrors];
+export type GetV1UsersByUserIdCalendarEventsError = GetV1UsersByUserIdCalendarEventsErrors[keyof GetV1UsersByUserIdCalendarEventsErrors];
 
-export type GetV1UsersUserIdCalendarEventsResponses = {
+export type GetV1UsersByUserIdCalendarEventsResponses = {
     /**
      * List of events
      */
@@ -1017,10 +1131,10 @@ export type GetV1UsersUserIdCalendarEventsResponses = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsResponse = GetV1UsersUserIdCalendarEventsResponses[keyof GetV1UsersUserIdCalendarEventsResponses];
+export type GetV1UsersByUserIdCalendarEventsResponse = GetV1UsersByUserIdCalendarEventsResponses[keyof GetV1UsersByUserIdCalendarEventsResponses];
 
-export type PostV1UsersUserIdCalendarEventsMetaData = {
-    body?: CreateMetaEvent;
+export type PostV1UsersByUserIdCalendarEventsMetaData = {
+    body: CreateMetaEvent;
     path: {
         userId: string;
     };
@@ -1030,13 +1144,13 @@ export type PostV1UsersUserIdCalendarEventsMetaData = {
     url: '/v1/users/{userId}/calendar/events/meta';
 };
 
-export type PostV1UsersUserIdCalendarEventsMetaErrors = {
+export type PostV1UsersByUserIdCalendarEventsMetaErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1061,9 +1175,9 @@ export type PostV1UsersUserIdCalendarEventsMetaErrors = {
     };
 };
 
-export type PostV1UsersUserIdCalendarEventsMetaError = PostV1UsersUserIdCalendarEventsMetaErrors[keyof PostV1UsersUserIdCalendarEventsMetaErrors];
+export type PostV1UsersByUserIdCalendarEventsMetaError = PostV1UsersByUserIdCalendarEventsMetaErrors[keyof PostV1UsersByUserIdCalendarEventsMetaErrors];
 
-export type PostV1UsersUserIdCalendarEventsMetaResponses = {
+export type PostV1UsersByUserIdCalendarEventsMetaResponses = {
     /**
      * Meta event created
      */
@@ -1072,9 +1186,9 @@ export type PostV1UsersUserIdCalendarEventsMetaResponses = {
     };
 };
 
-export type PostV1UsersUserIdCalendarEventsMetaResponse = PostV1UsersUserIdCalendarEventsMetaResponses[keyof PostV1UsersUserIdCalendarEventsMetaResponses];
+export type PostV1UsersByUserIdCalendarEventsMetaResponse = PostV1UsersByUserIdCalendarEventsMetaResponses[keyof PostV1UsersByUserIdCalendarEventsMetaResponses];
 
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdData = {
+export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData = {
     body?: never;
     path: {
         metaId: string;
@@ -1086,13 +1200,13 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdData = {
     url: '/v1/users/{userId}/calendar/events/meta/{metaId}';
 };
 
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
+export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1117,9 +1231,9 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
     };
 };
 
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdError = DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors[keyof DeleteV1UsersUserIdCalendarEventsMetaMetaIdErrors];
+export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdError = DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors[keyof DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors];
 
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
+export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses = {
     /**
      * Meta event deleted
      */
@@ -1130,9 +1244,9 @@ export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     };
 };
 
-export type DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponse = DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses];
+export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponse = DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses[keyof DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses];
 
-export type GetV1UsersUserIdCalendarEventsMetaMetaIdData = {
+export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdData = {
     body?: never;
     path: {
         metaId: string;
@@ -1144,13 +1258,13 @@ export type GetV1UsersUserIdCalendarEventsMetaMetaIdData = {
     url: '/v1/users/{userId}/calendar/events/meta/{metaId}';
 };
 
-export type GetV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
+export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1175,9 +1289,9 @@ export type GetV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsMetaMetaIdError = GetV1UsersUserIdCalendarEventsMetaMetaIdErrors[keyof GetV1UsersUserIdCalendarEventsMetaMetaIdErrors];
+export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdError = GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors[keyof GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors];
 
-export type GetV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
+export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponses = {
     /**
      * Event
      */
@@ -1186,10 +1300,10 @@ export type GetV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsMetaMetaIdResponse = GetV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof GetV1UsersUserIdCalendarEventsMetaMetaIdResponses];
+export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponse = GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponses[keyof GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponses];
 
-export type PutV1UsersUserIdCalendarEventsMetaMetaIdData = {
-    body?: UpdateMetaEvent;
+export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdData = {
+    body: UpdateMetaEvent;
     path: {
         metaId: string;
         userId: string;
@@ -1200,13 +1314,13 @@ export type PutV1UsersUserIdCalendarEventsMetaMetaIdData = {
     url: '/v1/users/{userId}/calendar/events/meta/{metaId}';
 };
 
-export type PutV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
+export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1231,9 +1345,9 @@ export type PutV1UsersUserIdCalendarEventsMetaMetaIdErrors = {
     };
 };
 
-export type PutV1UsersUserIdCalendarEventsMetaMetaIdError = PutV1UsersUserIdCalendarEventsMetaMetaIdErrors[keyof PutV1UsersUserIdCalendarEventsMetaMetaIdErrors];
+export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdError = PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors[keyof PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors];
 
-export type PutV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
+export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponses = {
     /**
      * Meta event updated
      */
@@ -1242,10 +1356,10 @@ export type PutV1UsersUserIdCalendarEventsMetaMetaIdResponses = {
     };
 };
 
-export type PutV1UsersUserIdCalendarEventsMetaMetaIdResponse = PutV1UsersUserIdCalendarEventsMetaMetaIdResponses[keyof PutV1UsersUserIdCalendarEventsMetaMetaIdResponses];
+export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponse = PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponses[keyof PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponses];
 
-export type PostV1UsersUserIdCalendarEventsProviderCalendarIdData = {
-    body?: CreateEvent;
+export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdData = {
+    body: CreateEvent;
     path: {
         calendarId: string;
         provider: 'google' | 'microsoft';
@@ -1255,13 +1369,13 @@ export type PostV1UsersUserIdCalendarEventsProviderCalendarIdData = {
     url: '/v1/users/{userId}/calendar/events/{provider}/{calendarId}';
 };
 
-export type PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors = {
+export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1286,9 +1400,9 @@ export type PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors = {
     };
 };
 
-export type PostV1UsersUserIdCalendarEventsProviderCalendarIdError = PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors[keyof PostV1UsersUserIdCalendarEventsProviderCalendarIdErrors];
+export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdError = PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors[keyof PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors];
 
-export type PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses = {
+export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponses = {
     /**
      * Event created
      */
@@ -1297,9 +1411,9 @@ export type PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses = {
     };
 };
 
-export type PostV1UsersUserIdCalendarEventsProviderCalendarIdResponse = PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses[keyof PostV1UsersUserIdCalendarEventsProviderCalendarIdResponses];
+export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponse = PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponses[keyof PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdResponses];
 
-export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
+export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData = {
     body?: never;
     path: {
         calendarId: string;
@@ -1311,13 +1425,13 @@ export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
     url: '/v1/users/{userId}/calendar/events/{provider}/{calendarId}/{eventId}';
 };
 
-export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
+export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1342,9 +1456,9 @@ export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
     };
 };
 
-export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdError = DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors[keyof DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors];
+export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdError = DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors[keyof DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors];
 
-export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses = {
+export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses = {
     /**
      * Event deleted
      */
@@ -1355,9 +1469,9 @@ export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses 
     };
 };
 
-export type DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses[keyof DeleteV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses];
+export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse = DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses[keyof DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses];
 
-export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
+export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData = {
     body?: never;
     path: {
         calendarId: string;
@@ -1369,13 +1483,13 @@ export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
     url: '/v1/users/{userId}/calendar/events/{provider}/{calendarId}/{eventId}';
 };
 
-export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
+export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1400,9 +1514,9 @@ export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdError = GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors[keyof GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors];
+export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdError = GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors[keyof GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors];
 
-export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses = {
+export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses = {
     /**
      * Event found
      */
@@ -1411,10 +1525,10 @@ export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses = {
     };
 };
 
-export type GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses[keyof GetV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses];
+export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse = GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses[keyof GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses];
 
-export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
-    body?: UpdateEvent;
+export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdData = {
+    body: UpdateEvent;
     path: {
         calendarId: string;
         eventId: string;
@@ -1425,13 +1539,13 @@ export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdData = {
     url: '/v1/users/{userId}/calendar/events/{provider}/{calendarId}/{eventId}';
 };
 
-export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
+export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1456,9 +1570,9 @@ export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors = {
     };
 };
 
-export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdError = PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors[keyof PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdErrors];
+export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdError = PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors[keyof PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdErrors];
 
-export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses = {
+export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses = {
     /**
      * Event updated
      */
@@ -1467,9 +1581,9 @@ export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses = {
     };
 };
 
-export type PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponse = PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses[keyof PutV1UsersUserIdCalendarEventsProviderCalendarIdEventIdResponses];
+export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponse = PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses[keyof PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdResponses];
 
-export type GetV1UsersUserIdOauthData = {
+export type GetV1UsersByUserIdOauthData = {
     body?: never;
     path: {
         userId: string;
@@ -1483,7 +1597,14 @@ export type GetV1UsersUserIdOauthData = {
     url: '/v1/users/{userId}/oauth';
 };
 
-export type GetV1UsersUserIdOauthErrors = {
+export type GetV1UsersByUserIdOauthErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -1493,9 +1614,9 @@ export type GetV1UsersUserIdOauthErrors = {
     };
 };
 
-export type GetV1UsersUserIdOauthError = GetV1UsersUserIdOauthErrors[keyof GetV1UsersUserIdOauthErrors];
+export type GetV1UsersByUserIdOauthError = GetV1UsersByUserIdOauthErrors[keyof GetV1UsersByUserIdOauthErrors];
 
-export type GetV1UsersUserIdOauthResponses = {
+export type GetV1UsersByUserIdOauthResponses = {
     /**
      * All oauth connections of the user
      */
@@ -1504,9 +1625,9 @@ export type GetV1UsersUserIdOauthResponses = {
     };
 };
 
-export type GetV1UsersUserIdOauthResponse = GetV1UsersUserIdOauthResponses[keyof GetV1UsersUserIdOauthResponses];
+export type GetV1UsersByUserIdOauthResponse = GetV1UsersByUserIdOauthResponses[keyof GetV1UsersByUserIdOauthResponses];
 
-export type GetV1UsersUserIdOauthLinksData = {
+export type GetV1UsersByUserIdOauthLinksData = {
     body?: never;
     path: {
         userId: string;
@@ -1525,13 +1646,13 @@ export type GetV1UsersUserIdOauthLinksData = {
     url: '/v1/users/{userId}/oauth/links';
 };
 
-export type GetV1UsersUserIdOauthLinksErrors = {
+export type GetV1UsersByUserIdOauthLinksErrors = {
     /**
      * Invalid request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * User not found
@@ -1542,9 +1663,9 @@ export type GetV1UsersUserIdOauthLinksErrors = {
     };
 };
 
-export type GetV1UsersUserIdOauthLinksError = GetV1UsersUserIdOauthLinksErrors[keyof GetV1UsersUserIdOauthLinksErrors];
+export type GetV1UsersByUserIdOauthLinksError = GetV1UsersByUserIdOauthLinksErrors[keyof GetV1UsersByUserIdOauthLinksErrors];
 
-export type GetV1UsersUserIdOauthLinksResponses = {
+export type GetV1UsersByUserIdOauthLinksResponses = {
     /**
      * Auth urls for the oauth providers
      */
@@ -1559,9 +1680,9 @@ export type GetV1UsersUserIdOauthLinksResponses = {
     };
 };
 
-export type GetV1UsersUserIdOauthLinksResponse = GetV1UsersUserIdOauthLinksResponses[keyof GetV1UsersUserIdOauthLinksResponses];
+export type GetV1UsersByUserIdOauthLinksResponse = GetV1UsersByUserIdOauthLinksResponses[keyof GetV1UsersByUserIdOauthLinksResponses];
 
-export type GetV1UsersUserIdOauthProviderLinkData = {
+export type GetV1UsersByUserIdOauthByProviderLinkData = {
     body?: never;
     path: {
         provider: 'google' | 'microsoft';
@@ -1584,13 +1705,13 @@ export type GetV1UsersUserIdOauthProviderLinkData = {
     url: '/v1/users/{userId}/oauth/{provider}/link';
 };
 
-export type GetV1UsersUserIdOauthProviderLinkErrors = {
+export type GetV1UsersByUserIdOauthByProviderLinkErrors = {
     /**
      * Invalid request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * User not found
@@ -1601,9 +1722,9 @@ export type GetV1UsersUserIdOauthProviderLinkErrors = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderLinkError = GetV1UsersUserIdOauthProviderLinkErrors[keyof GetV1UsersUserIdOauthProviderLinkErrors];
+export type GetV1UsersByUserIdOauthByProviderLinkError = GetV1UsersByUserIdOauthByProviderLinkErrors[keyof GetV1UsersByUserIdOauthByProviderLinkErrors];
 
-export type GetV1UsersUserIdOauthProviderLinkResponses = {
+export type GetV1UsersByUserIdOauthByProviderLinkResponses = {
     /**
      * Auth url for the oauth provider
      */
@@ -1617,10 +1738,10 @@ export type GetV1UsersUserIdOauthProviderLinkResponses = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderLinkResponse = GetV1UsersUserIdOauthProviderLinkResponses[keyof GetV1UsersUserIdOauthProviderLinkResponses];
+export type GetV1UsersByUserIdOauthByProviderLinkResponse = GetV1UsersByUserIdOauthByProviderLinkResponses[keyof GetV1UsersByUserIdOauthByProviderLinkResponses];
 
-export type PostV1UsersOauthProviderVerifyData = {
-    body?: {
+export type PostV1UsersOauthByProviderVerifyData = {
+    body: {
         code: string;
         scope: Array<string>;
         state: string;
@@ -1637,7 +1758,7 @@ export type PostV1UsersOauthProviderVerifyData = {
     url: '/v1/users/oauth/{provider}/verify';
 };
 
-export type PostV1UsersOauthProviderVerifyErrors = {
+export type PostV1UsersOauthByProviderVerifyErrors = {
     /**
      * Invalid request
      */
@@ -1654,16 +1775,16 @@ export type PostV1UsersOauthProviderVerifyErrors = {
     };
 };
 
-export type PostV1UsersOauthProviderVerifyError = PostV1UsersOauthProviderVerifyErrors[keyof PostV1UsersOauthProviderVerifyErrors];
+export type PostV1UsersOauthByProviderVerifyError = PostV1UsersOauthByProviderVerifyErrors[keyof PostV1UsersOauthByProviderVerifyErrors];
 
-export type PostV1UsersOauthProviderVerifyResponses = {
+export type PostV1UsersOauthByProviderVerifyResponses = {
     /**
      * OAuth code verified successfully
      */
     200: unknown;
 };
 
-export type DeleteV1UsersUserIdOauthProviderData = {
+export type DeleteV1UsersByUserIdOauthByProviderData = {
     body?: never;
     path: {
         provider: 'google' | 'microsoft';
@@ -1673,7 +1794,14 @@ export type DeleteV1UsersUserIdOauthProviderData = {
     url: '/v1/users/{userId}/oauth/{provider}';
 };
 
-export type DeleteV1UsersUserIdOauthProviderErrors = {
+export type DeleteV1UsersByUserIdOauthByProviderErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -1690,16 +1818,16 @@ export type DeleteV1UsersUserIdOauthProviderErrors = {
     };
 };
 
-export type DeleteV1UsersUserIdOauthProviderError = DeleteV1UsersUserIdOauthProviderErrors[keyof DeleteV1UsersUserIdOauthProviderErrors];
+export type DeleteV1UsersByUserIdOauthByProviderError = DeleteV1UsersByUserIdOauthByProviderErrors[keyof DeleteV1UsersByUserIdOauthByProviderErrors];
 
-export type DeleteV1UsersUserIdOauthProviderResponses = {
+export type DeleteV1UsersByUserIdOauthByProviderResponses = {
     /**
      * OAuth connection deleted
      */
     200: unknown;
 };
 
-export type GetV1UsersUserIdOauthProviderData = {
+export type GetV1UsersByUserIdOauthByProviderData = {
     body?: never;
     path: {
         provider: 'google' | 'microsoft';
@@ -1714,7 +1842,14 @@ export type GetV1UsersUserIdOauthProviderData = {
     url: '/v1/users/{userId}/oauth/{provider}';
 };
 
-export type GetV1UsersUserIdOauthProviderErrors = {
+export type GetV1UsersByUserIdOauthByProviderErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
     /**
      * User not found
      */
@@ -1724,9 +1859,9 @@ export type GetV1UsersUserIdOauthProviderErrors = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderError = GetV1UsersUserIdOauthProviderErrors[keyof GetV1UsersUserIdOauthProviderErrors];
+export type GetV1UsersByUserIdOauthByProviderError = GetV1UsersByUserIdOauthByProviderErrors[keyof GetV1UsersByUserIdOauthByProviderErrors];
 
-export type GetV1UsersUserIdOauthProviderResponses = {
+export type GetV1UsersByUserIdOauthByProviderResponses = {
     /**
      * OAuth connection of the user
      */
@@ -1735,10 +1870,10 @@ export type GetV1UsersUserIdOauthProviderResponses = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderResponse = GetV1UsersUserIdOauthProviderResponses[keyof GetV1UsersUserIdOauthProviderResponses];
+export type GetV1UsersByUserIdOauthByProviderResponse = GetV1UsersByUserIdOauthByProviderResponses[keyof GetV1UsersByUserIdOauthByProviderResponses];
 
-export type PostV1UsersUserIdOauthProviderData = {
-    body?: {
+export type PostV1UsersByUserIdOauthByProviderData = {
+    body: {
         accessToken: string;
         email: string | null;
         expiresAt: string | null;
@@ -1753,13 +1888,13 @@ export type PostV1UsersUserIdOauthProviderData = {
     url: '/v1/users/{userId}/oauth/{provider}';
 };
 
-export type PostV1UsersUserIdOauthProviderErrors = {
+export type PostV1UsersByUserIdOauthByProviderErrors = {
     /**
      * Invalid request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * User not found
@@ -1770,9 +1905,9 @@ export type PostV1UsersUserIdOauthProviderErrors = {
     };
 };
 
-export type PostV1UsersUserIdOauthProviderError = PostV1UsersUserIdOauthProviderErrors[keyof PostV1UsersUserIdOauthProviderErrors];
+export type PostV1UsersByUserIdOauthByProviderError = PostV1UsersByUserIdOauthByProviderErrors[keyof PostV1UsersByUserIdOauthByProviderErrors];
 
-export type PostV1UsersUserIdOauthProviderResponses = {
+export type PostV1UsersByUserIdOauthByProviderResponses = {
     /**
      * OAuth connection created
      */
@@ -1781,9 +1916,9 @@ export type PostV1UsersUserIdOauthProviderResponses = {
     };
 };
 
-export type PostV1UsersUserIdOauthProviderResponse = PostV1UsersUserIdOauthProviderResponses[keyof PostV1UsersUserIdOauthProviderResponses];
+export type PostV1UsersByUserIdOauthByProviderResponse = PostV1UsersByUserIdOauthByProviderResponses[keyof PostV1UsersByUserIdOauthByProviderResponses];
 
-export type GetV1UsersUserIdOauthProviderTokenData = {
+export type GetV1UsersByUserIdOauthByProviderTokenData = {
     body?: never;
     path: {
         provider: 'google' | 'microsoft';
@@ -1793,13 +1928,13 @@ export type GetV1UsersUserIdOauthProviderTokenData = {
     url: '/v1/users/{userId}/oauth/{provider}/token';
 };
 
-export type GetV1UsersUserIdOauthProviderTokenErrors = {
+export type GetV1UsersByUserIdOauthByProviderTokenErrors = {
     /**
      * Invalid request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * User not found
@@ -1810,9 +1945,9 @@ export type GetV1UsersUserIdOauthProviderTokenErrors = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderTokenError = GetV1UsersUserIdOauthProviderTokenErrors[keyof GetV1UsersUserIdOauthProviderTokenErrors];
+export type GetV1UsersByUserIdOauthByProviderTokenError = GetV1UsersByUserIdOauthByProviderTokenErrors[keyof GetV1UsersByUserIdOauthByProviderTokenErrors];
 
-export type GetV1UsersUserIdOauthProviderTokenResponses = {
+export type GetV1UsersByUserIdOauthByProviderTokenResponses = {
     /**
      * Access token
      */
@@ -1823,9 +1958,9 @@ export type GetV1UsersUserIdOauthProviderTokenResponses = {
     };
 };
 
-export type GetV1UsersUserIdOauthProviderTokenResponse = GetV1UsersUserIdOauthProviderTokenResponses[keyof GetV1UsersUserIdOauthProviderTokenResponses];
+export type GetV1UsersByUserIdOauthByProviderTokenResponse = GetV1UsersByUserIdOauthByProviderTokenResponses[keyof GetV1UsersByUserIdOauthByProviderTokenResponses];
 
-export type GetV1UsersUserIdSchedulingData = {
+export type GetV1UsersByUserIdSchedulingData = {
     body?: never;
     path: {
         userId: string;
@@ -1864,13 +1999,13 @@ export type GetV1UsersUserIdSchedulingData = {
     url: '/v1/users/{userId}/scheduling';
 };
 
-export type GetV1UsersUserIdSchedulingErrors = {
+export type GetV1UsersByUserIdSchedulingErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1880,14 +2015,28 @@ export type GetV1UsersUserIdSchedulingErrors = {
         error: string;
     };
     /**
-     * User not found, or the user has no connected calendars
+     * Calendar access was denied by the provider
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found, the user has no connected calendars, or a requested calendar does not exist
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider unreachable or returned an unreadable response
+     * The calendar provider throttled the request
+     */
+    429: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider could not be read
      */
     502: {
         data: null;
@@ -1895,9 +2044,9 @@ export type GetV1UsersUserIdSchedulingErrors = {
     };
 };
 
-export type GetV1UsersUserIdSchedulingError = GetV1UsersUserIdSchedulingErrors[keyof GetV1UsersUserIdSchedulingErrors];
+export type GetV1UsersByUserIdSchedulingError = GetV1UsersByUserIdSchedulingErrors[keyof GetV1UsersByUserIdSchedulingErrors];
 
-export type GetV1UsersUserIdSchedulingResponses = {
+export type GetV1UsersByUserIdSchedulingResponses = {
     /**
      * Available time slots
      */
@@ -1935,10 +2084,10 @@ export type GetV1UsersUserIdSchedulingResponses = {
     };
 };
 
-export type GetV1UsersUserIdSchedulingResponse = GetV1UsersUserIdSchedulingResponses[keyof GetV1UsersUserIdSchedulingResponses];
+export type GetV1UsersByUserIdSchedulingResponse = GetV1UsersByUserIdSchedulingResponses[keyof GetV1UsersByUserIdSchedulingResponses];
 
-export type PostV1UsersUserIdSchedulingData = {
-    body?: {
+export type PostV1UsersByUserIdSchedulingData = {
+    body: {
         schedules: Array<{
             /**
              * The days to apply this scheduling element to
@@ -1983,13 +2132,13 @@ export type PostV1UsersUserIdSchedulingData = {
     url: '/v1/users/{userId}/scheduling';
 };
 
-export type PostV1UsersUserIdSchedulingErrors = {
+export type PostV1UsersByUserIdSchedulingErrors = {
     /**
      * Bad request
      */
     400: {
-        data: null;
         error: string;
+        data: null;
     };
     /**
      * Calendar provider rejected the stored access token
@@ -1999,14 +2148,28 @@ export type PostV1UsersUserIdSchedulingErrors = {
         error: string;
     };
     /**
-     * User not found, or the user has no connected calendars
+     * Calendar access was denied by the provider
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
+     * User not found, the user has no connected calendars, or a requested calendar does not exist
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider unreachable or returned an unreadable response
+     * The calendar provider throttled the request
+     */
+    429: {
+        data: null;
+        error: string;
+    };
+    /**
+     * Calendar provider could not be read
      */
     502: {
         data: null;
@@ -2014,9 +2177,9 @@ export type PostV1UsersUserIdSchedulingErrors = {
     };
 };
 
-export type PostV1UsersUserIdSchedulingError = PostV1UsersUserIdSchedulingErrors[keyof PostV1UsersUserIdSchedulingErrors];
+export type PostV1UsersByUserIdSchedulingError = PostV1UsersByUserIdSchedulingErrors[keyof PostV1UsersByUserIdSchedulingErrors];
 
-export type PostV1UsersUserIdSchedulingResponses = {
+export type PostV1UsersByUserIdSchedulingResponses = {
     /**
      * Available time slots
      */
@@ -2054,10 +2217,10 @@ export type PostV1UsersUserIdSchedulingResponses = {
     };
 };
 
-export type PostV1UsersUserIdSchedulingResponse = PostV1UsersUserIdSchedulingResponses[keyof PostV1UsersUserIdSchedulingResponses];
+export type PostV1UsersByUserIdSchedulingResponse = PostV1UsersByUserIdSchedulingResponses[keyof PostV1UsersByUserIdSchedulingResponses];
 
 export type PostV1UsersSchedulingData = {
-    body?: {
+    body: {
         users: Array<{
             id: string;
             calendarIds?: string | Array<string>;
@@ -2116,6 +2279,18 @@ export type PostV1UsersSchedulingData = {
     };
     url: '/v1/users/scheduling';
 };
+
+export type PostV1UsersSchedulingErrors = {
+    /**
+     * Validation Error
+     */
+    400: {
+        error: string;
+        data: null;
+    };
+};
+
+export type PostV1UsersSchedulingError = PostV1UsersSchedulingErrors[keyof PostV1UsersSchedulingErrors];
 
 export type PostV1UsersSchedulingResponses = {
     /**
