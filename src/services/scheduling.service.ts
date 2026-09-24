@@ -120,7 +120,7 @@ export class SchedulingService {
      * Get available time slots for multiple users
      *
      * @param options - Query scheduling options
-     * @param users - Array of users with optional schedules
+     * @param body - Array of users with optional schedules
      *
      * @example
      * ```typescript

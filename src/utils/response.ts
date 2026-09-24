@@ -74,7 +74,9 @@ export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
  *
  * For the responses that carry a sibling of `data` — the organization free/busy routes
  * report `failedUsers` there — where dropping it would let a partial answer read as a
- * complete one. Error handling is identical to {@link unwrapResponse}.
+ * complete one. Error handling is identical to {@link unwrapResponse}: the error branch
+ * below delegates to it, which re-tests the same condition and always throws there —
+ * it never returns.
  */
 export function unwrapEnvelope<T>(response: HeyApiResponse<unknown>): T {
     if (response.error && typeof response.error === 'object' && Object.keys(response.error).length > 0) {
@@ -85,5 +87,7 @@ export function unwrapEnvelope<T>(response: HeyApiResponse<unknown>): T {
         throw new RecalError('No data in response', response.response?.status, response)
     }
 
+    // The generated response types describe the envelope; HeyAPI's `data` is typed loosely
+    // as the union `{ data: T } | T`, so this narrowing can't be expressed without a cast.
     return response.data as T
 }
