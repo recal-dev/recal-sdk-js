@@ -139,8 +139,8 @@ describe('Organization Integration Tests', () => {
             end: endDate.toISOString(),
         })
 
-        expect(busyTimes).toBeDefined()
-        expect(Array.isArray(busyTimes)).toBe(true)
+        expect(Array.isArray(busyTimes.data)).toBe(true)
+        expect(Array.isArray(busyTimes.failedUsers)).toBe(true)
     })
 
     test('should get busy times with provider filter', async () => {
@@ -153,8 +153,8 @@ describe('Organization Integration Tests', () => {
             provider: 'google',
         })
 
-        expect(busyTimes).toBeDefined()
-        expect(Array.isArray(busyTimes)).toBe(true)
+        expect(Array.isArray(busyTimes.data)).toBe(true)
+        expect(Array.isArray(busyTimes.failedUsers)).toBe(true)
     })
 
     test('should get scheduling slots for an organization', async () => {
@@ -174,9 +174,8 @@ describe('Organization Integration Tests', () => {
             padding: '15',
         })
 
-        expect(result).toBeDefined()
-        expect(result.availableSlots).toBeDefined()
-        expect(Array.isArray(result.availableSlots)).toBe(true)
+        expect(Array.isArray(result.data.availableSlots)).toBe(true)
+        expect(Array.isArray(result.failedUsers)).toBe(true)
     })
 
     test('should get scheduling slots with provider filter', async () => {
@@ -197,8 +196,7 @@ describe('Organization Integration Tests', () => {
             provider: 'google',
         })
 
-        expect(result).toBeDefined()
-        expect(result.availableSlots).toBeDefined()
-        expect(Array.isArray(result.availableSlots)).toBe(true)
+        expect(Array.isArray(result.data.availableSlots)).toBe(true)
+        expect(Array.isArray(result.failedUsers)).toBe(true)
     })
 })
