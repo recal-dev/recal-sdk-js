@@ -32,6 +32,10 @@ export type {
      * Event entity
      */
     Event,
+    /**
+     * A user whose busy times could not be read, with the reason
+     */
+    FailedFreeBusyUser,
     GetV1OrganizationsByOrgSlugData,
     GetV1OrganizationsByOrgSlugResponse,
     GetV1OrganizationsByOrgSlugSchedulingData,

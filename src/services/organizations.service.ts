@@ -2,10 +2,12 @@ import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
     GetV1OrganizationsByOrgSlugCalendarBusyData,
+    GetV1OrganizationsByOrgSlugCalendarBusyResponses,
     GetV1OrganizationsByOrgSlugMembersData,
     GetV1OrganizationsByOrgSlugSchedulingData,
+    GetV1OrganizationsByOrgSlugSchedulingResponses,
 } from '../client/types.gen'
-import { unwrapResponse } from '../utils/response'
+import { unwrapEnvelope, unwrapResponse } from '../utils/response'
 
 /**
  * Organizations Service
@@ -182,6 +184,9 @@ export class OrganizationsService {
      *   provider: 'google'
      * })
      * ```
+     *
+     * A non-empty `failedUsers` means `data` is a partial answer: those users
+     * contributed nothing to it.
      */
     async getBusyTimes(slug: string, options: GetV1OrganizationsByOrgSlugCalendarBusyData['query']) {
         const response = await sdk.getV1OrganizationsByOrgSlugCalendarBusy({
@@ -189,7 +194,7 @@ export class OrganizationsService {
             query: options,
             client: this.client,
         })
-        return unwrapResponse(response)
+        return unwrapEnvelope<GetV1OrganizationsByOrgSlugCalendarBusyResponses[200]>(response)
     }
 
     /**
@@ -207,6 +212,9 @@ export class OrganizationsService {
      *   padding: '15'
      * })
      * ```
+     *
+     * A non-empty `failedUsers` means `data` is a partial answer: those users
+     * contributed nothing to it.
      */
     async getScheduling(slug: string, options: GetV1OrganizationsByOrgSlugSchedulingData['query']) {
         const response = await sdk.getV1OrganizationsByOrgSlugScheduling({
@@ -214,6 +222,6 @@ export class OrganizationsService {
             query: options,
             client: this.client,
         })
-        return unwrapResponse(response)
+        return unwrapEnvelope<GetV1OrganizationsByOrgSlugSchedulingResponses[200]>(response)
     }
 }
