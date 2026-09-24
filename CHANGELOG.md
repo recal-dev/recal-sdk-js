@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## ⚠️ v1.2.0 — Partial organization answers are now visible (2026-09-24)
+
+### ✨ Added
+- **`organizations.getBusyTimes()` and `organizations.getScheduling()` report `failedUsers`.**
+  The API answers 200 with the users whose calendars it could not read, rather than failing
+  the whole request. Each entry carries the user's `customId` and a reason. A non-empty
+  `failedUsers` means the busy times or slots beside it are a *partial* answer.
+- `FailedFreeBusyUser` is exported from the package root.
+- `403` and `429` are documented on the user free/busy and scheduling endpoints, and the
+  user free/busy route documents a `400` for requesting more calendars than the limit allows.
+
+### ⚠️ Upgrading
+Three breaking changes.
+
+**1. The two organization methods return an envelope.** They resolved to the payload;
+they now resolve to `{ data, failedUsers }`.
+
+```typescript
+// before
+const busy = await recal.organizations.getBusyTimes('acme', { start, end })
+busy.forEach(…)
+
+// after
+const { data: busy, failedUsers } = await recal.organizations.getBusyTimes('acme', { start, end })
+if (failedUsers.length > 0) { /* the busy times below are partial */ }
+busy.forEach(…)
+```
+
+No other method changed shape.
+
+**2. Generated type exports were renamed.** A path parameter now contributes `By<Param>`,
+so `GetV1UsersUserIdSchedulingData` is now `GetV1UsersByUserIdSchedulingData`, and likewise
+for all 33 parameterised operations. This affects only the generated `GetV1…` / `PostV1…` /
+`PutV1…` / `DeleteV1…` names; the domain types (`Calendar`, `Event`, `User`, `TimeRange`,
+`Provider`, …) are untouched, and no method name, argument, or URL changed. The operation
+ids these names derive from are now pinned in the API, so they will not move again.
+
+**3. `scheduling.getAdvancedSlots()` and `scheduling.getMultiUserSlots()` now require their
+`body` argument.** Both took `body?`, but the API validates a required field on each of
+those request bodies — `schedules` for the single-user advanced route, `users` for the
+multi-user route — so a call omitting it has always been answered with a 400. The
+regenerated types just say what the API always did. Unlike the two changes above, this one
+changes the meaning of a call that compiles today: anyone omitting the body was already
+getting a runtime error, and will now get a compile error instead.
+
 ## 🐛 v1.1.0 — Multi-user scheduling no longer throws (2026-09-21)
 
 ### 🩹 Fixed
