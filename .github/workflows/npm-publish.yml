@@ -56,5 +56,22 @@ jobs:
       - name: Upgrade npm for trusted publishing
         run: npm install -g npm@latest
 
+      # Backfilling a Release for an already-published version fires this workflow, and so
+      # does re-running it. Both would otherwise die on EPUBLISHCONFLICT and leave a red run
+      # implying something is broken. Asking the registry first makes the job idempotent: the
+      # only version it will ever publish is one that is not there yet.
+      - name: Skip if this version is already on npm
+        id: published
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "recal-sdk@${VERSION}" version >/dev/null 2>&1; then
+            echo "recal-sdk@${VERSION} is already published; nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "recal-sdk@${VERSION} is not on the registry; publishing."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish to npm
+        if: steps.published.outputs.exists == 'false'
         run: npm publish
