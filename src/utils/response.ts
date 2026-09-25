@@ -68,3 +68,26 @@ export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
     // Return direct data
     return response.data
 }
+
+/**
+ * Unwraps a HeyAPI response to the API's whole envelope rather than its `data` field.
+ *
+ * For the responses that carry a sibling of `data`, where dropping it would let a partial
+ * answer read as a complete one: the organization free/busy routes report `failedUsers`
+ * there, and the user busy route reports `failedCalendars`. Error handling is identical to {@link unwrapResponse}: the error branch
+ * below delegates to it, which re-tests the same condition and always throws there —
+ * it never returns.
+ */
+export function unwrapEnvelope<T>(response: HeyApiResponse<unknown>): T {
+    if (response.error && typeof response.error === 'object' && Object.keys(response.error).length > 0) {
+        return unwrapResponse(response as HeyApiResponse<T>)
+    }
+
+    if (!response.data) {
+        throw new RecalError('No data in response', response.response?.status, response)
+    }
+
+    // The generated response types describe the envelope; HeyAPI's `data` is typed loosely
+    // as the union `{ data: T } | T`, so this narrowing can't be expressed without a cast.
+    return response.data as T
+}

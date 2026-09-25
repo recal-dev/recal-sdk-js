@@ -1,11 +1,13 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetV1OrganizationsOrgSlugCalendarBusyData,
-    GetV1OrganizationsOrgSlugMembersData,
-    GetV1OrganizationsOrgSlugSchedulingData,
+    GetV1OrganizationsByOrgSlugCalendarBusyData,
+    GetV1OrganizationsByOrgSlugCalendarBusyResponses,
+    GetV1OrganizationsByOrgSlugMembersData,
+    GetV1OrganizationsByOrgSlugSchedulingData,
+    GetV1OrganizationsByOrgSlugSchedulingResponses,
 } from '../client/types.gen'
-import { unwrapResponse } from '../utils/response'
+import { unwrapEnvelope, unwrapResponse } from '../utils/response'
 
 /**
  * Organizations Service
@@ -39,7 +41,7 @@ export class OrganizationsService {
      * ```
      */
     async get(slug: string) {
-        const response = await sdk.getV1OrganizationsOrgSlug({
+        const response = await sdk.getV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
@@ -80,7 +82,7 @@ export class OrganizationsService {
      * ```
      */
     async update(slug: string, data: { slug: string; name: string | null }) {
-        const response = await sdk.putV1OrganizationsOrgSlug({
+        const response = await sdk.putV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             body: data,
             client: this.client,
@@ -99,7 +101,7 @@ export class OrganizationsService {
      * ```
      */
     async delete(slug: string) {
-        const response = await sdk.deleteV1OrganizationsOrgSlug({
+        const response = await sdk.deleteV1OrganizationsByOrgSlug({
             path: { orgSlug: slug },
             client: this.client,
         })
@@ -119,8 +121,8 @@ export class OrganizationsService {
      * })
      * ```
      */
-    async getMembers(slug: string, options?: GetV1OrganizationsOrgSlugMembersData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugMembers({
+    async getMembers(slug: string, options?: GetV1OrganizationsByOrgSlugMembersData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
@@ -140,7 +142,7 @@ export class OrganizationsService {
      * ```
      */
     async addMembers(slug: string, userIds: string[]) {
-        const response = await sdk.postV1OrganizationsOrgSlugMembers({
+        const response = await sdk.postV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
@@ -160,7 +162,7 @@ export class OrganizationsService {
      * ```
      */
     async removeMembers(slug: string, userIds: string[]) {
-        const response = await sdk.deleteV1OrganizationsOrgSlugMembers({
+        const response = await sdk.deleteV1OrganizationsByOrgSlugMembers({
             path: { orgSlug: slug },
             body: { userIds },
             client: this.client,
@@ -182,14 +184,20 @@ export class OrganizationsService {
      *   provider: 'google'
      * })
      * ```
+     *
+     * A non-empty `failedUsers` means `data` is a partial answer. Each entry's
+     * `failedCalendars` says how partial: **empty** means that user could not be read at
+     * all and contributed nothing, **non-empty** means their busy time *is* in `data` but
+     * has gaps, and names the calendars missing from it. Re-querying a partial user would
+     * double-count the busy time already merged into `data`.
      */
-    async getBusyTimes(slug: string, options: GetV1OrganizationsOrgSlugCalendarBusyData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugCalendarBusy({
+    async getBusyTimes(slug: string, options: GetV1OrganizationsByOrgSlugCalendarBusyData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugCalendarBusy({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
         })
-        return unwrapResponse(response)
+        return unwrapEnvelope<GetV1OrganizationsByOrgSlugCalendarBusyResponses[200]>(response)
     }
 
     /**
@@ -207,13 +215,19 @@ export class OrganizationsService {
      *   padding: '15'
      * })
      * ```
+     *
+     * A non-empty `failedUsers` means `data` is a partial answer. Each entry's
+     * `failedCalendars` says how partial: **empty** means that user could not be read at
+     * all and contributed nothing, **non-empty** means their busy time *is* in `data` but
+     * has gaps, and names the calendars missing from it. Re-querying a partial user would
+     * double-count the busy time already merged into `data`.
      */
-    async getScheduling(slug: string, options: GetV1OrganizationsOrgSlugSchedulingData['query']) {
-        const response = await sdk.getV1OrganizationsOrgSlugScheduling({
+    async getScheduling(slug: string, options: GetV1OrganizationsByOrgSlugSchedulingData['query']) {
+        const response = await sdk.getV1OrganizationsByOrgSlugScheduling({
             path: { orgSlug: slug },
             query: options,
             client: this.client,
         })
-        return unwrapResponse(response)
+        return unwrapEnvelope<GetV1OrganizationsByOrgSlugSchedulingResponses[200]>(response)
     }
 }

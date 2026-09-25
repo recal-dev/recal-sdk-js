@@ -21,7 +21,8 @@ The SDK follows a modern code-generation architecture for type safety and mainta
 
 2. **Service Wrappers** (`src/services/`): Thin wrappers around generated SDK
    - Provide clean, domain-focused APIs
-   - Use `unwrapResponse()` to extract data from HeyAPI responses
+   - Use `unwrapResponse()` to extract `data`, or `unwrapEnvelope()` where the response
+     carries a failure list beside it (see Partial answers below)
    - Handle service-specific error cases
    - Constructor-based dependency injection with HeyAPI client
 
@@ -59,11 +60,21 @@ export class ServiceName {
 
 1. **Code Generation**: Use `bun run generate` to regenerate client from OpenAPI
 2. **Never Edit Gen Files**: All `*.gen.ts` files are auto-generated
-3. **Response Unwrapping**: Use `unwrapResponse()` to handle HeyAPI responses
-4. **Error Handling**: `unwrapResponse()` throws `RecalError` for API errors
+3. **Response Unwrapping**: `unwrapResponse()` for `{ data }`; `unwrapEnvelope()` for the four
+   availability methods, which must keep a sibling of `data`
+4. **Error Handling**: both throw `RecalError` for API errors
 5. **Service Wrappers**: Keep services thin - they're just adapters over generated SDK
 
-For detailed implementation guidance, see [STARTER.md](./devDocs/STARTER.md) (note: may be outdated).
+### Partial answers
+
+Four methods answer 200 with an incomplete result and a list naming what is missing, so dropping
+that list would let a partial answer read as a complete one — the bug `unwrapEnvelope()` exists to
+prevent. `calendar.getBusyTimes` and the two `organizations` availability methods return
+`{ data, failedCalendars | failedUsers }`; `scheduling.getMultiUserSlots` carries the list inside
+each per-user entry instead, because `data` is already one entry per user.
+
+A new method that fans out over calendars or users belongs on `unwrapEnvelope()`. Reaching for
+`unwrapResponse()` there compiles and silently discards the failures.
 
 ## Development Commands
 
@@ -82,7 +93,7 @@ bun test
 bun run check:fix
 
 # Individual commands
-bun run format:fix    # Fix formatting issues
+bun run format        # Fix formatting issues
 bun run lint:fix      # Fix linting issues
 bun run lint:fix:all  # Fix all linting issues including unsafe fixes
 
@@ -120,8 +131,7 @@ src/
 │   └── users.service.ts
 ├── utils/            # Utility functions
 │   ├── functionize.ts
-│   └── response.ts
-├── errors.ts         # RecalError class
+│   └── response.ts   # unwrapResponse, unwrapEnvelope, RecalError
 ├── index.ts          # Main exports
 ├── recal.ts          # Recal client class
 └── types.ts          # Type re-exports
@@ -145,7 +155,7 @@ src/
    - Built on HeyAPI's generated client using native `fetch` API
    - Automatic Bearer token authentication
    - HeyAPI returns `{ data?, error? }` response format
-   - Services use `unwrapResponse()` to extract data or throw `RecalError`
+   - Services use `unwrapResponse()` / `unwrapEnvelope()` to extract data or throw `RecalError`
 
 ### Code Style
 - Formatter: Biome with 4 spaces, 120 char lines
@@ -158,7 +168,8 @@ src/
 2. **Code Generation**: Use `bun run generate` to regenerate client after API changes
 3. **Build Output**: The `dist/` directory contains built files in ESM format only
 4. **Token Security**: This SDK is designed for server-side use only due to token requirements
-5. **Current State**: v1.0.0 stable release with full API coverage across all services
+5. **Current State**: v1.2.0, full API coverage across all services. See `CHANGELOG.md` for the
+   breaking changes in each release rather than trusting this line, which has gone stale before
 
 ## Domain Models
 

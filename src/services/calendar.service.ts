@@ -1,11 +1,12 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
 import type {
-    GetV1UsersUserIdCalendarBusyData,
-    GetV1UsersUserIdCalendarData,
-    GetV1UsersUserIdCalendarEventsData,
+    GetV1UsersByUserIdCalendarBusyData,
+    GetV1UsersByUserIdCalendarBusyResponses,
+    GetV1UsersByUserIdCalendarData,
+    GetV1UsersByUserIdCalendarEventsData,
 } from '../client/types.gen'
-import { unwrapResponse } from '../utils/response'
+import { unwrapEnvelope, unwrapResponse } from '../utils/response'
 
 /**
  * Calendar Service
@@ -28,8 +29,8 @@ export class CalendarService {
      * })
      * ```
      */
-    async list(userId: string, options?: GetV1UsersUserIdCalendarData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendar({
+    async list(userId: string, options?: GetV1UsersByUserIdCalendarData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendar({
             path: { userId },
             query: options,
             client: this.client,
@@ -45,20 +46,24 @@ export class CalendarService {
      *
      * @example
      * ```typescript
-     * const busy = await recal.calendar.getBusyTimes('user-123', {
+     * const { data, failedCalendars } = await recal.calendar.getBusyTimes('user-123', {
      *   start: '2024-01-01T00:00:00Z',
      *   end: '2024-01-31T23:59:59Z',
      *   provider: ['google', 'microsoft']
      * })
      * ```
+     *
+     * A non-empty `failedCalendars` means `data` is a partial answer: those calendars
+     * could not be read, so a window they cover may look free when it is not. Each entry
+     * names the calendar, its provider, a `reason` code and a message.
      */
-    async getBusyTimes(userId: string, options: GetV1UsersUserIdCalendarBusyData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendarBusy({
+    async getBusyTimes(userId: string, options: GetV1UsersByUserIdCalendarBusyData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendarBusy({
             path: { userId },
             query: options,
             client: this.client,
         })
-        return unwrapResponse(response)
+        return unwrapEnvelope<GetV1UsersByUserIdCalendarBusyResponses[200]>(response)
     }
 
     /**
@@ -76,8 +81,8 @@ export class CalendarService {
      * })
      * ```
      */
-    async listEvents(userId: string, options: GetV1UsersUserIdCalendarEventsData['query']) {
-        const response = await sdk.getV1UsersUserIdCalendarEvents({
+    async listEvents(userId: string, options: GetV1UsersByUserIdCalendarEventsData['query']) {
+        const response = await sdk.getV1UsersByUserIdCalendarEvents({
             path: { userId },
             query: options,
             client: this.client,

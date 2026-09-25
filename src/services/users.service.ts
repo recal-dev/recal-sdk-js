@@ -1,6 +1,6 @@
 import type { Client } from '../client/client'
 import * as sdk from '../client/sdk.gen'
-import type { GetV1UsersUserIdData } from '../client/types.gen'
+import type { GetV1UsersByUserIdData } from '../client/types.gen'
 import { unwrapResponse } from '../utils/response'
 
 /**
@@ -37,8 +37,8 @@ export class UsersService {
      * })
      * ```
      */
-    async get(userId: string, options?: GetV1UsersUserIdData['query']) {
-        const response = await sdk.getV1UsersUserId({
+    async get(userId: string, options?: GetV1UsersByUserIdData['query']) {
+        const response = await sdk.getV1UsersByUserId({
             path: { userId },
             query: options,
             client: this.client,
@@ -77,7 +77,7 @@ export class UsersService {
      * ```
      */
     async update(userId: string, newUserId: string) {
-        const response = await sdk.putV1UsersUserId({
+        const response = await sdk.putV1UsersByUserId({
             path: { userId },
             body: { userId: newUserId },
             client: this.client,
@@ -96,7 +96,7 @@ export class UsersService {
      * ```
      */
     async delete(userId: string) {
-        const response = await sdk.deleteV1UsersUserId({
+        const response = await sdk.deleteV1UsersByUserId({
             path: { userId },
             client: this.client,
         })
@@ -114,7 +114,7 @@ export class UsersService {
      * ```
      */
     async getOrganizations(userId: string) {
-        const response = await sdk.getV1UsersUserIdOrganizations({
+        const response = await sdk.getV1UsersByUserIdOrganizations({
             path: { userId },
             client: this.client,
         })

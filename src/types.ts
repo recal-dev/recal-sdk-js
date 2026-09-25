@@ -22,81 +22,79 @@ export type {
      * Create event across calendars payload
      */
     CreateMetaEvent,
-    DeleteV1OrganizationsOrgSlugData,
-    DeleteV1OrganizationsOrgSlugResponse,
-    DeleteV1UsersUserIdCalendarEventsMetaMetaIdData,
-    DeleteV1UsersUserIdCalendarEventsMetaMetaIdResponses,
-    DeleteV1UsersUserIdData,
-    DeleteV1UsersUserIdResponse,
+    DeleteV1OrganizationsByOrgSlugData,
+    DeleteV1OrganizationsByOrgSlugResponse,
+    DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdData,
+    DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdResponses,
+    DeleteV1UsersByUserIdData,
+    DeleteV1UsersByUserIdResponse,
     /**
      * Event entity
      */
     Event,
-    // Organizations
-    GetV1OrganizationsOrgSlugData,
-    GetV1OrganizationsOrgSlugResponse,
-    GetV1OrganizationsOrgSlugSchedulingData,
-    GetV1OrganizationsOrgSlugSchedulingResponse,
-    // Organizations
+    /**
+     * A calendar that could not be read, with the reason and a message for the end user
+     */
+    FailedCalendar,
+    /**
+     * A user whose busy times are missing (`failedCalendars` empty) or incomplete
+     * (`failedCalendars` names the gaps)
+     */
+    FailedFreeBusyUser,
+    /**
+     * Why a calendar or a user could not be read. A closed union — a code is never
+     * renamed or removed once shipped: https://docs.recal.dev/core/troubleshooting
+     */
+    FreeBusyFailureReason,
+    GetV1OrganizationsByOrgSlugData,
+    GetV1OrganizationsByOrgSlugResponse,
+    GetV1OrganizationsByOrgSlugSchedulingData,
+    GetV1OrganizationsByOrgSlugSchedulingResponse,
     GetV1OrganizationsResponse,
-    // ==================== Common Response Types ====================
-
-    // Users
+    GetV1UsersByUserIdCalendarBusyData,
+    GetV1UsersByUserIdCalendarBusyResponse,
+    GetV1UsersByUserIdCalendarData,
+    GetV1UsersByUserIdCalendarEventsData,
+    GetV1UsersByUserIdCalendarEventsMetaByMetaIdData,
+    GetV1UsersByUserIdCalendarEventsMetaByMetaIdResponse,
+    GetV1UsersByUserIdCalendarEventsResponse,
+    GetV1UsersByUserIdCalendarResponse,
+    GetV1UsersByUserIdData,
+    GetV1UsersByUserIdOauthByProviderLinkData,
+    GetV1UsersByUserIdOauthByProviderLinkResponse,
+    GetV1UsersByUserIdOauthByProviderTokenData,
+    GetV1UsersByUserIdOauthByProviderTokenResponse,
+    GetV1UsersByUserIdOauthData,
+    GetV1UsersByUserIdOauthLinksData,
+    GetV1UsersByUserIdOauthLinksResponse,
+    GetV1UsersByUserIdOauthResponse,
+    GetV1UsersByUserIdResponse,
+    GetV1UsersByUserIdSchedulingData,
+    GetV1UsersByUserIdSchedulingResponse,
     GetV1UsersResponse,
-    GetV1UsersUserIdCalendarBusyData,
-    GetV1UsersUserIdCalendarBusyResponse,
-    // Calendars
-    GetV1UsersUserIdCalendarData,
-    GetV1UsersUserIdCalendarEventsData,
-    GetV1UsersUserIdCalendarEventsMetaMetaIdData,
-    GetV1UsersUserIdCalendarEventsMetaMetaIdResponse,
-    GetV1UsersUserIdCalendarEventsResponse,
-    // Calendars
-    GetV1UsersUserIdCalendarResponse,
-    // ==================== Common Request Types ====================
-
-    // Users
-    GetV1UsersUserIdData,
-    // OAuth
-    GetV1UsersUserIdOauthData,
-    GetV1UsersUserIdOauthLinksData,
-    GetV1UsersUserIdOauthLinksResponse,
-    GetV1UsersUserIdOauthProviderLinkData,
-    GetV1UsersUserIdOauthProviderLinkResponse,
-    GetV1UsersUserIdOauthProviderTokenData,
-    GetV1UsersUserIdOauthProviderTokenResponse,
-    // OAuth
-    GetV1UsersUserIdOauthResponse,
-    GetV1UsersUserIdResponse,
-    // Scheduling
-    GetV1UsersUserIdSchedulingData,
-    // Scheduling
-    GetV1UsersUserIdSchedulingResponse,
     /**
      * Organization entity
      */
     Organization,
     PostV1OrganizationsData,
     PostV1OrganizationsResponse,
+    PostV1UsersByUserIdCalendarEventsMetaData,
+    PostV1UsersByUserIdCalendarEventsMetaResponse,
+    PostV1UsersByUserIdOauthByProviderData,
+    PostV1UsersByUserIdOauthByProviderResponse,
+    PostV1UsersByUserIdSchedulingData,
+    PostV1UsersByUserIdSchedulingResponse,
     PostV1UsersData,
-    PostV1UsersOauthProviderVerifyData,
+    PostV1UsersOauthByProviderVerifyData,
     PostV1UsersResponse,
     PostV1UsersSchedulingData,
     PostV1UsersSchedulingResponse,
-    // Events
-    PostV1UsersUserIdCalendarEventsMetaData,
-    // Events
-    PostV1UsersUserIdCalendarEventsMetaResponse,
-    PostV1UsersUserIdOauthProviderData,
-    PostV1UsersUserIdOauthProviderResponse,
-    PostV1UsersUserIdSchedulingData,
-    PostV1UsersUserIdSchedulingResponse,
-    PutV1OrganizationsOrgSlugData,
-    PutV1OrganizationsOrgSlugResponse,
-    PutV1UsersUserIdCalendarEventsMetaMetaIdData,
-    PutV1UsersUserIdCalendarEventsMetaMetaIdResponse,
-    PutV1UsersUserIdData,
-    PutV1UsersUserIdResponse,
+    PutV1OrganizationsByOrgSlugData,
+    PutV1OrganizationsByOrgSlugResponse,
+    PutV1UsersByUserIdCalendarEventsMetaByMetaIdData,
+    PutV1UsersByUserIdCalendarEventsMetaByMetaIdResponse,
+    PutV1UsersByUserIdData,
+    PutV1UsersByUserIdResponse,
     /**
      * Time range with start and end dates
      */
@@ -105,8 +103,6 @@ export type {
      * Update event payload
      */
     UpdateEvent,
-    // ==================== Domain Models ====================
-
     /**
      * User entity
      */
@@ -134,9 +130,17 @@ export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'frida
 export type OAuthAccessType = 'online' | 'offline'
 
 /**
- * OAuth scope presets
+ * OAuth scope presets, each expanded by the provider into its own scope list.
+ *
+ * `read` and `write` were added in v1.1.0 and this type never caught up, so
+ * `scope: 'write'` — valid against the API, and what the docs recommend — would not
+ * assign to it.
+ *
+ * @remarks `edit` is deprecated: still accepted as a synonym for `write`, and no longer
+ * the default. Passing an array instead of one of these presets skips the expansion and
+ * forwards the members verbatim as raw provider scopes.
  */
-export type OAuthScope = 'edit' | 'free-busy'
+export type OAuthScope = 'edit' | 'free-busy' | 'read' | 'write'
 
 /**
  * Attendee response status

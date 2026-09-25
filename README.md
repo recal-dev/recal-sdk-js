@@ -15,6 +15,7 @@ A powerful, type-safe SDK for interacting with the Recal calendar API. Build sop
 - **Rich Calendar Operations**: Events, busy queries, scheduling, and more
 - **Organization Management**: Handle organizations and user calendars
 - **OAuth Integration**: Built-in OAuth flow support for calendar connections
+- **Honest Availability**: Free/busy and scheduling answers name the calendars and users they could not read
 - **Error Handling**: Comprehensive error types for robust applications
 - **Modern Architecture**: Clean, testable service-based design
 
@@ -42,7 +43,7 @@ import { RecalClient } from 'recal-sdk'
 const recal = new RecalClient()
 
 // Or manually provide the token
-const recal = new RecalClient({ 
+const recalWithToken = new RecalClient({
     token: "recal_xyz"
 })
 ```
@@ -112,6 +113,31 @@ The SDK is organized into logical service modules:
 - **`organizations`** - Team and organization management
 - **`oauth`** - Calendar provider authentication
 
+Every method resolves to the response payload and throws a `RecalError` if the API rejects the call.
+
+### Partial answers
+
+One unreadable calendar does not fail an availability request. The four methods that fan out over several
+calendars or users answer with what they have, and name what they could not read beside it:
+`calendar.getBusyTimes()` resolves to `{ data, failedCalendars }`, `organizations.getBusyTimes()` and
+`organizations.getScheduling()` to `{ data, failedUsers }`, and each per-user entry of
+`scheduling.getMultiUserSlots()` carries its own `failedCalendars`.
+
+```typescript
+const { data: busy, failedCalendars } = await recal.calendar.getBusyTimes(userId, {
+    start: '2024-01-15T00:00:00Z',
+    end: '2024-01-19T23:59:59Z',
+})
+
+if (failedCalendars.length > 0) {
+    // `busy` is real but incomplete — a window these calendars cover may look free when it is not
+}
+```
+
+The list is always present and `[]` when nothing failed. Each entry carries a `reason` from the closed
+`FreeBusyFailureReason` union, documented at [docs.recal.dev/core/troubleshooting](https://docs.recal.dev/core/troubleshooting).
+Full treatment in [USAGE.md](./USAGE.md#partial-answers).
+
 ## Documentation
 
 - **API Reference**: [docs.recal.dev](https://docs.recal.dev) - Comprehensive guides and API schemas
@@ -131,7 +157,7 @@ The SDK is organized into logical service modules:
 const recal = new RecalClient()
 
 // Or provide explicitly
-const recal = new RecalClient({
+const recalExplicit = new RecalClient({
     token: "recal_xyz",
     url: "https://api.recal.dev"  // optional
 })
@@ -166,26 +192,27 @@ bun run build
 
 ```
 src/
-├── client/               # Auto-generated HeyAPI SDK (DO NOT EDIT)
-│   ├── client.gen.ts     # HTTP client
-│   ├── sdk.gen.ts        # Generated SDK functions
-│   ├── types.gen.ts      # Generated TypeScript types
-│   ├── zod.gen.ts        # Zod validation schemas
-│   └── core/             # Core utilities
-├── services/             # Service wrapper implementations
+├── client/                    # Auto-generated HeyAPI SDK (DO NOT EDIT)
+│   ├── client.gen.ts          # HTTP client
+│   ├── sdk.gen.ts             # Generated SDK functions
+│   ├── types.gen.ts           # Generated TypeScript types
+│   ├── transformers.gen.ts    # Date coercion for responses
+│   ├── zod.gen.ts             # Zod validation schemas
+│   ├── client/                # Client implementation
+│   └── core/                  # Core utilities
+├── services/                  # Service wrapper implementations
 │   ├── calendar.service.ts
 │   ├── events.service.ts
 │   ├── oauth.service.ts
 │   ├── organizations.service.ts
 │   ├── scheduling.service.ts
 │   └── users.service.ts
-├── utils/                # Helper utilities
-│   ├── functionize.ts    # Lazy evaluation helper
-│   └── response.ts       # Response unwrapper
-├── errors.ts             # Custom error classes
-├── index.ts              # Main exports
-├── recal.ts              # Recal client class
-└── types.ts              # Type re-exports
+├── utils/                     # Helper utilities
+│   ├── functionize.ts         # Lazy evaluation helper
+│   └── response.ts            # Response unwrappers and RecalError
+├── index.ts                   # Main exports
+├── recal.ts                   # Recal client class
+└── types.ts                   # Type re-exports
 ```
 
 > **Note**: All files in `client/` with `*.gen.ts` suffix are auto-generated from the OpenAPI specification and should not be edited manually. Use `bun run generate` to regenerate them.
@@ -215,7 +242,7 @@ This project uses Biome for formatting and linting:
 
 ```bash
 # Format code
-bun run format:fix
+bun run format
 
 # Lint code
 bun run lint:fix
@@ -226,12 +253,13 @@ bun run check:fix
 
 ### Testing
 
-The SDK includes comprehensive integration tests for all services.
+The SDK includes comprehensive integration tests for all services, plus unit tests under `tests/unit/` that
+drive the services against a stubbed client and need no credentials.
 
-**Required Environment Variables:**
+**Required Environment Variables** (integration tests only):
 ```bash
-RECAL_TOKEN=recal_xxx          # Required for all tests
-RECAL_URL=https://api.recal.dev # Optional, defaults to production
+RECAL_TOKEN=recal_xxx           # Required
+RECAL_URL=https://api.recal.dev # Required — the suite refuses to guess an environment
 
 # Optional (for OAuth integration tests)
 GOOGLE_ACCESS_TOKEN=xxx
@@ -242,6 +270,9 @@ GOOGLE_REFRESH_TOKEN=xxx
 ```bash
 # Run all tests
 bun test
+
+# Run only the unit tests, which need no credentials
+bun test tests/unit
 
 # Run specific test file
 bun test tests/integrations/users.test.ts

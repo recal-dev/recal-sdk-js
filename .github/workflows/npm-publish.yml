@@ -1,15 +1,23 @@
 name: Publish to npm
 
+# A published GitHub Release is the only trigger, deliberately. `gh release create v1.2.0`
+# pushes the tag and publishes the release, so a `push: tags: ['v*']` trigger alongside this
+# one fired twice for every release — two concurrent jobs racing to `npm publish` the same
+# version, one of which loses with EPUBLISHCONFLICT. Releasing by bare tag no longer
+# publishes anything, which is the intended flow: the Release is the artifact people read.
 on:
   release:
     types: [published]
-  push:
-    tags:
-      - 'v*'
 
 permissions:
     id-token: write
     contents: read
+
+# Publishing a version is not repeatable, so never let two runs overlap, and never cancel
+# one in flight — a cancelled job mid-`npm publish` is worse than a queued one.
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -48,5 +56,30 @@ jobs:
       - name: Upgrade npm for trusted publishing
         run: npm install -g npm@latest
 
+      # Backfilling a Release for an already-published version fires this workflow, and so
+      # does re-running it. Both would otherwise die on EPUBLISHCONFLICT and leave a red run
+      # implying something is broken. Asking the registry first makes the job idempotent: the
+      # only version it will ever publish is one that is not there yet.
+      - name: Skip if this version is already on npm
+        id: published
+        run: |
+          set -o pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          if OUTPUT=$(npm view "recal-sdk@${VERSION}" version 2>&1); then
+            echo "recal-sdk@${VERSION} is already published; nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif printf '%s' "$OUTPUT" | grep -qE 'E404|No match found for version'; then
+            echo "recal-sdk@${VERSION} is not on the registry; publishing."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            # Anything else — network, registry outage, auth — must not be read as "not
+            # published". Treating it that way would run `npm publish` on a version that may
+            # well exist, which is the EPUBLISHCONFLICT this step was added to prevent.
+            echo "::error::Could not determine whether recal-sdk@${VERSION} is published."
+            printf '%s\n' "$OUTPUT"
+            exit 1
+          fi
+
       - name: Publish to npm
+        if: steps.published.outputs.exists == 'false'
         run: npm publish
