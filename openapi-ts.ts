@@ -10,6 +10,7 @@ const TRANSFORMERS_FILE = 'src/client/transformers.gen.ts'
 const SCHEMAS_MISSING_TRANSFORMERS = [
     'calendarSchemaResponseTransformer',
     'failedFreeBusyUserSchemaResponseTransformer',
+    'freeBusyFailureReasonSchemaResponseTransformer',
 ]
 
 /**
@@ -18,8 +19,14 @@ const SCHEMAS_MISSING_TRANSFORMERS = [
  *
  * HeyAPI emits a call to `<name>SchemaResponseTransformer` for every $ref'd
  * component, but only defines one for components carrying date fields. A
- * component with none, e.g. `Calendar` or `FailedFreeBusyUser`, gets a call
+ * component with none, e.g. `Calendar` or `FreeBusyFailureReason`, gets a call
  * the generated file never declares, and it does not compile.
+ *
+ * The list outlives any one spec: entries self-disable, since a name is only
+ * stubbed when the file calls it without declaring it. `FailedFreeBusyUser`
+ * is the worked example — it needed a stub until it gained a nested `$ref`,
+ * after which HeyAPI emitted the definition and its entry went quiet on its
+ * own. Add names here; do not prune them on the strength of one regeneration.
  *
  * Idempotent, and a no-op once upstream either emits the definition or stops
  * emitting the call — so it can stay until the bug is fixed without rotting.

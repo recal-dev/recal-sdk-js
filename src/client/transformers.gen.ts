@@ -21,7 +21,7 @@ const userSchemaResponseTransformer = (data: any) => {
 const calendarSchemaResponseTransformer = (data: any) => data;
 
 // Manual: HeyAPI couldn't generate a transformer for this schema
-const failedFreeBusyUserSchemaResponseTransformer = (data: any) => data;
+const freeBusyFailureReasonSchemaResponseTransformer = (data: any) => data;
 
 export const getV1OrganizationsResponseTransformer = async (data: any): Promise<GetV1OrganizationsResponse> => {
     data.data = data.data.map((item: any) => {
@@ -78,6 +78,19 @@ export const getV1OrganizationsByOrgSlugMembersResponseTransformer = async (data
 const timeRangeSchemaResponseTransformer = (data: any) => {
     data.end = new Date(data.end);
     data.start = new Date(data.start);
+    return data;
+};
+
+const failedFreeBusyUserSchemaResponseTransformer = (data: any) => {
+    data.failedCalendars = data.failedCalendars.map((item: any) => {
+        return failedCalendarSchemaResponseTransformer(item);
+    });
+    data.reason = freeBusyFailureReasonSchemaResponseTransformer(data.reason);
+    return data;
+};
+
+const failedCalendarSchemaResponseTransformer = (data: any) => {
+    data.reason = freeBusyFailureReasonSchemaResponseTransformer(data.reason);
     return data;
 };
 
@@ -201,6 +214,9 @@ export const getV1UsersByUserIdCalendarBusyResponseTransformer = async (data: an
     data.data = data.data.map((item: any) => {
         return timeRangeSchemaResponseTransformer(item);
     });
+    data.failedCalendars = data.failedCalendars.map((item: any) => {
+        return failedCalendarSchemaResponseTransformer(item);
+    });
     return data;
 };
 
@@ -300,6 +316,9 @@ export const postV1UsersSchedulingResponseTransformer = async (data: any): Promi
     data.data = data.data.map((item: any) => {
         item.availableSlots = item.availableSlots.map((item: any) => {
             return timeRangeSchemaResponseTransformer(item);
+        });
+        item.failedCalendars = item.failedCalendars.map((item: any) => {
+            return failedCalendarSchemaResponseTransformer(item);
         });
         item.options.end = new Date(item.options.end);
         item.options.start = new Date(item.options.start);

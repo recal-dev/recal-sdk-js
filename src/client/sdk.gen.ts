@@ -219,7 +219,7 @@ export const postV1OrganizationsByOrgSlugMembers = <ThrowOnError extends boolean
 };
 
 /**
- * Get the consolidated busy times of all users of an organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no busy time, so a non-empty `failedUsers` means `data` is a partial answer rather than a complete one.
+ * Get the consolidated busy times of all users of an organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no busy time, so a non-empty `failedUsers` means `data` is a partial answer rather than a complete one. Members with no connected calendar are not listed — https://docs.recal.dev/core/troubleshooting
  */
 export const getV1OrganizationsByOrgSlugCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1OrganizationsByOrgSlugCalendarBusyData, ThrowOnError>) => {
     return (options.client ?? client).get<GetV1OrganizationsByOrgSlugCalendarBusyResponses, GetV1OrganizationsByOrgSlugCalendarBusyErrors, ThrowOnError>({
@@ -242,7 +242,7 @@ export const getV1OrganizationsByOrgSlugCalendarBusy = <ThrowOnError extends boo
 };
 
 /**
- * Get available time slots for all users in a sub-organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no slots, so a non-empty `failedUsers` means the availability is a partial answer rather than a complete one.
+ * Get available time slots for all users in a sub-organization. Users whose calendars could not be read are listed in `failedUsers` and contribute no slots, so a non-empty `failedUsers` means the availability is a partial answer rather than a complete one. Members with no connected calendar are not listed — https://docs.recal.dev/core/troubleshooting
  *
  * Tip: Use the `x-timezone` header to specify the timezone of the times provided in the request
  */
@@ -436,7 +436,7 @@ export const getV1UsersByUserIdCalendar = <ThrowOnError extends boolean = false>
 };
 
 /**
- * Get the busy times of a user across all their calendars
+ * Get the busy times of a user across all their calendars. Calendars that could not be read are listed in `failedCalendars` and contribute no busy time, so a non-empty `failedCalendars` means `data` is a partial answer rather than a complete one — https://docs.recal.dev/core/troubleshooting
  */
 export const getV1UsersByUserIdCalendarBusy = <ThrowOnError extends boolean = false>(options: Options<GetV1UsersByUserIdCalendarBusyData, ThrowOnError>) => {
     return (options.client ?? client).get<GetV1UsersByUserIdCalendarBusyResponses, GetV1UsersByUserIdCalendarBusyErrors, ThrowOnError>({
@@ -911,7 +911,7 @@ export const postV1UsersByUserIdScheduling = <ThrowOnError extends boolean = fal
 };
 
 /**
- * Get available time slots based on busy data with advanced parameters
+ * Get available time slots based on busy data with advanced parameters. An `ok` entry lists the calendars it could not read in `failedCalendars`, so its slots are a partial answer whenever that list is non-empty; an entry that failed outright carries `reason` unless it names a user who does not exist or has connected nothing — https://docs.recal.dev/core/troubleshooting
  */
 export const postV1UsersScheduling = <ThrowOnError extends boolean = false>(options: Options<PostV1UsersSchedulingData, ThrowOnError>) => {
     return (options.client ?? client).post<PostV1UsersSchedulingResponses, PostV1UsersSchedulingErrors, ThrowOnError>({

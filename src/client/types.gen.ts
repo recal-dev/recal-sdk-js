@@ -51,17 +51,28 @@ export type TimeRange = {
 };
 
 /**
- * Failed Free/Busy User
+ * Why a calendar or a user could not be read. What each value means and how to resolve it: https://docs.recal.dev/core/troubleshooting
+ */
+export type FreeBusyFailureReason = 'accessDenied' | 'authorizationInvalid' | 'insufficientScopes' | 'invalidCalendarId' | 'mailboxUnavailable' | 'notFound' | 'providerError' | 'providerNotConfigured' | 'rateLimited' | 'tooManyCalendars';
+
+/**
+ * A calendar that could not be read
+ */
+export type FailedCalendar = {
+    calendarId: string;
+    message: string;
+    provider: 'google' | 'microsoft';
+    reason: FreeBusyFailureReason;
+};
+
+/**
+ * A user whose busy times are missing (failedCalendars empty) or incomplete (failedCalendars names the gaps)
  */
 export type FailedFreeBusyUser = {
-    /**
-     * The caller-supplied identifier of the user whose busy times could not be read
-     */
     customId: string;
-    /**
-     * Why the lookup failed for this user
-     */
-    reason: string;
+    failedCalendars: Array<FailedCalendar>;
+    message: string;
+    reason: FreeBusyFailureReason;
 };
 
 /**
@@ -618,7 +629,7 @@ export type GetV1OrganizationsByOrgSlugSchedulingErrors = {
         data: null;
     };
     /**
-     * Organization not found
+     * Organization not found, or it has no members
      */
     404: {
         data: null;
@@ -963,9 +974,23 @@ export type GetV1UsersByUserIdCalendarErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1013,7 +1038,7 @@ export type GetV1UsersByUserIdCalendarBusyData = {
 
 export type GetV1UsersByUserIdCalendarBusyErrors = {
     /**
-     * Bad request, or more calendars requested than the limit allows
+     * Bad request, more calendars requested than the limit allows, or every requested calendar id is invalid
      */
     400: {
         error: string;
@@ -1027,28 +1052,28 @@ export type GetV1UsersByUserIdCalendarBusyErrors = {
         error: string;
     };
     /**
-     * Calendar access was denied by the provider
+     * Every requested calendar was denied by the provider, has no mailbox behind it, or the authorization does not cover busy times
      */
     403: {
         data: null;
         error: string;
     };
     /**
-     * User not found, or a requested calendar does not exist
+     * User not found, or none of the requested calendars exists
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * The calendar provider throttled the request
+     * The calendar provider throttled every requested calendar
      */
     429: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider could not be read
+     * Every requested calendar could not be read
      */
     502: {
         data: null;
@@ -1060,10 +1085,11 @@ export type GetV1UsersByUserIdCalendarBusyError = GetV1UsersByUserIdCalendarBusy
 
 export type GetV1UsersByUserIdCalendarBusyResponses = {
     /**
-     * List of busy intervals
+     * List of busy intervals, plus the calendars that could not be read
      */
     200: {
         data: Array<TimeRange>;
+        failedCalendars: Array<FailedCalendar>;
     };
 };
 
@@ -1105,9 +1131,23 @@ export type GetV1UsersByUserIdCalendarEventsErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1160,9 +1200,30 @@ export type PostV1UsersByUserIdCalendarEventsMetaErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The provider created the event, but it could not be read back into the Recal event shape
+     */
+    422: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1216,9 +1277,23 @@ export type DeleteV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1274,9 +1349,23 @@ export type GetV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1330,9 +1419,30 @@ export type PutV1UsersByUserIdCalendarEventsMetaByMetaIdErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * Event not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The provider applied the update, but the event could not be read back into the Recal event shape
+     */
+    422: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1385,9 +1495,37 @@ export type PostV1UsersByUserIdCalendarEventsByProviderByCalendarIdErrors = {
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The `id` supplied for the new event is already taken on that calendar. Google only: the Microsoft path never forwards a caller-supplied id
+     */
+    409: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The provider created the event, but it could not be read back into the Recal event shape
+     */
+    422: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1441,9 +1579,23 @@ export type DeleteV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdEr
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1499,9 +1651,23 @@ export type GetV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdError
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -1555,9 +1721,30 @@ export type PutV1UsersByUserIdCalendarEventsByProviderByCalendarIdByEventIdError
         error: string;
     };
     /**
+     * The calendar authorization does not cover the operation. A scope refusal also carries `operation` alongside the envelope, plus `validScopes` when Recal's own pre-flight raised it; a flat denial from the provider carries neither
+     */
+    403: {
+        data: null;
+        error: string;
+    };
+    /**
      * User not found
      */
     404: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The provider applied the update, but the event could not be read back into the Recal event shape
+     */
+    422: {
+        data: null;
+        error: string;
+    };
+    /**
+     * The calendar provider throttled the request. When it says how long to wait, the response carries a `Retry-After` header and a `retryAfter` field alongside the envelope
+     */
+    429: {
         data: null;
         error: string;
     };
@@ -2015,28 +2202,28 @@ export type GetV1UsersByUserIdSchedulingErrors = {
         error: string;
     };
     /**
-     * Calendar access was denied by the provider
+     * Every requested calendar was denied by the provider, has no mailbox behind it, or the authorization does not cover busy times
      */
     403: {
         data: null;
         error: string;
     };
     /**
-     * User not found, the user has no connected calendars, or a requested calendar does not exist
+     * User not found, or the user has no connected calendars
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * The calendar provider throttled the request
+     * The calendar provider throttled every requested calendar
      */
     429: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider could not be read
+     * Every requested calendar could not be read
      */
     502: {
         data: null;
@@ -2148,28 +2335,28 @@ export type PostV1UsersByUserIdSchedulingErrors = {
         error: string;
     };
     /**
-     * Calendar access was denied by the provider
+     * Every requested calendar was denied by the provider, has no mailbox behind it, or the authorization does not cover busy times
      */
     403: {
         data: null;
         error: string;
     };
     /**
-     * User not found, the user has no connected calendars, or a requested calendar does not exist
+     * User not found, or the user has no connected calendars
      */
     404: {
         data: null;
         error: string;
     };
     /**
-     * The calendar provider throttled the request
+     * The calendar provider throttled every requested calendar
      */
     429: {
         data: null;
         error: string;
     };
     /**
-     * Calendar provider could not be read
+     * Every requested calendar could not be read
      */
     502: {
         data: null;
@@ -2294,11 +2481,12 @@ export type PostV1UsersSchedulingError = PostV1UsersSchedulingErrors[keyof PostV
 
 export type PostV1UsersSchedulingResponses = {
     /**
-     * Available time slots for each user
+     * Available time slots for each user, plus the calendars that could not be read
      */
     200: {
         data: Array<{
             availableSlots: Array<TimeRange>;
+            failedCalendars: Array<FailedCalendar>;
             options: {
                 /**
                  * End time of the time range in ISO format
@@ -2360,6 +2548,7 @@ export type PostV1UsersSchedulingResponses = {
             error: string;
             status: 'error';
             userId: string;
+            reason?: FreeBusyFailureReason;
         }>;
     };
 };

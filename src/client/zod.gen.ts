@@ -65,11 +65,42 @@ export const zTimeRange = z.object({
 });
 
 /**
- * Failed Free/Busy User
+ * Why a calendar or a user could not be read. What each value means and how to resolve it: https://docs.recal.dev/core/troubleshooting
+ */
+export const zFreeBusyFailureReason = z.enum([
+    'accessDenied',
+    'authorizationInvalid',
+    'insufficientScopes',
+    'invalidCalendarId',
+    'mailboxUnavailable',
+    'notFound',
+    'providerError',
+    'providerNotConfigured',
+    'rateLimited',
+    'tooManyCalendars'
+]);
+
+/**
+ * A calendar that could not be read
+ */
+export const zFailedCalendar = z.object({
+    calendarId: z.string(),
+    message: z.string(),
+    provider: z.enum([
+        'google',
+        'microsoft'
+    ]),
+    reason: zFreeBusyFailureReason
+});
+
+/**
+ * A user whose busy times are missing (failedCalendars empty) or incomplete (failedCalendars names the gaps)
  */
 export const zFailedFreeBusyUser = z.object({
     customId: z.string(),
-    reason: z.string()
+    failedCalendars: z.array(zFailedCalendar),
+    message: z.string(),
+    reason: zFreeBusyFailureReason
 });
 
 /**
@@ -678,10 +709,11 @@ export const zGetV1UsersByUserIdCalendarBusyData = z.object({
 });
 
 /**
- * List of busy intervals
+ * List of busy intervals, plus the calendars that could not be read
  */
 export const zGetV1UsersByUserIdCalendarBusyResponse = z.object({
-    data: z.array(zTimeRange)
+    data: z.array(zTimeRange),
+    failedCalendars: z.array(zFailedCalendar)
 });
 
 export const zGetV1UsersByUserIdCalendarEventsData = z.object({
@@ -1264,12 +1296,13 @@ export const zPostV1UsersSchedulingData = z.object({
 });
 
 /**
- * Available time slots for each user
+ * Available time slots for each user, plus the calendars that could not be read
  */
 export const zPostV1UsersSchedulingResponse = z.object({
     data: z.array(z.union([
         z.object({
             availableSlots: z.array(zTimeRange),
+            failedCalendars: z.array(zFailedCalendar),
             options: z.object({
                 end: z.iso.datetime({
                     offset: true
@@ -1321,7 +1354,8 @@ export const zPostV1UsersSchedulingResponse = z.object({
         z.object({
             error: z.string(),
             status: z.literal('error'),
-            userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/)
+            userId: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$/),
+            reason: z.optional(zFreeBusyFailureReason)
         })
     ]))
 });
