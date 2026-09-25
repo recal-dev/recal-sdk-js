@@ -38,8 +38,8 @@ describe('Calendar Integration Tests', () => {
             end: endDate.toISOString(),
         })
 
-        expect(busyTimes).toBeDefined()
-        expect(Array.isArray(busyTimes)).toBe(true)
+        expect(Array.isArray(busyTimes.data)).toBe(true)
+        expect(Array.isArray(busyTimes.failedCalendars)).toBe(true)
     })
 
     test('should list events for a user', async () => {
