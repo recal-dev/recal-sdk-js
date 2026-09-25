@@ -16,8 +16,8 @@ const FAILED: FailedCalendar[] = [
     },
 ]
 
-const clientReturning = (body: unknown, error?: unknown) =>
-    ({ get: async () => ({ data: error ? undefined : body, error }) }) as never
+const clientReturning = (body: unknown, error?: unknown, status?: number) =>
+    ({ get: async () => ({ data: error ? undefined : body, error, response: { status } }) }) as never
 
 describe('user free/busy envelope', () => {
     test('getBusyTimes reports the calendars it could not read beside the busy times', async () => {
@@ -38,9 +38,14 @@ describe('user free/busy envelope', () => {
         expect(result.failedCalendars).toEqual([])
     })
 
-    test('an api error still throws RecalError rather than returning an envelope', async () => {
-        const service = new CalendarService(clientReturning(undefined, { error: 'User not found' }))
+    test("an api error throws RecalError carrying the api's own status and message", async () => {
+        const service = new CalendarService(clientReturning(undefined, { error: 'User not found' }, 404))
 
-        await expect(service.getBusyTimes('user-123', {} as never)).rejects.toBeInstanceOf(RecalError)
+        // `instanceof RecalError` alone is not enough: the fake's `data: undefined` trips the
+        // no-data guard, which throws one too. The status and message pin the error branch.
+        const error = (await service.getBusyTimes('user-123', {} as never).catch((e) => e)) as RecalError
+        expect(error).toBeInstanceOf(RecalError)
+        expect(error.statusCode).toBe(404)
+        expect(error.message).toContain('User not found')
     })
 })

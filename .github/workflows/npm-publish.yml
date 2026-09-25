@@ -63,13 +63,21 @@ jobs:
       - name: Skip if this version is already on npm
         id: published
         run: |
+          set -o pipefail
           VERSION=$(node -p "require('./package.json').version")
-          if npm view "recal-sdk@${VERSION}" version >/dev/null 2>&1; then
+          if OUTPUT=$(npm view "recal-sdk@${VERSION}" version 2>&1); then
             echo "recal-sdk@${VERSION} is already published; nothing to do."
             echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
+          elif printf '%s' "$OUTPUT" | grep -qE 'E404|No match found for version'; then
             echo "recal-sdk@${VERSION} is not on the registry; publishing."
             echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            # Anything else — network, registry outage, auth — must not be read as "not
+            # published". Treating it that way would run `npm publish` on a version that may
+            # well exist, which is the EPUBLISHCONFLICT this step was added to prevent.
+            echo "::error::Could not determine whether recal-sdk@${VERSION} is published."
+            printf '%s\n' "$OUTPUT"
+            exit 1
           fi
 
       - name: Publish to npm

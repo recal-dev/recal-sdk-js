@@ -185,8 +185,11 @@ export class OrganizationsService {
      * })
      * ```
      *
-     * A non-empty `failedUsers` means `data` is a partial answer: those users
-     * contributed nothing to it.
+     * A non-empty `failedUsers` means `data` is a partial answer. Each entry's
+     * `failedCalendars` says how partial: **empty** means that user could not be read at
+     * all and contributed nothing, **non-empty** means their busy time *is* in `data` but
+     * has gaps, and names the calendars missing from it. Re-querying a partial user would
+     * double-count the busy time already merged into `data`.
      */
     async getBusyTimes(slug: string, options: GetV1OrganizationsByOrgSlugCalendarBusyData['query']) {
         const response = await sdk.getV1OrganizationsByOrgSlugCalendarBusy({
@@ -213,8 +216,11 @@ export class OrganizationsService {
      * })
      * ```
      *
-     * A non-empty `failedUsers` means `data` is a partial answer: those users
-     * contributed nothing to it.
+     * A non-empty `failedUsers` means `data` is a partial answer. Each entry's
+     * `failedCalendars` says how partial: **empty** means that user could not be read at
+     * all and contributed nothing, **non-empty** means their busy time *is* in `data` but
+     * has gaps, and names the calendars missing from it. Re-querying a partial user would
+     * double-count the busy time already merged into `data`.
      */
     async getScheduling(slug: string, options: GetV1OrganizationsByOrgSlugSchedulingData['query']) {
         const response = await sdk.getV1OrganizationsByOrgSlugScheduling({

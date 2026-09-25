@@ -35,8 +35,18 @@ fans out over calendars or users, and this release is what makes that visible to
 - `403` and `429` are documented on the user free/busy and scheduling endpoints, and the
   user free/busy route documents a `400` for requesting more calendars than the limit allows.
 
+### 🩹 Fixed
+- **`OAuthScope` was missing two of the four values the API accepts.** It was
+  `'edit' | 'free-busy'`, so `scope: 'write'` — valid since v1.1.0, and what the docs
+  recommend — would not assign to the type this package exports for exactly that purpose.
+  The only non-deprecated value it offered was `free-busy`. It is now
+  `'edit' | 'free-busy' | 'read' | 'write'`. Strictly this is a fifth breaking change: an
+  exhaustive `switch` over `OAuthScope` with a `never` check stops compiling until it
+  handles the two new members.
+
 ### ⚠️ Upgrading
-Four breaking changes. The first two are the same change applied to different methods.
+Four breaking changes to runtime shapes, plus the `OAuthScope` widening noted above. The
+first two are the same change applied to different methods.
 
 **1. The two organization methods return an envelope.** They resolved to the payload;
 they now resolve to `{ data, failedUsers }`.
@@ -73,7 +83,8 @@ if (failedCalendars.length > 0) {
 
 `scheduling.getMultiUserSlots()` did not change shape, but its per-user entries gained
 fields: an `ok` entry now carries `failedCalendars`, and an `error` entry carries an optional
-`reason`. `scheduling.getSlots()` and `getAdvancedSlots()` are unaffected.
+`reason`. `scheduling.getSlots()` and `getAdvancedSlots()` carry no failure list at all —
+though `getAdvancedSlots()` is affected by (4) below, which is a separate change.
 
 **3. Generated type exports were renamed.** A path parameter now contributes `By<Param>`,
 so `GetV1UsersUserIdSchedulingData` is now `GetV1UsersByUserIdSchedulingData`, and likewise
@@ -85,9 +96,14 @@ pinned in the API, so they will not move again.
 
 Callers going through `RecalSDK.*` — the raw generated functions, re-exported from the
 package root for direct use without the `Recal` wrapper — see more than the rename: the
-same 33 functions are renamed on the function name itself, and 12 of them (beyond the two
-scheduling functions covered in (4) below) had an optional `body` argument become required.
-`recal.*` service methods are unaffected by that second part; each already supplied its
+same 33 functions are renamed on the function name itself.
+
+Separately from the rename, **14 operations had an optional `body` argument become
+required**. Two are the scheduling functions covered in (4) below. Of the other twelve, ten
+are among the renamed set — but **two are not**: `RecalSDK.postV1Organizations` and
+`RecalSDK.postV1Users` keep their names and still gain a required `body`, so a
+`postV1Users({ client })` call that compiles today stops compiling without its name
+changing. `recal.*` service methods are unaffected throughout; each already supplied its
 body unconditionally.
 
 **4. `scheduling.getAdvancedSlots()` and `scheduling.getMultiUserSlots()` now require their

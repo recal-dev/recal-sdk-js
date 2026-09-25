@@ -25,8 +25,8 @@ const FAILED: FailedFreeBusyUser[] = [
     },
 ]
 
-const clientReturning = (body: unknown, error?: unknown) =>
-    ({ get: async () => ({ data: error ? undefined : body, error }) }) as never
+const clientReturning = (body: unknown, error?: unknown, status?: number) =>
+    ({ get: async () => ({ data: error ? undefined : body, error, response: { status } }) }) as never
 
 describe('organization free/busy envelopes', () => {
     test('getBusyTimes reports the users whose calendars could not be read', async () => {
@@ -65,11 +65,17 @@ describe('organization free/busy envelopes', () => {
         expect(incomplete.failedCalendars[0].calendarId).toBe('shared@example.com')
     })
 
-    test('an api error still throws RecalError rather than returning an envelope', async () => {
+    test("an api error throws RecalError carrying the api's own status and message", async () => {
         const service = new OrganizationsService(
-            clientReturning(undefined, { error: 'Organization with slug acme not found' })
+            clientReturning(undefined, { error: 'Organization with slug acme not found' }, 404)
         )
 
-        await expect(service.getBusyTimes('acme', {} as never)).rejects.toBeInstanceOf(RecalError)
+        // Asserting only `instanceof RecalError` would pass even with the error branch deleted:
+        // the fake's `data: undefined` trips the no-data guard, which throws a RecalError too,
+        // just a generic one. The status and the API's message are what prove the error path ran.
+        const error = (await service.getBusyTimes('acme', {} as never).catch((e) => e)) as RecalError
+        expect(error).toBeInstanceOf(RecalError)
+        expect(error.statusCode).toBe(404)
+        expect(error.message).toContain('Organization with slug acme not found')
     })
 })
