@@ -2,19 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
-## ⚠️ v1.2.0 — Partial organization answers are now visible (2026-09-24)
+## ⚠️ v1.2.0 — An incomplete availability answer now says so (2026-09-25)
+
+An availability answer that is missing a calendar is worse than one that fails: it reports a
+busy person as free. The API now answers partially instead of failing outright wherever it
+fans out over calendars or users, and this release is what makes that visible to a caller.
+
+> **If you are staying on v1.1.0, read this.** Nothing throws and nothing fails to parse — but
+> calls that previously raised an error when a calendar could not be read now resolve with a
+> *quietly incomplete* answer, and v1.1.0 cannot see the field that says so. This affects
+> `calendar.getBusyTimes`, `organizations.getBusyTimes`, `organizations.getScheduling` and
+> `scheduling.getMultiUserSlots`. On the multi-user route in particular, `status: 'ok'` no
+> longer implies every requested calendar was read. Upgrading is the fix.
 
 ### ✨ Added
+- **`calendar.getBusyTimes()` reports `failedCalendars`.** A user's busy times are answered
+  even when some of their calendars cannot be read, with each failure named beside the data.
 - **`organizations.getBusyTimes()` and `organizations.getScheduling()` report `failedUsers`.**
   The API answers 200 with the users whose calendars it could not read, rather than failing
-  the whole request. Each entry carries the user's `customId` and a reason. A non-empty
-  `failedUsers` means the busy times or slots beside it are a *partial* answer.
-- `FailedFreeBusyUser` is exported from the package root.
+  the whole request. A non-empty `failedUsers` means the busy times or slots beside it are a
+  *partial* answer.
+- **`failedUsers` entries now distinguish no answer from a partial one.** Each carries
+  `failedCalendars`: **empty** means that user contributed nothing at all, **non-empty** means
+  their busy times are real but have gaps, and names which calendars are missing. Entries also
+  carry a human-readable `message`.
+- **`FreeBusyFailureReason`** — a closed ten-value union explaining *why* a calendar or user
+  could not be read (`authorizationInvalid`, `accessDenied`, `mailboxUnavailable`,
+  `rateLimited`, …). A code is never renamed or removed once shipped. What each one means and
+  how to resolve it: https://docs.recal.dev/core/troubleshooting
+- `FailedCalendar`, `FreeBusyFailureReason` and `FailedFreeBusyUser` are exported from the
+  package root.
 - `403` and `429` are documented on the user free/busy and scheduling endpoints, and the
   user free/busy route documents a `400` for requesting more calendars than the limit allows.
 
 ### ⚠️ Upgrading
-Three breaking changes.
+Four breaking changes. The first two are the same change applied to different methods.
 
 **1. The two organization methods return an envelope.** They resolved to the payload;
 they now resolve to `{ data, failedUsers }`.
@@ -30,9 +52,30 @@ if (failedUsers.length > 0) { /* the busy times below are partial */ }
 busy.forEach(…)
 ```
 
-No other method changed shape.
+**2. `calendar.getBusyTimes()` returns an envelope too.** It resolved to a `TimeRange[]`; it
+now resolves to `{ data, failedCalendars }`. This is the change most likely to affect you,
+because it is the most-called method in the SDK.
 
-**2. Generated type exports were renamed.** A path parameter now contributes `By<Param>`,
+```typescript
+// before
+const busy = await recal.calendar.getBusyTimes('user-123', { start, end })
+
+// after
+const { data: busy, failedCalendars } = await recal.calendar.getBusyTimes('user-123', { start, end })
+if (failedCalendars.length > 0) {
+    // `busy` is real but incomplete — a window these calendars cover may look free
+    // when it is not. Each entry names the calendar, its provider and a `reason`.
+}
+```
+
+`failedCalendars` and `failedUsers` are **always present**, `[]` when nothing failed, so
+`.length` needs no guard.
+
+`scheduling.getMultiUserSlots()` did not change shape, but its per-user entries gained
+fields: an `ok` entry now carries `failedCalendars`, and an `error` entry carries an optional
+`reason`. `scheduling.getSlots()` and `getAdvancedSlots()` are unaffected.
+
+**3. Generated type exports were renamed.** A path parameter now contributes `By<Param>`,
 so `GetV1UsersUserIdSchedulingData` is now `GetV1UsersByUserIdSchedulingData`, and likewise
 for all 33 parameterised operations. This affects only the generated `GetV1…` / `PostV1…` /
 `PutV1…` / `DeleteV1…` names; the domain types (`Calendar`, `Event`, `User`, `TimeRange`,
@@ -43,11 +86,11 @@ pinned in the API, so they will not move again.
 Callers going through `RecalSDK.*` — the raw generated functions, re-exported from the
 package root for direct use without the `Recal` wrapper — see more than the rename: the
 same 33 functions are renamed on the function name itself, and 12 of them (beyond the two
-scheduling functions covered in (3) below) had an optional `body` argument become required.
+scheduling functions covered in (4) below) had an optional `body` argument become required.
 `recal.*` service methods are unaffected by that second part; each already supplied its
 body unconditionally.
 
-**3. `scheduling.getAdvancedSlots()` and `scheduling.getMultiUserSlots()` now require their
+**4. `scheduling.getAdvancedSlots()` and `scheduling.getMultiUserSlots()` now require their
 `body` argument.** Both took `body?`, but the API validates a required field on each of
 those request bodies — `schedules` for the single-user advanced route, `users` for the
 multi-user route — so a call omitting it has always been answered with a 400. The

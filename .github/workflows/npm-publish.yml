@@ -1,15 +1,23 @@
 name: Publish to npm
 
+# A published GitHub Release is the only trigger, deliberately. `gh release create v1.2.0`
+# pushes the tag and publishes the release, so a `push: tags: ['v*']` trigger alongside this
+# one fired twice for every release — two concurrent jobs racing to `npm publish` the same
+# version, one of which loses with EPUBLISHCONFLICT. Releasing by bare tag no longer
+# publishes anything, which is the intended flow: the Release is the artifact people read.
 on:
   release:
     types: [published]
-  push:
-    tags:
-      - 'v*'
 
 permissions:
     id-token: write
     contents: read
+
+# Publishing a version is not repeatable, so never let two runs overlap, and never cancel
+# one in flight — a cancelled job mid-`npm publish` is worse than a queued one.
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   test:
