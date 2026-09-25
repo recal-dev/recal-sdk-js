@@ -72,9 +72,9 @@ export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
 /**
  * Unwraps a HeyAPI response to the API's whole envelope rather than its `data` field.
  *
- * For the responses that carry a sibling of `data` — the organization free/busy routes
- * report `failedUsers` there — where dropping it would let a partial answer read as a
- * complete one. Error handling is identical to {@link unwrapResponse}: the error branch
+ * For the responses that carry a sibling of `data`, where dropping it would let a partial
+ * answer read as a complete one: the organization free/busy routes report `failedUsers`
+ * there, and the user busy route reports `failedCalendars`. Error handling is identical to {@link unwrapResponse}: the error branch
  * below delegates to it, which re-tests the same condition and always throws there —
  * it never returns.
  */

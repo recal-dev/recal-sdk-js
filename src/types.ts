@@ -33,9 +33,19 @@ export type {
      */
     Event,
     /**
-     * A user whose busy times could not be read, with the reason
+     * A calendar that could not be read, with the reason and a message for the end user
+     */
+    FailedCalendar,
+    /**
+     * A user whose busy times are missing (`failedCalendars` empty) or incomplete
+     * (`failedCalendars` names the gaps)
      */
     FailedFreeBusyUser,
+    /**
+     * Why a calendar or a user could not be read. A closed union — a code is never
+     * renamed or removed once shipped: https://docs.recal.dev/core/troubleshooting
+     */
+    FreeBusyFailureReason,
     GetV1OrganizationsByOrgSlugData,
     GetV1OrganizationsByOrgSlugResponse,
     GetV1OrganizationsByOrgSlugSchedulingData,
