@@ -130,9 +130,17 @@ export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'frida
 export type OAuthAccessType = 'online' | 'offline'
 
 /**
- * OAuth scope presets
+ * OAuth scope presets, each expanded by the provider into its own scope list.
+ *
+ * `read` and `write` were added in v1.1.0 and this type never caught up, so
+ * `scope: 'write'` — valid against the API, and what the docs recommend — would not
+ * assign to it.
+ *
+ * @remarks `edit` is deprecated: still accepted as a synonym for `write`, and no longer
+ * the default. Passing an array instead of one of these presets skips the expansion and
+ * forwards the members verbatim as raw provider scopes.
  */
-export type OAuthScope = 'edit' | 'free-busy'
+export type OAuthScope = 'edit' | 'free-busy' | 'read' | 'write'
 
 /**
  * Attendee response status
