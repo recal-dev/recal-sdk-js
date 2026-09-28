@@ -16,8 +16,13 @@ on:
             TEST_GOOGLE_REFRESH_TOKEN:
                 required: false
 
+# Per-ref, because a constant group puts every run in the repo into one queue. That is how
+# v1.0.1's test job died: its Release and v1.1.0's were created seconds apart, the newer run
+# joined the same queue, and GitHub cancelled the older *pending* one — `cancel-in-progress:
+# false` only protects a run already in flight. The cancelled test job then skipped the
+# publish job that needs it. Keyed on the ref, independent releases queue independently.
 concurrency:
-    group: tests
+    group: tests-${{ github.ref }}
     cancel-in-progress: false
 
 jobs:
