@@ -73,6 +73,10 @@ export type {
     GetV1UsersByUserIdSchedulingResponse,
     GetV1UsersResponse,
     /**
+     * Event spanning the calendars it was created across
+     */
+    MetaEvent,
+    /**
      * Organization entity
      */
     Organization,
@@ -103,6 +107,10 @@ export type {
      * Update event payload
      */
     UpdateEvent,
+    /**
+     * Update event across calendars payload
+     */
+    UpdateMetaEvent,
     /**
      * User entity
      */

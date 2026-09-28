@@ -47,7 +47,7 @@ export interface RecalOptions {
  *   provider: 'google'
  * })
  *
- * const event = await recal.events.create('user-123', {
+ * const event = await recal.events.createMetaEvent('user-123', {
  *   subject: 'Team Meeting',
  *   start: '2024-01-15T10:00:00Z',
  *   end: '2024-01-15T11:00:00Z',
