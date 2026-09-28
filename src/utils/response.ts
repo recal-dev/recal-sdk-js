@@ -43,13 +43,10 @@ export function unwrapResponse<T>(response: HeyApiResponse<T>): T {
     if (response.error && typeof response.error === 'object' && Object.keys(response.error).length > 0) {
         const statusCode = response.response?.status
 
-        // Extract error message safely from unknown type
         let errorMessage = 'Unknown API error'
-        if (typeof response.error === 'string') {
-            errorMessage = response.error
-        } else if (response.error && typeof response.error === 'object' && 'message' in response.error) {
+        if ('message' in response.error) {
             errorMessage = String(response.error.message)
-        } else if (response.error && typeof response.error === 'object' && 'error' in response.error) {
+        } else if ('error' in response.error) {
             errorMessage = String(response.error.error)
         }
 
