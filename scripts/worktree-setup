@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Make a fresh worktree usable: copy the env files over, then install dependencies.
+#
+# Orca runs this as the `setup` hook in orca.yaml, from inside the new worktree,
+# with ORCA_ROOT_PATH (the main checkout) and ORCA_WORKTREE_PATH set. Outside Orca
+# it works the same when run from inside any worktree: both paths come from git.
+#
+# Env files are gitignored, so a fresh checkout has none of them. Every ignored
+# .env / .env.* in the main checkout is copied at the same relative path. They are
+# copies, not symlinks: editing one worktree's env must not silently change another's.
+set -euo pipefail
+
+die() { printf '%s\n' "$*" >&2; exit 1; }
+
+ROOT="${ORCA_ROOT_PATH:-$(cd "$(git rev-parse --path-format=absolute --git-common-dir)/.." && pwd)}"
+DEST="${ORCA_WORKTREE_PATH:-$(git rev-parse --show-toplevel)}"
+
+[ "$ROOT" != "$DEST" ] || die "worktree-setup: run this inside a worktree, not the main checkout"
+
+copied=0
+while IFS= read -r -d '' file; do
+  case "$(basename "$file")" in
+    .env.example) continue ;;
+    .env|.env.*) ;;
+    *) continue ;;
+  esac
+  mkdir -p "$DEST/$(dirname "$file")"
+  cp -p "$ROOT/$file" "$DEST/$file"
+  printf 'copied %s\n' "$file"
+  copied=$((copied + 1))
+done < <(git -C "$ROOT" ls-files -z --others --ignored --exclude-standard \
+  -- ':(exclude)**/node_modules/**' ':(exclude).claude/worktrees/**')
+printf '%d env file(s) copied\n' "$copied"
+
+(cd "$DEST" && bun install)
